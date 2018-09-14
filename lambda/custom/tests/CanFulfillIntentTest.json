@@ -1,0 +1,44 @@
+{
+  "session": {
+    "new": true,
+    "sessionId": "SessionId.[unique-value-here]",
+    "application": {
+      "applicationId": "[APP-ID]"
+    },
+    "attributes": {
+      "key": "string value"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.bananas"
+    }
+  },
+  "request": {
+    "type": "CanFulfillIntentRequest",
+    "requestId": "EdwRequestId.[unique-value-here]",
+    "intent": {
+      "name": "SearchByLocationIntent",
+      "slots": {
+        "STATE": {
+          "name": "STATE",
+          "value": "Texas"
+        }
+      }
+    },
+    "locale": "en-US",
+    "timestamp": "2018-06-04T20:19:30Z"
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "[APP-ID]"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.bananas"
+      },
+      "device": {
+        "supportedInterfaces": {}
+      }
+    }
+  },
+  "version": "1.0"
+}

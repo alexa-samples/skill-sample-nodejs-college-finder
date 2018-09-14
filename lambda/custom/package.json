@@ -1,0 +1,12 @@
+{
+  "name": "sample-skill-college-finder",
+  "version": "1.0.0",
+  "description": "Example complex skill",
+  "license": "Amazon Software License",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ask-sdk": "^2.1.0-beta.1"
+  }
+}
