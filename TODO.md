@@ -1,5 +1,9 @@
 - [ ] figure out how to do absolute path on windows with launch.json
 - [ ] add dotenv for api_key
+- [ ] move testing.json up a level
+- [ ] add mock for api call
+- [ ] document bugs found - parseInteger in profileHandler
+- [ ] Add filter for canfulfillrequest
 - [ ] Document CI configuration
   - [ ] Add project in Travis by hitting "+"
   - [ ] Change links for badges

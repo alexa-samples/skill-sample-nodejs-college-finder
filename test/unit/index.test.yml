@@ -19,7 +19,7 @@ configuration:
   dynamo: mock
 
 ---
-- test.only: Launch request, no further interaction.
+- test: Launch request, no further interaction.
 - LaunchRequest: # LaunchRequest is not an utterance but a request type and reserved word
   - response.outputSpeech.ssml: Welcome to U.S. College Finder, I can help you find a college in the United States that's right for you using your personal preferences and test scores.
 - RefineSearchIntent:
@@ -62,6 +62,16 @@ configuration:
 - RefineSearchIntent SIZE=large:
   - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
 - ListSchoolsIntent:
-  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+  - response.outputSpeech.ssml: Here are your search results.
 
-
+---
+- test: Setting profile information
+- ListProfileIntent: To get the best college matches, I'll need to know a little more about you. Would you like to finish your profile now?
+- AMAZON.YesIntent: To make searching easier, let's build your student profile. You can ask me to skip any of these questions if you're not sure or don't have a preference. OK. First question
+- TestScoresIntent TEST=ACT: Ok. What is your cumulative <say-as interpret-as=\"spell-out\">ACT</say-as> score?
+- NumberIntent NUMBER=30: What is the max amount you want to pay annually in <say-as interpret-as=\"spell-out\">US</say-as> dollars?
+- NumberIntent NUMBER=20000: Do you want to pursue a bachelor's degree, or associate's degree?
+- DegreeIntent DEGREE=bachelors:  Do you know your major?
+- SearchByMajorIntent MAJOR=history: Would you like to store the zip code for your home address to search for schools within a specified distance?
+- AMAZON.YesIntent: What is the five digit zip code for your home address?
+- NumberIntent NUMBER=20816

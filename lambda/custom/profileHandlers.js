@@ -678,7 +678,7 @@ module.exports = {
       console.info(`${attributes[constants.STATE]}, NumberIntent`);
 
       const intentObj = handlerInput.requestEnvelope.request.intent;
-      const number = parseInteger(intentObj.slots.NUMBER.value);
+      const number = parseInt(intentObj.slots.NUMBER.value);
 
       if (attributes[constants.STATE] === constants.STATES.SCORES) {
         // SAT Score range: 400 - 1600
