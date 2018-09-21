@@ -74,4 +74,8 @@ configuration:
 - DegreeIntent DEGREE=bachelors:  Do you know your major?
 - SearchByMajorIntent MAJOR=history: Would you like to store the zip code for your home address to search for schools within a specified distance?
 - AMAZON.YesIntent: What is the five digit zip code for your home address?
-- NumberIntent NUMBER=20816
+- NumberIntent NUMBER=20816: That's all for your profile
+
+---
+- test: Check the profile after creating
+- ListProfileIntent: You have set the following for your profile
