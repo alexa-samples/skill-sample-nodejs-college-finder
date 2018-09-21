@@ -627,7 +627,7 @@ module.exports = {
     if (module.exports.hasDisplay(handlerInput)) {
       handlerInput.responseBuilder
         .addRenderTemplateDirective(template)
-        .addHintDirective(module.exports.getMessage('PROFILE_HINT'));
+        .addHintDirective(module.exports.getMessage(handlerInput, 'PROFILE_HINT'));
     }
 
     return handlerInput.responseBuilder.getResponse();

@@ -14,6 +14,7 @@ permissions and limitations under the License.
 *********************************************************************/
 'use strict';
 const SKILL_NAME = 'U.S. College Finder';
+// const SKILL_NAME_DE = 'U.S. Universitätsfinder';
 
 module.exports = Object.freeze({
   'en-US': {
@@ -305,7 +306,30 @@ module.exports = Object.freeze({
       ERROR_CANT: "I don't know that one. ",
       ERROR_INVALID_VALUE: "That's not a valid value. ",
 
-      GOODBYE: 'Thank you for using College Finder.'
+      GOODBYE: 'Thank you for using ' + SKILL_NAME + '.'
     }
   }
+  /*
+  'de-DE': {
+    translation: {
+      LABEL_NAME: SKILL_NAME_DE,
+      WELCOME_SHORT: 'Willkommen zurück zum ' + SKILL_NAME_DE + '. ',
+      WELCOME_LONG: '',
+      WELCOME_TOP_PICK: 'Meine derzeitige beste Universität für Sie ist %%SCHOOL%%. ',
+      WELCOME_MENU: '',
+      SEARCH:
+        'Sie können über 3000 Universität nach Hauptfach, Standorten in den Vereinigten Staaten suchen, oder nach einer Schule mit Namen fragen. Welches möchtest du?',
+      WELCOME_BACK_NO_PROFILE:
+        'Um die besten Ergebnisse zu erzielen, muss ich etwas mehr über Sie wissen. Möchten Sie Ihr Profil jetzt beenden?',
+      WELCOME_BACK_INCOMPLETE_PROFILE:
+        'Es sieht so aus, als ob du dein Profil nicht ausgefüllt hast. Willst du es jetzt beenden?',
+      WELCOME_HELP: '',
+      WELCOME_HELP_LISTEN: '',
+
+      GENERIC_ERROR: 'Ich habe dich nicht verstanden. ',
+
+      GOODBYE: 'Danke für die Suche mit ' + SKILL_NAME_DE
+    }
+  }
+  */
 });
