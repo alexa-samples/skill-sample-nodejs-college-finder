@@ -1,0 +1,67 @@
+#=====================================================================================================================
+#     ______    _ ____  ______        __  _
+#    / __/ /__ (_) / / /_  __/__ ___ / /_(_)__  ___ _
+#   _\ \/  '_// / / /   / / / -_|_-</ __/ / _ \/ _ `/
+#  /___/_/\_\/_/_/_/   /_/  \__/___/\__/_/_//_/\_, /
+#                                             /___/
+#
+# Created by Bespoken
+# Learn more at https://read.bespoken.io/unit-testing/getting-started/
+#
+# Skill name: "Space Facts" by Amazon
+# Test scope: LaunchRequest, GetNewFactIntent, AMAZON.HelpIntent, AMAZON.StopIntent, AMAZON.CancelIntent,
+#             AMAZON.FallbackIntent
+# Description: General test suite for all intents
+#=====================================================================================================================
+
+---
+configuration:
+  dynamo: mock
+
+---
+- test.only: Launch request, no further interaction.
+- LaunchRequest: # LaunchRequest is not an utterance but a request type and reserved word
+  - response.outputSpeech.ssml: Welcome to U.S. College Finder, I can help you find a college in the United States that's right for you using your personal preferences and test scores.
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    LOCATION: state
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    HOME: "20816"
+    DISTANCE: "20"
+    STATE: Maryland
+    REGION: Southeast
+    MAJOR: history
+    COST: 50000
+    TYPE: public
+    SIZE: large
+  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+
+---
+- test: Launch request, no further interaction.
+- LaunchRequest: # LaunchRequest is not an utterance but a request type and reserved word
+  - response.outputSpeech.ssml: Welcome to U.S. College Finder, I can help you find a college in the United States that's right for you using your personal preferences and test scores.
+- RefineSearchIntent:
+  - prompt: I can search by region, state, or zip code. Which option would you like?
+- RefineSearchIntent LOCATION=state:
+  - prompt: What zip code would you like to search for?
+- RefineSearchIntent HOME=20816:
+  - prompt: How many miles from your zip code do you want to search?
+- RefineSearchIntent DISTANCE=20:
+  - prompt: What state would you like to search for?
+- RefineSearchIntent STATE=Maryland:
+  - prompt: What region would you like to search for?
+- RefineSearchIntent REGION=Southeast:
+  - prompt: What major would you like to search for?
+- RefineSearchIntent MAJOR=history:
+  - prompt: What is the max you want to pay per year for tuition and fees?
+- RefineSearchIntent COST=50000:
+  - prompt:  Do you want to search for public, or private schools?
+- RefineSearchIntent TYPE=public:
+  - prompt: What size school do you want to search for. Small, medium, or large?
+- RefineSearchIntent SIZE=large:
+  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+- ListSchoolsIntent:
+  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+
+

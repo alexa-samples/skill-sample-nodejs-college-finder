@@ -1,0 +1,1889 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for resultsHandlers.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="index.html">All files</a> resultsHandlers.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">7.66% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>16/209</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">12.5% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>17/136</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">7.66% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>16/209</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*********************************************************************
+Copyright 2018 Amazon.com, Inc. and its affiliates. All Rights Reserved.
+&nbsp;
+Licensed under the Amazon Software License (the "License").
+You may not use this file except in compliance with the License.
+A copy of the License is located at
+&nbsp;
+  http://aws.amazon.com/asl/
+&nbsp;
+or in the "license" file accompanying this file. This file is distributed
+on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+express or implied. See the License for the specific language governing
+permissions and limitations under the License.
+&nbsp;
+Description: Handlers for listing schools in the SEARCH_RESULTS
+or FAVORITES_LIST arrays. The results are offered in sets of three
+schools. The user can move forward in the result list, go back, start
+over or get details about a school by it's numeric position in the
+list. If a user says the school name then the SearchByNameIntent
+in basicSearchHandlers.js handles the school name and lists details.
+*********************************************************************/
+const constants = require('./constants');
+const helpers = require('./helpers');
+&nbsp;
+/**
+ * Central logic for item not found messages.
+ *
+ * @param {Object} handlerInput
+ * @param {Object} attributes
+ */
+function <span class="fstat-no" title="function not covered" >notFound </span>(handlerInput, attributes) {
+<span class="cstat-no" title="statement not covered" >  helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return handlerInput.responseBuilder</span>
+    .speak(helpers.getMessage(handlerInput, 'FAVORITES_NOT_FOUND'))
+    .reprompt(helpers.getMessage(handlerInput, 'FAVORITES_NOT_FOUND'))
+    .getResponse();
+}
+&nbsp;
+/**
+ * Handles forward and backward paging of the lists. Formats Alexa's
+ * response to list three schools at a time until the end of the list.
+ *
+ * @param {Object} handlerInput
+ * @param {Object} attributes
+ */
+function <span class="fstat-no" title="function not covered" >pageResults </span>(handlerInput, attributes) {
+<span class="cstat-no" title="statement not covered" >  console.info('Paging Results');</span>
+  let page;
+  let schools;
+  let end;
+  let prompt;
+  let title;
+&nbsp;
+  // Determine if this is the favorites or result list
+<span class="cstat-no" title="statement not covered" >  if (attributes[constants.STATE] === constants.STATES.FAVORITES) {</span>
+<span class="cstat-no" title="statement not covered" >    page = attributes[constants.LIST_PAGE];</span>
+<span class="cstat-no" title="statement not covered" >    schools = attributes[constants.LIST];</span>
+<span class="cstat-no" title="statement not covered" >    end = 'FAVORITES_NO_MORE_ITEMS';</span>
+<span class="cstat-no" title="statement not covered" >    prompt = 'FAVORITES_CURRENT_ITEM_PROMPT';</span>
+<span class="cstat-no" title="statement not covered" >    title = 'FAVORITES_TITLE';</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    page = attributes[constants.SEARCH_PAGE];</span>
+<span class="cstat-no" title="statement not covered" >    schools = attributes[constants.SEARCH_RESULTS];</span>
+<span class="cstat-no" title="statement not covered" >    end = 'LIST_SCHOOLS_END_OF_LIST';</span>
+<span class="cstat-no" title="statement not covered" >    prompt = 'LIST_SCHOOLS_PROMPT';</span>
+<span class="cstat-no" title="statement not covered" >    title = 'RESULTS_TITLE';</span>
+  }
+&nbsp;
+  // If there are no more results, start back at the beginning of the list.
+<span class="cstat-no" title="statement not covered" >  if (page * constants.PER_PAGE &gt; schools.length) {</span>
+<span class="cstat-no" title="statement not covered" >    helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return handlerInput.responseBuilder</span>
+      .speak(helpers.getMessage(handlerInput, end))
+      .reprompt(helpers.getMessage(handlerInput, end))
+      .getResponse();
+  }
+&nbsp;
+  const endStatement =
+<span class="cstat-no" title="statement not covered" >    page * constants.PER_PAGE &lt; schools.length</span>
+      ? helpers.getMessage(handlerInput, prompt)
+      : helpers.getMessage(handlerInput, end);
+&nbsp;
+  // Create the message for the current set of schools
+  const max = <span class="cstat-no" title="statement not covered" >Math.min((page + 1) * constants.PER_PAGE, schools.length);</span>
+  let message;
+  let schoolList = <span class="cstat-no" title="statement not covered" >'';</span>
+  let num = <span class="cstat-no" title="statement not covered" >constants.PER_PAGE * page;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  while (num &lt; max) {</span>
+    const name = <span class="cstat-no" title="statement not covered" >schools[num]['school.name'].replace('&amp;', 'and');</span>
+<span class="cstat-no" title="statement not covered" >    schoolList += `${num + 1}. ${name}. `;</span>
+<span class="cstat-no" title="statement not covered" >    num += 1;</span>
+  }
+&nbsp;
+  // If this is the first page then speak the number of results first
+<span class="cstat-no" title="statement not covered" >  if (page === 0) {</span>
+<span class="cstat-no" title="statement not covered" >    message = helpers.getPromptMessage(attributes, `${schoolList} ${endStatement}`);</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    message = `${schoolList} ${endStatement}`;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  helpers.saveUser(handlerInput, attributes, 'session');</span>
+<span class="cstat-no" title="statement not covered" >  handlerInput.responseBuilder.speak(message).reprompt(message);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (helpers.hasDisplay(handlerInput)) {</span>
+<span class="cstat-no" title="statement not covered" >    handlerInput.responseBuilder.addRenderTemplateDirective(</span>
+      helpers.buildListTemplate(schools, helpers.getMessage(handlerInput, title))
+    );
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return handlerInput.responseBuilder.getResponse();</span>
+}
+&nbsp;
+/**
+ * Helper function for removing an item from a results/favorites list.
+ *
+ * @param {Array} items
+ * @param {String} search
+ */
+function <span class="fstat-no" title="function not covered" >removeSchool </span>(items, search) {
+  let schools = <span class="cstat-no" title="statement not covered" >items;</span>
+&nbsp;
+  const current = <span class="cstat-no" title="statement not covered" >schools.findIndex(<span class="fstat-no" title="function not covered" >fo</span>und =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    school = found['school.name'];</span>
+<span class="cstat-no" title="statement not covered" >    return found.id === search;</span>
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (current &amp;&amp; current !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >    schools.splice(current, 1);</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return schools;</span>
+}
+&nbsp;
+module.exports = {
+  /**
+   * Handler for the ListSchoolsIntent and the ListFavoritesIntent. Checks to see
+   * if there are any school results and then prepares the starting variables
+   * for pageResults() to process the list.
+   */
+  ListsHandler: {
+    canHandle (handlerInput) {
+      return (
+        handlerInput.requestEnvelope.request.type === 'IntentRequest' &amp;&amp;
+        (handlerInput.requestEnvelope.request.intent.name === 'ListSchoolsIntent' ||
+          handlerInput.requestEnvelope.request.intent.name === 'ListFavoritesIntent')
+      );
+    },
+    handle (handlerInput) {
+      let attributes = <span class="cstat-no" title="statement not covered" >handlerInput.attributesManager.getSessionAttributes();</span>
+<span class="cstat-no" title="statement not covered" >      console.info(`${attributes[constants.STATE]}, ListSchools`);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      attributes[constants.PREVIOUS_INTENT] = handlerInput.requestEnvelope.request.intent.name;</span>
+&nbsp;
+      let schools;
+      let empty;
+      let intro;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (handlerInput.requestEnvelope.request.intent.name === 'ListFavoritesIntent') {</span>
+<span class="cstat-no" title="statement not covered" >        schools = attributes[constants.LIST] === undefined ? [] : attributes[constants.LIST];</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.STATE] = constants.STATES.FAVORITES;</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.LIST_PAGE] = 0;</span>
+<span class="cstat-no" title="statement not covered" >        empty = 'FAVORITES_EMPTY';</span>
+<span class="cstat-no" title="statement not covered" >        intro = 'FAVORITES_OVERVIEW';</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        schools =</span>
+          attributes[constants.SEARCH_RESULTS] === undefined
+            ? []
+            : attributes[constants.SEARCH_RESULTS];
+<span class="cstat-no" title="statement not covered" >        attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.SEARCH_PAGE] = 0;</span>
+<span class="cstat-no" title="statement not covered" >        empty = 'LIST_SCHOOLS_NO_ITEMS_PROMPT';</span>
+<span class="cstat-no" title="statement not covered" >        intro = 'LIST_SCHOOLS_INTRO';</span>
+      }
+&nbsp;
+      // No results. Prompt to do a search.
+<span class="cstat-no" title="statement not covered" >      if (schools === undefined || schools.length &lt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >        helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return handlerInput.responseBuilder</span>
+          .speak(helpers.getMessage(handlerInput, empty))
+          .reprompt(helpers.getMessage(handlerInput, empty))
+          .getResponse();
+      } else {
+<span class="cstat-no" title="statement not covered" >        intro = schools.length === 1 ? `${intro}_ONE` : intro;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        attributes[constants.SEARCH_PAGE] = 0;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (handlerInput.requestEnvelope.request.intent.name === 'ListFavoritesIntent') {</span>
+<span class="cstat-no" title="statement not covered" >          attributes[constants.INTRO_MESSAGE] = helpers</span>
+            .getMessage(handlerInput, intro)
+            .replace('%%COUNT%%', schools.length);
+        } else {
+<span class="cstat-no" title="statement not covered" >          attributes[constants.INTRO_MESSAGE] = helpers.getMessage(handlerInput, intro);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return pageResults(handlerInput, attributes);</span>
+      }
+    }
+  },
+  /**
+   * Handler for the AMAZON.PreviousIntent if the user is either in the LIST_SCHOOLS STATE
+   * or the MORE_INFORMATION STATE. If the user was listening to details about a school
+   * then previous takes them back to the point in the results they were at, otherwise Alexa lists
+   * the prior page of schools.
+   */
+  PreviousListHandler: {
+    canHandle (handlerInput) {
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
+      return (
+        handlerInput.requestEnvelope.request.type === 'IntentRequest' &amp;&amp;
+        handlerInput.requestEnvelope.request.intent.name === 'AMAZON.PreviousIntent' &amp;&amp;
+        (<span class="branch-2 cbranch-no" title="branch not covered" >attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS </span>||
+<span class="branch-3 cbranch-no" title="branch not covered" >          attributes[constants.STATE] === constants.STATES.MORE_INFORMATION </span>||
+<span class="branch-4 cbranch-no" title="branch not covered" >          attributes[constants.STATE] === constants.STATES.FAVORITES)</span>
+      );
+    },
+    handle (handlerInput) {
+      let attributes = <span class="cstat-no" title="statement not covered" >handlerInput.attributesManager.getSessionAttributes();</span>
+<span class="cstat-no" title="statement not covered" >      console.info(`${attributes[constants.STATE]}, AMAZON.PreviousIntent for Lists`);</span>
+&nbsp;
+      let schools;
+      let empty = <span class="cstat-no" title="statement not covered" >'LIST_SCHOOLS_NO_ITEMS_PROMPT';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (attributes[constants.STATE] === constants.STATES.FAVORITES) {</span>
+<span class="cstat-no" title="statement not covered" >        schools = attributes[constants.LIST];</span>
+<span class="cstat-no" title="statement not covered" >        empty = 'FAVORITES_EMPTY';</span>
+      } else <span class="cstat-no" title="statement not covered" >if (attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS) {</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.SEARCH_PAGE] = Math.max(0, attribute[constants.SEARCH_PAGE] - 1);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        schools = attributes[constants.SEARCH_RESULTS];</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.INTRO_MESSAGE] = '';</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;</span>
+      }
+&nbsp;
+      // End of the list, prompt to go back to beginning or new search
+<span class="cstat-no" title="statement not covered" >      if (</span>
+        !schools ||
+        attributes[constants.STATE] === constants.STATES.SEARCH_BY_NAME ||
+        attributes[constants.SEARCH] === constants.STATES.SEARCH_BY_NAME
+      ) {
+<span class="cstat-no" title="statement not covered" >        attributes[constants.PREVIOUS_STATE] = attributes[constants.STATE];</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.STATE] = constants.STATES.START;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return handlerInput.responseBuilder</span>
+          .speak(helpers.getMessage(handlerInput, 'WELCOME_MENU'))
+          .reprompt(helpers.getMessage(handlerInput, 'WELCOME_MENU'))
+          .getResponse();
+      } else <span class="cstat-no" title="statement not covered" >if (schools.length &lt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >        helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return handlerInput.responseBuilder</span>
+          .speak(helpers.getMessage(handlerInput, empty))
+          .reprompt(helpers.getMessage(handlerInput, empty))
+          .getResponse();
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return pageResults(handlerInput, attributes);</span>
+    }
+  },
+  /**
+   * Handler for the AMAZON.NextIntent if the user is in the LIST_SCHOOLS STATE.
+   * Increments the SEARCH_PAGE by one and sends to pageResults() to list the next
+   * three schools.
+   */
+  NextListHandler: {
+    canHandle (handlerInput) {
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
+      return (
+        handlerInput.requestEnvelope.request.type === 'IntentRequest' &amp;&amp;
+        (handlerInput.requestEnvelope.request.intent.name === 'AMAZON.NextIntent' ||
+          handlerInput.requestEnvelope.request.intent.name === 'AMAZON.MoreIntent') &amp;&amp;
+        (<span class="branch-3 cbranch-no" title="branch not covered" >attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS </span>||
+<span class="branch-4 cbranch-no" title="branch not covered" >          attributes[constants.STATE] === constants.STATES.FAVORITES)</span>
+      );
+    },
+    handle (handlerInput) {
+      let attributes = <span class="cstat-no" title="statement not covered" >handlerInput.attributesManager.getSessionAttributes();</span>
+<span class="cstat-no" title="statement not covered" >      console.info(`${attributes[constants.STATE]}, AMAZON.NextIntent`);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (attributes[constants.STATE] === constants.STATES.FAVORITES) {</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.LIST_PAGE] += 1;</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        attributes[constants.SEARCH_PAGE] += 1;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return pageResults(handlerInput, attributes);</span>
+    }
+  },
+  /**
+   * Handler for the AMAZON.YesIntent if the user has reached the end of the list of schools.
+   * Resets the SEARCH_PAGE to 0 and starts listing the schools from the beginning.
+   */
+  ResultsYesHandler: {
+    canHandle (handlerInput) {
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
+      return (
+        handlerInput.requestEnvelope.request.type === 'IntentRequest' &amp;&amp;
+        handlerInput.requestEnvelope.request.intent.name === 'AMAZON.YesIntent' &amp;&amp;
+        (<span class="branch-2 cbranch-no" title="branch not covered" >attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS </span>||
+<span class="branch-3 cbranch-no" title="branch not covered" >          attributes[constants.STATE] === constants.STATES.FAVORITES)</span>
+      );
+    },
+    handle (handlerInput) {
+      let attributes = <span class="cstat-no" title="statement not covered" >handlerInput.attributesManager.getSessionAttributes();</span>
+<span class="cstat-no" title="statement not covered" >      console.info(`${attributes[constants.STATE]}, AMAZON.YesIntent`);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (attributes[constants.STATE] === constants.STATES.FAVORITES) {</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.LIST_PAGE] = 0;</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        attributes[constants.SEARCH_PAGE] = 0;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      attributes[constants.INTRO_MESSAGE] = '';</span>
+<span class="cstat-no" title="statement not covered" >      attributes[constants.PREVIOUS_INTRO_MESSAGE] = '';</span>
+<span class="cstat-no" title="statement not covered" >      helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return pageResults(handlerInput, attributes);</span>
+    }
+  },
+  /**
+   * Handler for the NumberIntent in the LIST_SCHOOLS and FAVORITES STATES. If a user requests
+   * more information about a school by its numeric order in the list. Lists the details
+   * about the corresponding school in the SEARCH_RESULTS array.
+   */
+  ResultsNumberHandler: {
+    canHandle (handlerInput) {
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
+      return (
+        handlerInput.requestEnvelope.request.type === 'IntentRequest' &amp;&amp;
+        handlerInput.requestEnvelope.request.intent.name === 'NumberIntent' &amp;&amp;
+        (<span class="branch-2 cbranch-no" title="branch not covered" >attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS </span>||
+<span class="branch-3 cbranch-no" title="branch not covered" >          attributes[constants.STATE] === constants.STATES.FAVORITES </span>||
+<span class="branch-4 cbranch-no" title="branch not covered" >          attributes[constants.STATE] === constants.STATES.MORE_INFORMATION)</span>
+      );
+    },
+    handle (handlerInput) {
+      let attributes = <span class="cstat-no" title="statement not covered" >handlerInput.attributesManager.getSessionAttributes();</span>
+<span class="cstat-no" title="statement not covered" >      console.info(`${attributes[constants.STATE]}, AMAZON.NumberIntent`);</span>
+&nbsp;
+      const intentObj = <span class="cstat-no" title="statement not covered" >handlerInput.requestEnvelope.request.intent;</span>
+      let number = <span class="cstat-no" title="statement not covered" >Number(intentObj.slots.NUMBER.value) - 1;</span>
+      let schools;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (attributes[constants.STATE] === constants.STATES.FAVORITES) {</span>
+<span class="cstat-no" title="statement not covered" >        schools = attributes[constants.LIST];</span>
+<span class="cstat-no" title="statement not covered" >        empty = 'FAVORITES_EMPTY';</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        schools = attributes[constants.SEARCH_RESULTS];</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.STATE] = constants.STATES.MORE_INFORMATION;</span>
+<span class="cstat-no" title="statement not covered" >        empty = 'LIST_SCHOOLS_NO_ITEMS_PROMPT';</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (schools === undefined || schools.length &lt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >        helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return handlerInput.responseBuilder</span>
+          .speak(helpers.getMessage(handlerInput, empty))
+          .reprompt(helpers.getMessage(handlerInput, empty))
+          .getResponse();
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (number &lt; 0 || number &gt; schools.length) {</span>
+<span class="cstat-no" title="statement not covered" >        attributes[constants.INTRO_MESSAGE] = helpers.getMessage(</span>
+          handlerInput,
+          'ERROR_INVALID_VALUE'
+        );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        attributes[constants.SEARCH_PAGE] -= 1;</span>
+<span class="cstat-no" title="statement not covered" >        return pageResults(handlerInput, attributes);</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return helpers.moreInfoResponse(handlerInput, attributes, schools[number]);</span>
+    }
+  },
+  /**
+   * Handler for adding a school to the favorites list from either SearchByNameIntent or
+   * ListSchoolsIntent results.
+   */
+  AddFavoriteHandler: {
+    canHandle (handlerInput) {
+      return (
+        handlerInput.requestEnvelope.request.type === 'IntentRequest' &amp;&amp;
+        handlerInput.requestEnvelope.request.intent.name === 'AddToFavoritesIntent'
+      );
+    },
+    handle (handlerInput) {
+      let attributes = <span class="cstat-no" title="statement not covered" >handlerInput.attributesManager.getSessionAttributes();</span>
+<span class="cstat-no" title="statement not covered" >      console.info(`${attributes[constants.STATE]}, AddToFavoritesIntent`);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      attributes[constants.PREVIOUS_INTENT] = handlerInput.requestEnvelope.request.intent.name;</span>
+&nbsp;
+      let schools =
+<span class="cstat-no" title="statement not covered" >        attributes[constants.LIST] &amp;&amp; attributes[constants.LIST] !== undefined</span>
+          ? attributes[constants.LIST]
+          : [];
+      const list = <span class="cstat-no" title="statement not covered" >attributes[constants.SEARCH_RESULTS];</span>
+      let school;
+&nbsp;
+      // First check for duplicates
+      const duplicate = <span class="cstat-no" title="statement not covered" >schools.find(<span class="fstat-no" title="function not covered" >sc</span>hool =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        return school.id === attributes[constants.CURRENT_SCHOOL_ID];</span>
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (duplicate &amp;&amp; duplicate !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        return handlerInput.responseBuilder</span>
+          .speak(
+            helpers
+              .getMessage(handlerInput, 'FAVORITES_DUPLICATE')
+              .replace('%%SCHOOL%%', duplicate['school.name'])
+          )
+          .reprompt(
+            helpers
+              .getMessage(handlerInput, 'FAVORITES_DUPLICATE')
+              .replace('%%SCHOOL%%', duplicate['school.name'])
+          )
+          .getResponse();
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (attributes[constants.CURRENT_SCHOOL_ID] === attributes[constants.CURRENT_SCHOOL].id) {</span>
+<span class="cstat-no" title="statement not covered" >        school = attributes[constants.CURRENT_SCHOOL];</span>
+      } else {
+        const item = <span class="cstat-no" title="statement not covered" >list.find(<span class="fstat-no" title="function not covered" >li</span>stItem =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          return list.id === attributes[constants.CURRENT_SCHOOL_ID];</span>
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (item &amp;&amp; item !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >          school = item;</span>
+        }
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (school.id) {</span>
+<span class="cstat-no" title="statement not covered" >        if (schools.length &gt;= constants.RECORD_LIMIT) {</span>
+<span class="cstat-no" title="statement not covered" >          schools.pop();</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        schools.unshift(school);</span>
+&nbsp;
+        let message = <span class="cstat-no" title="statement not covered" >helpers</span>
+          .getMessage(handlerInput, 'FAVORITES_ADDED')
+          .replace('%%SCHOOL%%', school['school.name'].replace('&amp;', 'and'));
+<span class="cstat-no" title="statement not covered" >        attributes[constants.LIST] = schools;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        helpers.saveUser(handlerInput, attributes, 'session');</span>
+<span class="cstat-no" title="statement not covered" >        helpers.saveUser(handlerInput, attributes, 'persistent');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return handlerInput.responseBuilder</span>
+          .speak(message)
+          .reprompt(message)
+          .getResponse();
+      } else {
+<span class="cstat-no" title="statement not covered" >        return notFound(handlerInput, attributes);</span>
+      }
+    }
+  },
+  /**
+   * Handler for deleting a school from the favorites list via either ListFavoritesIntent or
+   * ListSchoolsIntent results.
+   */
+  DeleteFavoriteHandler: {
+    canHandle (handlerInput) {
+      return (
+        handlerInput.requestEnvelope.request.type === 'IntentRequest' &amp;&amp;
+        handlerInput.requestEnvelope.request.intent.name === 'DeleteFromFavoritesIntent'
+      );
+    },
+    handle (handlerInput) {
+      let attributes = <span class="cstat-no" title="statement not covered" >handlerInput.attributesManager.getSessionAttributes();</span>
+<span class="cstat-no" title="statement not covered" >      console.info(`${attributes[constants.STATE]}, DeleteFromFavoritesIntent`);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      attributes[constants.PREVIOUS_INTENT] = handlerInput.requestEnvelope.request.intent.name;</span>
+&nbsp;
+      const intentObj = <span class="cstat-no" title="statement not covered" >handlerInput.requestEnvelope.request.intent;</span>
+      let schools = <span class="cstat-no" title="statement not covered" >attributes[constants.LIST];</span>
+      let school;
+&nbsp;
+      // The list is empty so there is nothing to delete
+<span class="cstat-no" title="statement not covered" >      if (attributes[constants.LIST] === undefined || attributes[constants.LIST].length &lt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >        return handlerInput.responseBuilder</span>
+          .speak(helpers.getMessage(handlerInput, 'FAVORITES_EMPTY'))
+          .reprompt(helpers.getMessage(handlerInput, 'FAVORITES_EMPTY'))
+          .getResponse();
+      } else {
+<span class="cstat-no" title="statement not covered" >        if (</span>
+          !intentObj ||
+          !intentObj.slots ||
+          ((!intentObj.slots.NUMBER || !intentObj.slots.NUMBER.value) &amp;&amp;
+            (!intentObj.slots.SCHOOL || !intentObj.slots.SCHOOL.value))
+        ) {
+<span class="cstat-no" title="statement not covered" >          if (attributes[constants.CURRENT_SCHOOL_ID]) {</span>
+<span class="cstat-no" title="statement not covered" >            schools = removeSchool(schools, attributes[constants.CURRENT_SCHOOL_ID]);</span>
+          } else <span class="cstat-no" title="statement not covered" >if (attributes[constants.CURRENT_FAVORITE_ID]) {</span>
+<span class="cstat-no" title="statement not covered" >            schools = removeSchool(schools, attributes[constants.CURRENT_FAVORITE_ID]);</span>
+          } else {
+<span class="cstat-no" title="statement not covered" >            helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return notFound(handlerInput, attributes);</span>
+          }
+        } else {
+<span class="cstat-no" title="statement not covered" >          if (intentObj.slots['NUMBER'] &amp;&amp; intentObj.slots['NUMBER'].value) {</span>
+            let number = <span class="cstat-no" title="statement not covered" >parseInt(intentObj.slots['NUMBER'].value);</span>
+<span class="cstat-no" title="statement not covered" >            number -= number;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (number &lt; 0 || number &gt; schools.length) {</span>
+<span class="cstat-no" title="statement not covered" >              return notFound(handlerInput, attributes);</span>
+            }
+<span class="cstat-no" title="statement not covered" >            school = schools[number]['school.name'];</span>
+<span class="cstat-no" title="statement not covered" >            schools.splice(schools[number], 1);</span>
+          } else <span class="cstat-no" title="statement not covered" >if (intentObj.slots.SCHOOL &amp;&amp; intentObj.slots.SCHOOL.value) {</span>
+            const current = <span class="cstat-no" title="statement not covered" >schools.findIndex(<span class="fstat-no" title="function not covered" >fo</span>und =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >              school = found['school.name'];</span>
+<span class="cstat-no" title="statement not covered" >              return found.id === helpers.getSlotResolutionId(handlerInput, 'SCHOOL_NAME');</span>
+            });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (current &amp;&amp; current !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >              schools.splice(current, 1);</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >              return notFound(handlerInput, attributes);</span>
+            }
+          } else {
+<span class="cstat-no" title="statement not covered" >            helpers.saveUser(handlerInput, attributes, 'session');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return notFound(handlerInput, attributes);</span>
+          }
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        attributes[constants.INTRO_MESSAGE] = helpers</span>
+          .getMessage(handlerInput, 'FAVORITES_REMOVE_CONFIRM')
+          .replace('%%SCHOOL_NAME%%', school.replace('&amp;', 'and'));
+<span class="cstat-no" title="statement not covered" >        attributes[constants.LIST] = schools;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS) {</span>
+<span class="cstat-no" title="statement not covered" >          message = helpers.getPromptMessage(</span>
+            attributes,
+            helpers.getMessage(handlerInput, 'FAVORITES_FROM_SEARCH')
+          );
+        } else {
+          // Create the message for the current set of schools
+          let schoolList = <span class="cstat-no" title="statement not covered" >'';</span>
+          const page = <span class="cstat-no" title="statement not covered" >attributes[constants.LIST_PAGE];</span>
+          let num = <span class="cstat-no" title="statement not covered" >constants.PER_PAGE * page;</span>
+          const max = <span class="cstat-no" title="statement not covered" >Math.min((page + 1) * constants.PER_PAGE, schools.length);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          while (num &lt; max) {</span>
+<span class="cstat-no" title="statement not covered" >            schoolList += `${num + 1}. ${schools[num]['school.name']}. `;</span>
+          }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          message = helpers.getPromptMessage(</span>
+            attributes,
+            helpers
+              .getMessage(handlerInput, 'FAVORITES_OVERVIEW')
+              .replace('%%COUNT%%', schools.length) +
+              ' ' +
+              schoolList
+          );
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        helpers.saveUser(handlerInput, attributes, 'session');</span>
+<span class="cstat-no" title="statement not covered" >        helpers.saveUser(handlerInput, attributes, 'persistent');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return handlerInput.responseBuilder</span>
+          .speak(message)
+          .reprompt(message)
+          .getResponse();
+      }
+    }
+  },
+  /**
+   * Handler for when a touch is registered on a display when listing favorites
+   * or search results.
+   */
+  ResultsTouchHandler: {
+    canHandle (handlerInput) {
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
+      return (
+        handlerInput.requestEnvelope.request.type === 'Display.ElementSelected' &amp;&amp;
+        (<span class="branch-1 cbranch-no" title="branch not covered" >attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS </span>||
+<span class="branch-2 cbranch-no" title="branch not covered" >          attributes[constants.STATE] === constants.STATES.FAVORITES)</span>
+      );
+    },
+    handle (handlerInput) {
+      let attributes = <span class="cstat-no" title="statement not covered" >handlerInput.attributesManager.getSessionAttributes();</span>
+<span class="cstat-no" title="statement not covered" >      console.info(`${attributes[constants.STATE]}, ListDisplayTouch`);</span>
+&nbsp;
+      let schools;
+      // Determine if this is the favorites or result list
+<span class="cstat-no" title="statement not covered" >      if (attributes[constants.STATE] === constants.STATES.FAVORITES) {</span>
+<span class="cstat-no" title="statement not covered" >        schools = attributes[constants.LIST];</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        schools = attributes[constants.SEARCH_RESULTS];</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return helpers.moreInfoResponse(</span>
+        handlerInput,
+        attributes,
+        schools[parseInt(handlerInput.requestEnvelope.request.token)]
+      );
+    }
+  }
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Sep 18 2018 17:23:43 GMT-0400 (Eastern Daylight Time)
+</div>
+</div>
+<script src="prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="sorter.js"></script>
+</body>
+</html>

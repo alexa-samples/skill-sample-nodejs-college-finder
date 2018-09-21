@@ -42,6 +42,10 @@ module.exports = {
    */
   CFIRBasicSearch: {
     canHandle (handlerInput) {
+      console.log("type: " + handlerInput.requestEnvelope.request.type);
+      if (handlerInput.requestEnvelope.request.intent) { 
+        console.log("intent: " + handlerInput.requestEnvelope.request.intent.name);
+      }
       return (
         handlerInput.requestEnvelope.request.type === 'CanFulfillIntentRequest' &&
         (handlerInput.requestEnvelope.request.intent.name === 'SearchByNameIntent' ||
@@ -62,6 +66,8 @@ module.exports = {
       ) {
         slot = 'SCHOOL_NAME';
       } else if (intentName === 'SearchByLocationIntent') {
+        console.log("slots: " + JSON.stringify(slotValues));
+        
         if (
           slotValues[constants.LOCATION_STATE] &&
           slotValues[constants.LOCATION_STATE].isValidated

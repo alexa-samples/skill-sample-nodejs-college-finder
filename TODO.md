@@ -1,0 +1,2 @@
+- [ ] figure out how to do absolute path on windows with launch.json
+- [ ] add dotenv for api_key?
