@@ -176,18 +176,18 @@ function getSearchData (attributes) {
 
   // Cost tution in state is a range value from 0 to the max tuition/fees the user entered
   if (parseFloat(intentObj[constants.COST].value) > 0) {
-    url += '&2015.cost.tuition.in_state__range=0..' + intentObj[constants.COST].value;
+    url += '&latest.cost.tuition.in_state__range=0..' + intentObj[constants.COST].value;
   } else {
     url += constants.LIMITCOST;
   }
 
   // SAT or ACT scores are a range value
   if (intentObj[constants.SCORE].value === constants.SAT) {
-    url += `&2015.admissions.sat_scores.average.overall__range=400..${parseFloat(
+    url += `&latest.admissions.sat_scores.average.overall__range=400..${parseFloat(
       attributes[constants.SAT]
     )}`;
   } else if (intentObj[constants.SCORE].value === constants.ACT) {
-    url += `&2015.admissions.act_scores.25th_percentile.cumulative__range=1..
+    url += `&latest.admissions.act_scores.25th_percentile.cumulative__range=1..
       ${parseFloat(attributes[constants.ACT])}`;
   }
 
@@ -196,7 +196,7 @@ function getSearchData (attributes) {
     intentObj[constants.MAJOR].value !== constants.NO_PREFERENCE &&
     attributes[constants.SCHOOL_MAJOR_ID]
   ) {
-    url += `&2015.academics.program_percentage.${
+    url += `&latest.academics.program_percentage.${
       attributes[constants.SCHOOL_MAJOR_ID]
     }__range=0.1..1.0`;
   }

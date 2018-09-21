@@ -7,6 +7,13 @@
                     "name": "AddToFavoritesIntent",
                     "slots": [],
                     "samples": [
+                        "please save this school",
+                        "save it",
+                        "save it to my favorites",
+                        "please save this school to my favorites",
+                        "please save",
+                        "save to my favorites",
+                        "save",
                         "I'd like to add to my favorites",
                         "please at to my favorites list",
                         "please add to my favorites",

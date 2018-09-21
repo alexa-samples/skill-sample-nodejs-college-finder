@@ -205,7 +205,7 @@ module.exports = {
             .replace('%%SCHOOL_NAME%%', name); // TODO progressive response
           console.info(`Searching for ${name}`);
 
-          // Search paramaters - school ID, school name, school state, 2015 in-state tuition, 2015 out-of-state tuition
+          // Search paramaters - school ID, school name, school state, latest in-state tuition, latest out-of-state tuition
           let url =
             config.API_URI +
             '&school.name=' +
@@ -325,9 +325,9 @@ module.exports = {
           .replace('%%LOCATION%%', slotText); // TODO progressive response
         console.info(`Searching for ${search}`);
 
-        // Search paramaters - school ID, school name, school state, 2015 in-state tuition, 2015 out-of-state tuition,
-        // 2014 admissions rate, and 2015 undergraduate student body size.
-        // Limited to only schools with recorded tuition values and sorted by the 2015 undergraduate student size.
+        // Search paramaters - school ID, school name, school state, latest in-state tuition, latest out-of-state tuition,
+        // latest admissions rate, and latest undergraduate student body size.
+        // Limited to only schools with recorded tuition values and sorted by the latest undergraduate student size.
         let url =
           config.API_URI +
           search +
@@ -459,9 +459,9 @@ module.exports = {
         console.info(`Searching for ${major} with an ID of ${id}`);
 
         // Each major has it's own percentage variable for the amount of students attending for that major
-        let variable = `2015.academics.program_percentage.${id}`;
+        let variable = `latest.academics.program_percentage.${id}`;
 
-        // Search paramaters - school ID, school name, school state, 2015 in-state tuition, 2015 out-of-state tuition, 2015 percentage of population attending
+        // Search paramaters - school ID, school name, school state, latest in-state tuition, latest out-of-state tuition, latest percentage of population attending
         // for the selected major. Limited to 10% or more for the major and sorted by the percentage descending.
         let url = `${config.API_URI}&${variable}__range=0.01..1.0${constants.LIMITCOST}${
           constants.FIELDS

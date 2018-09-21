@@ -293,9 +293,9 @@ module.exports = Object.freeze({
       MORE_INFORMATION_ERROR:
         "I can't get that information right now. You can hear your results again or search for a school by name. Which would you like to do?",
       MORE_INFORMATION_OVERVIEW:
-        '%%SCHOOL_NAME%% is a school in %%CITY%%, %%STATE%%. In 2015, in-state tuition was <say-as interpret-as="unit">$%%TUITION_IN_STATE%%</say-as> and out-of-state tuition was <say-as interpret-as="unit">$%%TUITION_OUT_OF_STATE%%</say-as>.',
+        '%%SCHOOL_NAME%% is a school in %%CITY%%, %%STATE%%. The latest in-state tuition is <say-as interpret-as="unit">$%%TUITION_IN_STATE%%</say-as> and out-of-state tuition is <say-as interpret-as="unit">$%%TUITION_OUT_OF_STATE%%</say-as>.',
       MORE_INFORMATION_CARD:
-        'Location: %%STATE%%\n2015 Tuition (In-State): $%%TUITION_IN_STATE%%\n2014 Tuition (Out-Of-State): $%%TUITION_OUT_OF_STATE%%\n',
+        'Location: %%STATE%%\nIn-State Tuition: $%%TUITION_IN_STATE%%\nOut-Of-State Tuition: $%%TUITION_OUT_OF_STATE%%\n',
       MORE_INFORMATION_SAVE_PROMPT:
         'You can save this school to your favorites list or go back. Which would you like to do?',
       MORE_INFORMATION_FAV_PROMPT:
