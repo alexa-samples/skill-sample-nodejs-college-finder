@@ -1,2 +1,6 @@
 - [ ] figure out how to do absolute path on windows with launch.json
-- [ ] add dotenv for api_key?
+- [ ] add dotenv for api_key
+- [ ] Document CI configuration
+  - [ ] Add project in Travis by hitting "+"
+  - [ ] Change links for badges
+  - [ ] Add API_KEY environment variable in Travis

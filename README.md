@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/jkelvie/alexa-sample-college-finder-nodejs.svg?branch=master)](https://travis-ci.org/jkelvie/alexa-sample-college-finder-nodejs)
+[![codecov](https://codecov.io/gh/jkelvie/alexa-sample-college-finder-nodejs/branch/master/graph/badge.svg)](https://codecov.io/gh/jkelvie/alexa-sample-college-finder-nodej)
+
+
 ## Alexa Sample: College Finder (Node.js)
 
 This is a complex Node.js sample skill with examples of DynamoDB integration, display templates, dialog management, state management, contextual help and errors, and entity resolution.
