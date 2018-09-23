@@ -1,9 +1,12 @@
+- [ ] Get version of bst with bst-test.js
+- [ ] Set runInBand always to true
 - [ ] figure out how to do absolute path on windows with launch.json
 - [ ] add dotenv for api_key
 - [ ] move testing.json up a level
 - [ ] add mock for api call
-- [ ] document bugs found - parseInteger in profileHandler
+- [ ] document bugs found - parseInteger in profileHandler, getMessage in helper.js
 - [ ] Add filter for canfulfillrequest
+- [ ] Remove bespoken-tools from package.json
 - [ ] Document CI configuration
   - [ ] Add project in Travis by hitting "+"
   - [ ] Change links for badges

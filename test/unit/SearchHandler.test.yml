@@ -8,10 +8,9 @@
 # Created by Bespoken
 # Learn more at https://read.bespoken.io/unit-testing/getting-started/
 #
-# Skill name: "Space Facts" by Amazon
-# Test scope: LaunchRequest, GetNewFactIntent, AMAZON.HelpIntent, AMAZON.StopIntent, AMAZON.CancelIntent,
-#             AMAZON.FallbackIntent
-# Description: General test suite for all intents
+# Skill name: "College Finder" by Amazon
+# Test scope: RefineSearchIntent
+# Description: Test suite for search intents
 #=====================================================================================================================
 
 ---
@@ -38,9 +37,54 @@ configuration:
   - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
 
 ---
+- test: Test add and remove favorites
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    LOCATION: state
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    HOME: "20816"
+    DISTANCE: "20"
+    STATE: Maryland
+    REGION: Southeast
+    MAJOR: history
+    COST: 50000
+    TYPE: public
+    SIZE: large
+- ListSchoolsIntent: 
+  - response.outputSpeech.ssml: Here are your search results.
+  - response.outputSpeech.ssml: You can hear details about one of these, or hear more results. Which would you like?
+- NumberIntent NUMBER=1: You can save this school to your favorites list or go back. Which would you like to do?
+- AddToFavoritesIntent: You can hear your results again or list your favorites. Which would you like to do?
+- ListSchoolsIntent
+- NumberIntent NUMBER=2: You can save this school to your favorites list or go back. Which would you like to do?
+- AddToFavoritesIntent
+- ListFavoritesIntent: You have 2 schools on this list
+- DeleteFromFavoritesIntent NUMBER=1: You have 1 schools on this list
+
+---
+- test: Test next and previous intents
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    LOCATION: state
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    HOME: "20816"
+    DISTANCE: "20"
+    STATE: Maryland
+    REGION: Southeast
+    MAJOR: history
+    COST: 50000
+    TYPE: public
+    SIZE: large
+- ListSchoolsIntent # List the schools again to test next intent
+- AMAZON.NextIntent: You can hear details about one of these, or hear more results. Which would you like?
+- AMAZON.PreviousIntent: You can hear details about one of these, or hear more results. Which would you like?
+- AMAZON.PreviousIntent: You can hear details about one of these, or hear more results. Which would you like?
+
+---
 - test: Launch request, no further interaction.
-- LaunchRequest: # LaunchRequest is not an utterance but a request type and reserved word
-  - response.outputSpeech.ssml: Welcome to U.S. College Finder, I can help you find a college in the United States that's right for you using your personal preferences and test scores.
+- LaunchRequest # We already tested the launch request
 - RefineSearchIntent:
   - prompt: I can search by region, state, or zip code. Which option would you like?
 - RefineSearchIntent LOCATION=state:
@@ -63,26 +107,3 @@ configuration:
   - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
 - ListSchoolsIntent:
   - response.outputSpeech.ssml: Here are your search results.
-
----
-- test: Setting profile information
-- ListProfileIntent: To get the best college matches, I'll need to know a little more about you. Would you like to finish your profile now?
-- AMAZON.YesIntent: To make searching easier, let's build your student profile. You can ask me to skip any of these questions if you're not sure or don't have a preference. OK. First question
-- TestScoresIntent TEST=ACT: Ok. What is your cumulative <say-as interpret-as=\"spell-out\">ACT</say-as> score?
-- NumberIntent NUMBER=30: What is the max amount you want to pay annually in <say-as interpret-as=\"spell-out\">US</say-as> dollars?
-- NumberIntent NUMBER=20000: Do you want to pursue a bachelor's degree, or associate's degree?
-- DegreeIntent DEGREE=bachelors:  Do you know your major?
-- SearchByMajorIntent MAJOR=history: Would you like to store the zip code for your home address to search for schools within a specified distance?
-- AMAZON.YesIntent: What is the five digit zip code for your home address?
-- NumberIntent NUMBER=20816: That's all for your profile
-
----
-- test: Check the profile after creating
-- ListProfileIntent: You have set the following for your profile
-- ChangeProfileIntent: You can change your scores, degree, major, cost, or zip code. Which would you like to change?
-- ChangeProfileIntent PROFILE=score: Would you like to provide an <say-as interpret-as=\"spell-out\">SAT</say-as> score or <say-as interpret-as=\"spell-out\">ACT</say-as> score?
-- TestScoresIntent TEST=SAT: Ok. What is your <say-as interpret-as="spell-out">SAT</say-as> score?
-- NumberIntent NUMBER=1300: That's all for your profile.
-- ChangeProfileIntent
-- ChangeProfileIntent PROFILE=major: What field of study would you like to major in?
-- SearchByMajorIntent MAJOR=economics: That's all for your profile.
