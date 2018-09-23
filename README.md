@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/jkelvie/alexa-sample-college-finder-nodejs.svg?branch=master)](https://travis-ci.org/jkelvie/alexa-sample-college-finder-nodejs)
-[![codecov](https://codecov.io/gh/jkelvie/alexa-sample-college-finder-nodejs/branch/master/graph/badge.svg)](https://codecov.io/gh/jkelvie/alexa-sample-college-finder-nodej)
+[![codecov](https://codecov.io/gh/jkelvie/alexa-sample-college-finder-nodejs/branch/master/graph/badge.svg)](https://codecov.io/gh/jkelvie/alexa-sample-college-finder-nodejs)
 
 
 ## Alexa Sample: College Finder (Node.js)
