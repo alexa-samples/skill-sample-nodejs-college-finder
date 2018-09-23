@@ -1,0 +1,40 @@
+#=====================================================================================================================
+#     ______    _ ____  ______        __  _
+#    / __/ /__ (_) / / /_  __/__ ___ / /_(_)__  ___ _
+#   _\ \/  '_// / / /   / / / -_|_-</ __/ / _ \/ _ `/
+#  /___/_/\_\/_/_/_/   /_/  \__/___/\__/_/_//_/\_, /
+#                                             /___/
+#
+# Created by Bespoken
+# Learn more at https://read.bespoken.io/unit-testing/getting-started/
+#
+# Skill name: "College Finder" by Amazon
+# Test scope: CanFulfillIntentRequest, SearchByLocationIntent, SearchByNameIntent, SearchByMajorIntent
+# Description: Test the basic search functionality
+#=====================================================================================================================
+
+---
+configuration:
+  dynamo: mock
+
+---
+- test: CanFulfillRequest works properly
+- SearchByLocationIntent STATE=Maryland:
+  - request.request.type: CanFulfillIntentRequest
+  - response.canFulfillIntent.canFulfill: YES
+  - response.canFulfillIntent.slots.STATE.canUnderstand: YES
+  - response.canFulfillIntent.slots.STATE.canFulfill: YES
+
+---
+- test: SearchByLocationIntent works properly
+- SearchByLocationIntent STATE=Maryland:
+  - response.outputSpeech.ssml: I found * schools in Maryland. You can refine your search or hear the first 12 results. Which would you like?
+
+---
+- test: SearchByNameIntent works properly
+- SearchByNameIntent SCHOOL_NAME="University of Maryland University College":
+  - response.outputSpeech.ssml: University of Maryland-University College is a school in Adelphi, Maryland
+
+---
+- test: SearchByMajorIntent works properly
+- SearchByMajorIntent MAJOR=history: I found * schools for History. You can refine your search or hear the first 12 results. Which would you like?

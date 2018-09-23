@@ -112,7 +112,7 @@ module.exports = {
   getSlotValidation (filledSlots) {
     const slotValues = {};
 
-    filledSlots.forEach(item => {
+    Object.keys(filledSlots).forEach(item => {
       const name = filledSlots[item].name;
 
       if (
