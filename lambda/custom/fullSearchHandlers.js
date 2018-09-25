@@ -142,9 +142,11 @@ function getSearchData (attributes) {
   } else if (intentObj[constants.LOCATION].value.toUpperCase() === constants.LOCATION_STATE) {
     url += `&school.state=${helpers.abbrState(intentObj[constants.LOCATION_STATE].value)}`;
   } else if (intentObj[constants.LOCATION].value.toUpperCase() === constants.LOCATION_REGION) {
-    url += `&school.region_id=${
-      intentObj[constants.LOCATION_REGION].resolutions.resolutionsPerAuthority[0].values[0].value.id
-    }`;
+    const regionID = intentObj[constants.LOCATION_REGION].resolutions
+      ? intentObj[constants.LOCATION_REGION].resolutions.resolutionsPerAuthority[0].values[0].value
+          .id
+      : attributes[constants.REGION_ID];
+    url += `&school.region_id=${regionID}`;
   }
 
   // School ownership is private (2-4) or public (1)

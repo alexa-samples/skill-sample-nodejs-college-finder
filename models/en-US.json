@@ -7,12 +7,9 @@
                     "name": "AddToFavoritesIntent",
                     "slots": [],
                     "samples": [
-                        "I'd like to add to my favorites",
-                        "please at to my favorites list",
-                        "please add to my favorites",
-                        "add school to favorites please",
-                        "I'd like to add school",
-                        "please add school",
+                        "I'd like to add it to my favorites",
+                        "add to my my favorites list please",
+                        "add to my favorites please",
                         "add school",
                         "save favorite",
                         "save school",
@@ -58,7 +55,10 @@
                 },
                 {
                     "name": "AMAZON.YesIntent",
-                    "samples": []
+                    "samples": [
+                        "okay",
+                        "ok"
+                    ]
                 },
                 {
                     "name": "SearchByLocationIntent",
@@ -73,27 +73,12 @@
                         }
                     ],
                     "samples": [
-                        "I'd like to know more about colleges in {STATE}",
-                        "I'd like to know more about colleges in {REGION}",
-                        "I want to know more about colleges in {REGION}",
-                        "I want to know more about colleges in {STATE}",
-                        "fine me colleges in {STATE}",
-                        "find me colleges in {REGION}",
-                        "find colleges in {STATE}",
-                        "fine colleges in {REGION}",
-                        "find schools in {STATE}",
-                        "find schools in {REGION}",
-                        "tell me about {STATE}",
-                        "tell me about {REGION}",
-                        "tell me about {STATE} please",
-                        "I want to know more about schools in {STATE}",
-                        "I want to know more abotu schools in {REGION}",
-                        "list schools in {REGION}",
-                        "list schools in {STATE}",
                         "search for schools in {REGION}",
                         "search for schools in {STATE}",
                         "location",
                         "search for school by {REGION}",
+                        "about {REGION}",
+                        "about {STATE}",
                         "search for schools by {STATE}",
                         "lookup by {STATE}",
                         "lookup by {REGION}",
@@ -104,16 +89,19 @@
                         "lookup schools by location",
                         "search for schools by location",
                         "search by location",
-                        "schools in the {REGION}",
+                        "for schools in the {REGION}",
+                        "about schools in the {REGION}",
                         "state",
                         "region",
-                        " schools in {STATE}",
-                        " schools in {REGION}",
+                        "about schools in {STATE}",
+                        "about schools in {REGION}",
                         "in {REGION}",
                         "in the region {REGION}",
-                        "{REGION} schools",
+                        "for {REGION} schools",
                         "{REGION}",
-                        "{STATE} schools",
+                        "for schools in {REGION}",
+                        "for {STATE} schools",
+                        "for schools in {STATE}",
                         "{STATE}",
                         "in {STATE}",
                         "in the state {STATE}"
@@ -123,17 +111,6 @@
                     "name": "ListSchoolsIntent",
                     "slots": [],
                     "samples": [
-                        "what is the result",
-                        "what is the school",
-                        "what is my school",
-                        "hear result",
-                        "What are my schools",
-                        "What are my results",
-                        "I would like to hear my results",
-                        "I would like to hear my search results",
-                        "I want to hear my colleges",
-                        "I want to hear my schools",
-                        "I want to hear my results",
                         "hear the first",
                         "hear the first schools",
                         "hear the first twelve schools",
@@ -145,6 +122,21 @@
                         "hear results",
                         "my results",
                         "my search results"
+                    ]
+                },
+                {
+                    "name": "MoreInformationIntent",
+                    "slots": [],
+                    "samples": [
+                        "more.",
+                        "more",
+                        "hear more information",
+                        "give me more information",
+                        "tell me more about the school",
+                        "tell me more",
+                        "school details",
+                        "more about the school",
+                        "more information about the school"
                     ]
                 },
                 {
@@ -169,6 +161,7 @@
                         "a distance of {NUMBER}",
                         "no further than {NUMBER}",
                         "within {NUMBER}",
+                        "about {NUMBER}",
                         "closer than {NUMBER}",
                         "no farther than {NUMBER}",
                         "within {NUMBER} miles",
@@ -272,10 +265,6 @@
                         }
                     ],
                     "samples": [
-                        "please refine my search",
-                        "I'd like to refine my search",
-                        "refine my search please",
-                        "change my search please",
                         "search for schools",
                         "refine my search",
                         "refine search",
@@ -296,10 +285,12 @@
                         }
                     ],
                     "samples": [
+                        "I'd like to go home",
                         "hear more about {SCHOOL_NAME}",
                         "hear more information about {SCHOOL_NAME}",
                         "lookup {SEARCHQUERY}",
                         "search for {SEARCHQUERY}",
+                        "verse of {SCHOOL_NAME}",
                         "lookup {SCHOOL_NAME}",
                         "lookup school",
                         "{SCHOOL_NAME} search",
@@ -313,6 +304,7 @@
                         "lookup a specific school",
                         "search for school by name",
                         "search for a school by name",
+                        "about {SCHOOL_NAME}",
                         "search by name",
                         "search for school",
                         "search for {SCHOOL_NAME}",
@@ -335,8 +327,6 @@
                         }
                     ],
                     "samples": [
-                        "i know my {TEST}",
-                        "I know my {TEST} score",
                         "I have my {TEST}",
                         "I have my {TEST} score",
                         "{TEST} score",
@@ -358,13 +348,13 @@
                 {
                     "name": "AMAZON.NextIntent",
                     "samples": [
-                        "more results",
-                        "hear more results",
                         "next results",
-                        "more colleges",
                         "next set of schools",
+                        "more items",
                         "more schools",
-                        "more items"
+                        "more colleges",
+                        "more results",
+                        "hear more results"
                     ]
                 },
                 {
@@ -404,12 +394,6 @@
                         }
                     ],
                     "samples": [
-                        "please get me a list of colleges that offer {DEGREE}",
-                        "tell me about {DEGREE} please",
-                        "I want to know more about {DEGREE} degree",
-                        "list the colleges that offer {DEGREE} degree ",
-                        "use {DEGREE}",
-                        "save {DEGREE}",
                         "colleges that offer {DEGREE} degree",
                         "{DEGREE} colleges",
                         "{DEGREE} college",
@@ -430,10 +414,6 @@
                         }
                     ],
                     "samples": [
-                        "please update my {PROFILE}",
-                        "please change my {PROFILE}",
-                        "I would like to change my {PROFILE}",
-                        "I want to change my {PROFILE}",
                         "change {PROFILE}",
                         "I'd like to change my {PROFILE}",
                         "I'd like to change {PROFILE}",
@@ -463,13 +443,10 @@
                         }
                     ],
                     "samples": [
-                        "please get me a list of colleges that offer {MAJOR}",
-                        "tell me about {MAJOR} please",
-                        "I want to know more about {MAJOR} ",
-                        "List colleges that offer {MAJOR}",
                         "major",
-                        "search for {MAJOR} schools",
+                        "for search {MAJOR} schools",
                         "search for schools by {MAJOR}",
+                        "about {MAJOR}",
                         "look for school by major",
                         "lookup by major",
                         "search for school by major",
@@ -481,7 +458,8 @@
                         "colleges with {MAJOR} degrees",
                         "universities with {MAJOR} degrees",
                         "schools with {MAJOR} degrees",
-                        "{MAJOR} schools",
+                        "about schools with {MAJOR} degrees",
+                        "about {MAJOR} schools",
                         "schools with {MAJOR}",
                         "{MAJOR}",
                         "I'd like to study {MAJOR}"
@@ -491,20 +469,6 @@
                     "name": "ListFavoritesIntent",
                     "slots": [],
                     "samples": [
-                        "tell me what's on my favorites list",
-                        "tell me my favorites ",
-                        "tell me what's on my list",
-                        "get me my favorites",
-                        "give me my favorites",
-                        "I'd like to hear my favorites",
-                        "I'd like to hear my list",
-                        "please list my favorites",
-                        "what's on my list",
-                        "what are my favorite schools",
-                        "list my favorites schools",
-                        "list my favorites please",
-                        "what is on my list",
-                        "what are my favorites",
                         "favorite schools",
                         "favorites",
                         "top schools",
@@ -533,12 +497,6 @@
                         }
                     ],
                     "samples": [
-                        "I would like to remove this school from my list",
-                        "please remove {NUMBER} from my favorites",
-                        "please remove {NUMBER} from my list",
-                        "I would like to remove number {NUMBER}",
-                        "please remove this school from my list",
-                        "I want to delete this school from my favorites",
                         "delete this school from my favorites",
                         "delete this from favorites",
                         "remove this from my favorites",
@@ -564,16 +522,6 @@
                     "name": "ListProfileIntent",
                     "slots": [],
                     "samples": [
-                        "what is in my profile",
-                        "what's in my profile",
-                        "Show me my profile",
-                        "I'd like to view my profile",
-                        "I would like to view my profile",
-                        "view my profile",
-                        "view profile please",
-                        "review my profile please",
-                        "review my profile",
-                        "view my profile please",
                         "view profile",
                         "review profile",
                         "list profile",

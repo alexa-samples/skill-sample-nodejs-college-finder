@@ -83,12 +83,12 @@ const GetUserDataInterceptor = {
  * Search - FillSearchHandler, CompleteSearchHandler
  */
 
-exports.handler = Alexa.SkillBuilders
-  .standard()
+exports.handler = Alexa.SkillBuilders.standard()
   .withSkillId(config.APPID)
   .addRequestHandlers(
     common.CancelAndStopIntentHandler,
     common.HelpIntentHandler,
+    results.NextListHandler,
     searchBy.CFIRBasicSearch,
     profile.ProfileYesHandler,
     profile.ScoresHandler,
@@ -106,7 +106,6 @@ exports.handler = Alexa.SkillBuilders
     common.RegionListIntentHandler,
     results.ResultsNumberHandler,
     results.ResultsTouchHandler,
-    results.NextListHandler,
     results.PreviousListHandler,
     results.ResultsYesHandler,
     results.ListsHandler,
