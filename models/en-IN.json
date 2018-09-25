@@ -5,7 +5,6 @@
       "intents": [
         {
           "name": "AddToFavoritesIntent",
-          "slots": [],
           "samples": [
             "I'd like to add it to my favorites",
             "add to my my favorites list please",
@@ -106,7 +105,6 @@
         },
         {
           "name": "ListSchoolsIntent",
-          "slots": [],
           "samples": [
             "hear the first",
             "hear the first schools",
@@ -123,7 +121,6 @@
         },
         {
           "name": "MoreInformationIntent",
-          "slots": [],
           "samples": [
             "more.",
             "more",
@@ -388,7 +385,6 @@
         },
         {
           "name": "RegionListIntent",
-          "slots": [],
           "samples": [
             "tell me more about regions",
             "more about regions",
@@ -431,7 +427,6 @@
         },
         {
           "name": "ListFavoritesIntent",
-          "slots": [],
           "samples": [
             "favorite schools",
             "favorites",
@@ -484,7 +479,6 @@
         },
         {
           "name": "ListProfileIntent",
-          "slots": [],
           "samples": [
             "view profile",
             "review profile",
@@ -502,7 +496,6 @@
       ],
       "types": [
         {
-          "name": "SCHOOL",
           "values": [
             {
               "id": "120838",
@@ -25064,10 +25057,10 @@
                 "value": "Eastern International College Jersey City"
               }
             }
-          ]
+          ],
+          "name": "SCHOOL"
         },
         {
-          "name": "SCORES",
           "values": [
             {
               "name": {
@@ -25120,10 +25113,10 @@
                 ]
               }
             }
-          ]
+          ],
+          "name": "SCORES"
         },
         {
-          "name": "DEGREE",
           "values": [
             {
               "name": {
@@ -25146,10 +25139,10 @@
                 "synonyms": ["associates", "two year", "two-year", "associate"]
               }
             }
-          ]
+          ],
+          "name": "DEGREE"
         },
         {
-          "name": "PROFILE",
           "values": [
             {
               "name": {
@@ -25180,10 +25173,10 @@
                 "value": "degree"
               }
             }
-          ]
+          ],
+          "name": "PROFILE"
         },
         {
-          "name": "MAJOR",
           "values": [
             {
               "id": "0",
@@ -25783,10 +25776,10 @@
                 ]
               }
             }
-          ]
+          ],
+          "name": "MAJOR"
         },
         {
-          "name": "REGION",
           "values": [
             {
               "id": "9",
@@ -25845,10 +25838,10 @@
                 "value": "New England"
               }
             }
-          ]
+          ],
+          "name": "REGION"
         },
         {
-          "name": "TYPE",
           "values": [
             {
               "name": {
@@ -25860,10 +25853,10 @@
                 "value": "public"
               }
             }
-          ]
+          ],
+          "name": "TYPE"
         },
         {
-          "name": "SIZE",
           "values": [
             {
               "name": {
@@ -25880,10 +25873,10 @@
                 "value": "small"
               }
             }
-          ]
+          ],
+          "name": "SIZE"
         },
         {
-          "name": "LOCATION",
           "values": [
             {
               "name": {
@@ -25901,10 +25894,10 @@
                 "synonyms": ["zip code"]
               }
             }
-          ]
+          ],
+          "name": "LOCATION"
         },
         {
-          "name": "STATES",
           "values": [
             {
               "id": "WY",
@@ -26214,7 +26207,8 @@
                 "value": "Arizona"
               }
             }
-          ]
+          ],
+          "name": "STATES"
         }
       ]
     },
@@ -26223,13 +26217,12 @@
         {
           "name": "RefineSearchIntent",
           "confirmationRequired": false,
-          "prompts": {},
           "slots": [
             {
               "name": "LOCATION",
               "type": "LOCATION",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.193795101871.1408472028654"
               }
@@ -26237,8 +26230,8 @@
             {
               "name": "HOME",
               "type": "AMAZON.NUMBER",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.193795101871.1152651794533"
               }
@@ -26246,8 +26239,8 @@
             {
               "name": "DISTANCE",
               "type": "AMAZON.NUMBER",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.193795101871.865763485287"
               }
@@ -26255,8 +26248,8 @@
             {
               "name": "STATE",
               "type": "STATES",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.424512070095.1245995632127"
               }
@@ -26264,8 +26257,8 @@
             {
               "name": "REGION",
               "type": "REGION",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.424512070095.1233297558104"
               }
@@ -26273,8 +26266,8 @@
             {
               "name": "MAJOR",
               "type": "MAJOR",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.193795101871.1375019713185"
               }
@@ -26282,8 +26275,8 @@
             {
               "name": "COST",
               "type": "AMAZON.NUMBER",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.193795101871.267059218842"
               }
@@ -26291,8 +26284,8 @@
             {
               "name": "TYPE",
               "type": "TYPE",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.193795101871.1360525056063"
               }
@@ -26300,8 +26293,8 @@
             {
               "name": "SIZE",
               "type": "SIZE",
-              "confirmationRequired": false,
               "elicitationRequired": true,
+              "confirmationRequired": false,
               "prompts": {
                 "elicitation": "Elicit.Slot.193795101871.566392232268"
               }
@@ -26309,16 +26302,14 @@
             {
               "name": "DEGREE",
               "type": "DEGREE",
-              "confirmationRequired": false,
               "elicitationRequired": false,
-              "prompts": {}
+              "confirmationRequired": false
             },
             {
               "name": "SCORE",
               "type": "SCORES",
-              "confirmationRequired": false,
               "elicitationRequired": false,
-              "prompts": {}
+              "confirmationRequired": false
             }
           ]
         }

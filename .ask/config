@@ -1,0 +1,24 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.91efd2ff-b268-415c-8947-288e6ef6ee3d",
+      "was_cloned": false,
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "ask-custom-College-Finder-default"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "manifest": {
+          "eTag": "a36abf4bc847e4042ad45e286d3b6348"
+        }
+      }
+    }
+  }
+}
