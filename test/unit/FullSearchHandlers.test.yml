@@ -18,12 +18,13 @@ configuration:
   dynamo: mock
 
 ---
-- test: Launch request, no further interaction.
+- test: Launch request, then refine search by state
 - LaunchRequest: # LaunchRequest is not an utterance but a request type and reserved word
   - response.outputSpeech.ssml: Welcome to U.S. College Finder, I can help you find a college in the United States that's right for you using your personal preferences and test scores.
+- SearchByLocationIntent STATE=Maryland: You can refine your search or hear the first 12 results
 - RefineSearchIntent:
-  - intent: RefineSearchIntent
-    LOCATION: state
+  - prompt: What zip code would you like to search for?
+  - request.request.dialogState: STARTED
 - RefineSearchIntent:
   - intent: RefineSearchIntent
     HOME: "20816"
@@ -34,7 +35,26 @@ configuration:
     COST: 50000
     TYPE: public
     SIZE: large
-  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+  - prompt: You now have * results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+
+---
+- test: Refine search by region
+- LaunchRequest
+- SearchByLocationIntent REGION="New England": You can refine your search or hear the first 12 results
+- RefineSearchIntent:
+  - prompt: What zip code would you like to search for?
+  - request.request.dialogState: STARTED
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    HOME: "20816"
+    DISTANCE: "20"
+    STATE: Maryland
+    REGION: Southeast
+    MAJOR: history
+    COST: 50000
+    TYPE: public
+    SIZE: large
+  - response.outputSpeech.ssml: You now have * results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
 
 ---
 - test: Test add and remove favorites
