@@ -9,5 +9,5 @@ install:
   - npm install codecov -g
   - cd lambda/custom && npm install && cd ../..
 script:
-  - bst test unit/test
+  - bst test test/unit
   - codecov
