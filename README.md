@@ -4,7 +4,7 @@
 
 ## Alexa Sample: College Finder (Node.js)
 
-This is a complex Node.js sample skill with examples of DynamoDB integration, display templates, dialog management, state management, contextual help and errors, and entity resolution.
+This is a complex and useful Node.js sample skill with examples of DynamoDB integration, display templates, dialog management, state management, contextual help and errors, and entity resolution.
 
 ## Getting Started
 
