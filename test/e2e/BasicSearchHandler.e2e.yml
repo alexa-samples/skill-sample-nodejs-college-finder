@@ -17,6 +17,7 @@
 configuration:
   locale: en-US
   voiceId: Joey
+  type: e2e
 
 ---
 - test: Invoke skill, do not create profile, search by major without refining
@@ -28,6 +29,11 @@ configuration:
 - details about xavier university: xavier university is a school in cincinnati ohio the latest in-state tuition is $36,150 and out of state tuition is $36,150 you can save this school to your favorites list or go back which would you like to do
 - go back: 1 cleveland university kansas city 2 northwestern health sciences university 3 xavier university of louisiana you can hear details about one of these or hear more results which would you like
 - stop
+
+---
+- test: Make sure UMCP is recognized correctly
+- ask college finder for information about university of maryland college park:
+  - prompt: University of Maryland College Park is a school in Adelphi Maryland the latest in-state tuition is $7,176 and out-of-state tuition is $12,336 you can save the school to your favorites list or go back which would you like to do
 
 ---
 - test: Invoke skill, do not create profile, search by major without refining, hear 6 results and stop

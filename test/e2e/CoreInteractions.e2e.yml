@@ -37,7 +37,7 @@ configuration:
 - cancel: thank you for using us college finder
 
 ---
-- test: Invoke skill, do not continue, ask for help and exit
+- test.only: Invoke skill, do not continue, ask for help and exit
 - open college finder
 - no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
 - help: this skill will help you narrow down your selection of schools in the united states using a curated set of criteria if you get stuck at any time just ask alexa for help welcome back to us college finder to get the best college matches i'll need to know a little more about you would you like to finish your profile now

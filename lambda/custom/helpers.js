@@ -224,6 +224,20 @@ module.exports = {
     }
   },
 
+  clearUser (handlerInput) {
+    let attributes = handlerInput.attributesManager.getSessionAttributes();
+    console.info('Clearing Dynamo: ', attributes);
+
+    for (const key of attributes) {
+      attributes[key] = undefined;
+    }
+
+    handlerInput.attributesManager.setSessionAttributes(attributes);
+    handlerInput.attributesManager.setPersistentAttributes(attributes);
+    return handlerInput.attributesManager.savePersistentAttributes();
+  },
+
+
   /**
    * Helper function to clear out temporary search attributes on
    * session exit.

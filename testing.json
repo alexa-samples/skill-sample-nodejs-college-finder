@@ -1,7 +1,7 @@
 {
   "handler": "lambda/custom/index.js",
   "locale": "en-US",
-  "trace": true,
+  "trace": false,
   "virtualDeviceToken": "aebfbe63-2006-40cd-8476-86b211f6575c",
   "jest": {
     "collectCoverageFrom": ["lambda/custom/*.js"],

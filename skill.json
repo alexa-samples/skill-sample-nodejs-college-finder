@@ -60,12 +60,8 @@
       },
       "testingInstructions": "Sample Testing Instructions.",
       "category": "EDUCATION_AND_REFERENCE",
-      "allowPurchases": false,
-      "usePersonalInfo": false,
-      "isChildDirected": false,
-      "exportCompliance": true,
-      "availableWorldwide": true,
-      "distributionCountries": []
+      "isAvailableWorldwide": false,
+      "distributionCountries": ["US"]
     },
     "apis": {
       "custom": {
@@ -73,6 +69,12 @@
           "sourceDir": "lambda/custom"
         }
       }
+    },
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": false,
+      "isExportCompliant": true
     },
     "manifestVersion": "1.0"
   }

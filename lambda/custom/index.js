@@ -89,6 +89,7 @@ exports.handler = Alexa.SkillBuilders
   .addRequestHandlers(
     common.CancelAndStopIntentHandler,
     common.HelpIntentHandler,
+    common.ResetProfileHandler,
     searchBy.CFIRBasicSearch,
     profile.ProfileYesHandler,
     profile.ScoresHandler,

@@ -18,12 +18,13 @@ configuration:
   dynamo: mock
 
 ---
-- test: Get help for various intents
+- test.only: Get help for various intents
 - AMAZON.HelpIntent: This skill will help you narrow down your selection of schools in the United States using a curated set of criteria
 - ListFavoritesIntent
 - AMAZON.HelpIntent: You can add up to 12 schools to your favorites list from your search results.
 - ListSchoolsIntent
 - AMAZON.HelpIntent: This list is filtered by the preferences you set in your profile.
+- ResetProfileIntent
 - SessionEndedRequest:
   - response.outputSpeech: undefined
 
