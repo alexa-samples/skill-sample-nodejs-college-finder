@@ -26,7 +26,7 @@ configuration:
 - s-a-t: ok what is your sat score
 - 45: that's not a valid score please provide a sat score between 400 and 1600 what is your score
 - 450: i've noted your sat score of 450 i can limit your picks to a maximum annual cost for tuition and fees what is the max amount you want to pay annually in us dollars
-- 14400: i've saved your preferred max tuition and fees at $14,400 do you want to pursue a bachelor's degree or associates degree
+- 14400: i've saved your preferred max tuition and fees of $14,400 do you want to pursue a bachelor's degree or associates degree
 - bachelor degree: schools that offer bachelor's degrees it is do you know your major
 - business: would you like to store the zip code for your home address to search for schools within a specified distance
 - yes: what is the five digit zip code for your home address
@@ -35,25 +35,26 @@ configuration:
 
 ---
 - test: Invoke skill, show profile
-- open college finder: welcome back to us college finder my current top pick for you is * you can search for schools by major our location here your favorites list or look up a specific school which would you like to do
+- open college finder: welcome back to us college finder
 - show me my profile: you have set the following for your profile sat score of 450 tuition and fees of $14,400 and degree preference of bachelors major in the field of business management marketing and related support services and a zip code of 57559 you can change your profile or go back which would you like to do
 - stop
 
 ---
 - test: Invoke skill, update profile (major)
 - open college finder
-- change my profile: you can change your scores degree major cost or zip code which would you like to change
+- change my profile: you can change your profile or go back which would you like to do
 - change major: your current program of study is business management marketing and related support services what field of study would you like to major in
 - psychology: psychology is part of psychology i'll save that program to your profile that's all for your profile you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
 - show me my profile: psychology
 - stop
 
 ---
-- test.only: Direct search intent call, save/delete result to profile
+- test: Direct search intent call, save/delete result to profile
 - ask college finder to search schools of psychology: i found * schools for psychology you can refine your search or hear the first 12 results which would you like
 - i want to hear my results
-- details about first one: you can save this school to your favorites list or go back which would you like to do
+- one: you can save this school to your favorites list or go back which would you like to do
 - save this school to my favorites list: added * to your list you can hear your results again or list your favorites which would you like to do
 - list my favorites: you have 1 school on this list * you can hear more information about a school or remove a school from your list
-- remove it from my list: removed * from your list you have 0 schools on this list
+- remove one from my list: removed * from your list you have 0 schools on this list
+- click your heels together three times: Your profile has been reset
 - stop

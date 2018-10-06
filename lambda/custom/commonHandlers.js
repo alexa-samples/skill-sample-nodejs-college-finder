@@ -358,6 +358,9 @@ module.exports = {
     },
     handle (handlerInput) {
       helpers.clearUser(handlerInput);
+      return handlerInput.responseBuilder.speak("Your profile has been reset")
+        .reprompt("Your profile has been reset. What would you like to do next?")
+        .getResponse();
     }
   },
   /**

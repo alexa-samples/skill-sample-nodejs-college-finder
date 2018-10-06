@@ -226,9 +226,9 @@ module.exports = {
 
   clearUser (handlerInput) {
     let attributes = handlerInput.attributesManager.getSessionAttributes();
-    console.info('Clearing Dynamo: ', attributes);
+    console.info('Clearing Dynamo: ' + attributes);
 
-    for (const key of attributes) {
+    for (const key of Object.keys(attributes)) {
       attributes[key] = undefined;
     }
 

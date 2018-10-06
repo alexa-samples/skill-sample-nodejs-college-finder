@@ -259,7 +259,8 @@
                             "name": "SIZE",
                             "type": "SIZE",
                             "samples": [
-                                "{SIZE}"
+                                "{SIZE}",
+                                "{SIZE} sized"
                             ]
                         },
                         {

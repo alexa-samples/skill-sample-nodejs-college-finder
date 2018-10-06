@@ -28,19 +28,19 @@ configuration:
     - welcome back to us College finder it looks like you're not done filling out your profile do you want to finish it now
   - reprompt: undefined
   - card: undefined
-- stop: thank you for using us college finder
+- stop: thank you
 
 ---
 - test: Invoke skill, do not continue, cancel
 - open college finder
 - no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
-- cancel: thank you for using us college finder
+- cancel: thank you
 
 ---
-- test.only: Invoke skill, do not continue, ask for help and exit
+- test: Invoke skill, do not continue, ask for help and exit
 - open college finder
 - no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
-- help: this skill will help you narrow down your selection of schools in the united states using a curated set of criteria if you get stuck at any time just ask alexa for help welcome back to us college finder to get the best college matches i'll need to know a little more about you would you like to finish your profile now
+- help: this skill will help you narrow down your selection of schools in the united states
 - exit: /^$/ # This regex matches an empty string
 
 ---
@@ -50,5 +50,5 @@ configuration:
 
 ---
 - test: Direct intent invocation (searching for specific college)
-- ask college finder about xavier university: xavier university is a school in cincinnati ohio the latest in-state tuition is $36,150 and out of state tuition is $36,150 you can save this school to your favorites list or go back which would you like to do
+- ask college finder about xavier university: xavier university is a school in cincinnati ohio * you can save this school to your favorites list or go back which would you like to do
 - stop
