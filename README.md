@@ -19,6 +19,14 @@ The skill references environment variables in the config.js file for instance sp
 2. **API_KEY** - Request a key for the College Scorecard api on the api.data.gov [website](https://api.data.gov/signup/). 
 3. **MAIN_IMAGE**, **LIST_IMAGE**, **GRAD_IMAGE** - These are all images that appear as backgrounds throughout the skill for devices with displays. You can find example images in the config.js file. 
 
+## Testing the Skill
+
+Take a look at the unit-tests and end-to-end tests provided for this skill by [Bespoken](https://bespoken.io). 
+
+* The unit-tests ensure the code is working correctly
+* End-to-end tests ensure the skill as a whole is working right
+* Read more [here](/test)
+
 ## License
 
 This library is licensed under the Amazon Software License.

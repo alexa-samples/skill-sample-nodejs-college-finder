@@ -42,7 +42,7 @@ configuration:
 ---
 - test: Invoke skill, update profile (major)
 - open college finder
-- change my profile: you can change your profile or go back which would you like to do
+- change my profile: you can change your scores degree major cost or zip code which would you like to change
 - change major: your current program of study is business management marketing and related support services what field of study would you like to major in
 - psychology: psychology is part of psychology i'll save that program to your profile that's all for your profile you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
 - show me my profile: psychology
