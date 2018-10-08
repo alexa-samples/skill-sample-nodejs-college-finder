@@ -422,8 +422,8 @@ module.exports = {
       .replace('%%SCHOOL_NAME%%', school['school.name'].replace('&', 'and'))
       .replace('%%CITY%%', school['school.city'])
       .replace('%%STATE%%', state)
-      .replace('%%TUITION_IN_STATE%%', school['2015.cost.tuition.in_state'])
-      .replace('%%TUITION_OUT_OF_STATE%%', school['2015.cost.tuition.out_of_state']);
+      .replace('%%TUITION_IN_STATE%%', school['latest.cost.tuition.in_state'])
+      .replace('%%TUITION_OUT_OF_STATE%%', school['latest.cost.tuition.out_of_state']);
 
     const message = module.exports.getPromptMessage(
       attributes,
@@ -456,34 +456,34 @@ module.exports = {
     const city = school['school.city'];
     const state = school['school.state'];
     const tuitionInState =
-      school['2015.cost.tuition.in_state'] === null
+      school['latest.cost.tuition.in_state'] === null
         ? nullText
-        : '$' + school['2015.cost.tuition.in_state'].toLocaleString('en');
+        : '$' + school['latest.cost.tuition.in_state'].toLocaleString('en');
     const tuitionOutOfState =
-      school['2015.cost.tuition.out_of_state'] === null
+      school['latest.cost.tuition.out_of_state'] === null
         ? nullText
-        : '$' + school['2015.cost.tuition.out_of_state'].toLocaleString('en');
+        : '$' + school['latest.cost.tuition.out_of_state'].toLocaleString('en');
     const gradRate =
-      school['2015.completion.completion_rate_4yr_150nt'] === null
+      school['latest.completion.completion_rate_4yr_150nt'] === null
         ? nullText
-        : (school['2015.completion.completion_rate_4yr_150nt'] * 100).toFixed(2) + '%';
+        : (school['latest.completion.completion_rate_4yr_150nt'] * 100).toFixed(2) + '%';
     const salary =
-      school['2013.earnings.10_yrs_after_entry.median'] === null
+      school['latest.earnings.10_yrs_after_entry.median'] === null
         ? nullText
-        : '$' + school['2013.earnings.10_yrs_after_entry.median'].toLocaleString('en');
+        : '$' + school['latest.earnings.10_yrs_after_entry.median'].toLocaleString('en');
     const students =
-      school['2015.student.size'] === null
+      school['latest.student.size'] === null
         ? nullText
-        : school['2015.student.size'].toLocaleString('en');
+        : school['latest.student.size'].toLocaleString('en');
 
     const backgroundImage = config.BACKGROUND_IMAGE;
 
     const primaryText = `<b><font size="6">${schoolName}</font></b><br /><b>${city}, ${state}</b><br/>${students} undergraduate students`;
 
     const secondaryText =
-      '<br/><b>2015 In-State Tuition/Fees:</b> ' +
+      '<br/><b>In-State Tuition/Fees:</b> ' +
       tuitionInState +
-      '<br/><b>2015 Out-of-State Tuition/Fees:</b> ' +
+      '<br/><b>Out-of-State Tuition/Fees:</b> ' +
       tuitionOutOfState +
       '<br/><b>Graduation Rate:</b> ' +
       gradRate +
@@ -534,10 +534,10 @@ module.exports = {
       const city = school['school.city'];
       const state = school['school.state'];
       const tuitionInState =
-        school['2015.cost.tuition.in_state'] === null ||
-        school['2015.cost.tuition.in_state'] === undefined
+        school['latest.cost.tuition.in_state'] === null ||
+        school['latest.cost.tuition.in_state'] === undefined
           ? '-'
-          : '$' + school['2015.cost.tuition.in_state'].toLocaleString('en');
+          : '$' + school['latest.cost.tuition.in_state'].toLocaleString('en');
       const primaryText = `<b><font size='5'>${schoolName}</font></b>`;
       const secondaryText = city + ', ' + state;
       const tertiaryText = tuitionInState;

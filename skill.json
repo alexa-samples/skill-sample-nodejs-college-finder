@@ -5,77 +5,82 @@
         "en-US": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa open College Finder.",
-            "Alexa ask College Finder about University of Washington.",
-            "Alexa ask College Finder about schools in Washington."
+            "Alexa, open college finder",
+            "Alexa, ask college finder about Washington University",
+            "Alexa, ask College Finder about schools in Washington."
           ],
-          "keywords": ["colleges", "universities", "school"],
+          "keywords": ["college", "university", "college", "search", "college", "finder"],
           "name": "College Finder",
-          "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
+          "description": "College Finder helps you find the college that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
-        "en-AU": {
+        "en-CA": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa open College Finder.",
-            "Alexa ask College Finder about University of Washington.",
-            "Alexa ask College Finder about schools in Washington."
+            "Alexa, open College Finder",
+            "Alexa, ask College Finder about University of Washington",
+            "Alexa, ask College Finder about schools in Washington"
           ],
-          "keywords": ["colleges", "universities", "school"],
+          "keywords": ["college", "university", "college", "search", "college", "finder"],
           "name": "College Finder",
           "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
         "en-IN": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa open College Finder.",
-            "Alexa ask College Finder about University of Washington.",
-            "Alexa ask College Finder about schools in Washington."
+            "Alexa, open College Finder",
+            "Alexa, ask College Finder about University of Washington"
           ],
-          "keywords": ["colleges", "universities", "school"],
+          "keywords": ["college", "university", "college", "search", "college", "finder"],
+          "name": "College Finder",
+          "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
+        },
+        "en-AU": {
+          "summary": "A skill to help you narrow down colleges in the United States.",
+          "examplePhrases": [
+            "Alexa, open College Finder",
+            "Alexa, ask College Finder about University of Washington",
+            "Alexa, ask College Finder about schools in Washington"
+          ],
+          "keywords": ["college", "university", "college", "search", "college", "finder"],
           "name": "College Finder",
           "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
         "en-GB": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa open College Finder.",
-            "Alexa ask College Finder about University of Washington.",
-            "Alexa ask College Finder about schools in Washington."
+            "Alexa, open College Finder",
+            "Alexa, ask College Finder about University of Washington",
+            "Alexa, ask College Finder about schools in Washington"
           ],
-          "keywords": ["colleges", "universities", "school"],
-          "name": "College Finder",
-          "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
-        },
-        "en-CA": {
-          "summary": "A skill to help you narrow down colleges in the United States.",
-          "examplePhrases": [
-            "Alexa open College Finder.",
-            "Alexa ask College Finder about University of Washington.",
-            "Alexa ask College Finder about schools in Washington."
-          ],
-          "keywords": ["colleges", "universities", "school"],
+          "keywords": ["college", "university", "college", "search", "college", "finder"],
           "name": "College Finder",
           "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         }
       },
-      "testingInstructions": "Sample Testing Instructions.",
+      "isAvailableWorldwide": true,
+      "testingInstructions": "None",
       "category": "EDUCATION_AND_REFERENCE",
-      "isAvailableWorldwide": false,
-      "distributionCountries": ["US"]
+      "distributionCountries": []
     },
     "apis": {
       "custom": {
         "endpoint": {
           "sourceDir": "lambda/custom"
-        }
+        },
+        "interfaces": [
+          {
+            "type": "RENDER_TEMPLATE"
+          }
+        ]
       }
     },
+    "manifestVersion": "1.0",
     "privacyAndCompliance": {
       "allowsPurchases": false,
-      "usesPersonalInfo": false,
+      "isExportCompliant": true,
+      "containsAds": false,
       "isChildDirected": false,
-      "isExportCompliant": true
-    },
-    "manifestVersion": "1.0"
+      "usesPersonalInfo": false
+    }
   }
 }

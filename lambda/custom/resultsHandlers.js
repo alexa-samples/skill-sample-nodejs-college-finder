@@ -228,7 +228,7 @@ module.exports = {
         schools = attributes[constants.LIST];
         empty = 'FAVORITES_EMPTY';
       } else if (attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS) {
-        schools = attributes[constants.SEARCH_RESULTS];
+        schools = attributes[constants.LIST];
         attributes[constants.SEARCH_PAGE] = Math.max(0, attributes[constants.SEARCH_PAGE] - 1);
       } else {
         schools = attributes[constants.SEARCH_RESULTS];
@@ -276,7 +276,8 @@ module.exports = {
       return (
         handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
         (handlerInput.requestEnvelope.request.intent.name === 'AMAZON.NextIntent' ||
-          handlerInput.requestEnvelope.request.intent.name === 'AMAZON.MoreIntent') &&
+          handlerInput.requestEnvelope.request.intent.name === 'AMAZON.MoreIntent' ||
+          handlerInput.requestEnvelope.request.intent.name === 'MoreInformationIntent') &&
         (attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS ||
           attributes[constants.STATE] === constants.STATES.FAVORITES)
       );

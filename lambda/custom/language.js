@@ -14,6 +14,7 @@ permissions and limitations under the License.
 *********************************************************************/
 'use strict';
 const SKILL_NAME = 'U.S. College Finder';
+// const SKILL_NAME_DE = 'U.S. Universitätsfinder';
 
 module.exports = Object.freeze({
   'en-US': {
@@ -292,9 +293,9 @@ module.exports = Object.freeze({
       MORE_INFORMATION_ERROR:
         "I can't get that information right now. You can hear your results again or search for a school by name. Which would you like to do?",
       MORE_INFORMATION_OVERVIEW:
-        '%%SCHOOL_NAME%% is a school in %%CITY%%, %%STATE%%. In 2015, in-state tuition was <say-as interpret-as="unit">$%%TUITION_IN_STATE%%</say-as> and out-of-state tuition was <say-as interpret-as="unit">$%%TUITION_OUT_OF_STATE%%</say-as>.',
+        '%%SCHOOL_NAME%% is a school in %%CITY%%, %%STATE%%. The latest in-state tuition is <say-as interpret-as="unit">$%%TUITION_IN_STATE%%</say-as> and out-of-state tuition is <say-as interpret-as="unit">$%%TUITION_OUT_OF_STATE%%</say-as>.',
       MORE_INFORMATION_CARD:
-        'Location: %%STATE%%\n2015 Tuition (In-State): $%%TUITION_IN_STATE%%\n2014 Tuition (Out-Of-State): $%%TUITION_OUT_OF_STATE%%\n',
+        'Location: %%STATE%%\nIn-State Tuition: $%%TUITION_IN_STATE%%\nOut-Of-State Tuition: $%%TUITION_OUT_OF_STATE%%\n',
       MORE_INFORMATION_SAVE_PROMPT:
         'You can save this school to your favorites list or go back. Which would you like to do?',
       MORE_INFORMATION_FAV_PROMPT:
@@ -305,7 +306,30 @@ module.exports = Object.freeze({
       ERROR_CANT: "I don't know that one. ",
       ERROR_INVALID_VALUE: "That's not a valid value. ",
 
-      GOODBYE: 'Thank you for using College Finder.'
+      GOODBYE: 'Thank you for using ' + SKILL_NAME + '.'
     }
   }
+  /*
+  'de-DE': {
+    translation: {
+      LABEL_NAME: SKILL_NAME_DE,
+      WELCOME_SHORT: 'Willkommen zurück zum ' + SKILL_NAME_DE + '. ',
+      WELCOME_LONG: '',
+      WELCOME_TOP_PICK: 'Meine derzeitige beste Universität für Sie ist %%SCHOOL%%. ',
+      WELCOME_MENU: '',
+      SEARCH:
+        'Sie können über 3000 Universität nach Hauptfach, Standorten in den Vereinigten Staaten suchen, oder nach einer Schule mit Namen fragen. Welches möchtest du?',
+      WELCOME_BACK_NO_PROFILE:
+        'Um die besten Ergebnisse zu erzielen, muss ich etwas mehr über Sie wissen. Möchten Sie Ihr Profil jetzt beenden?',
+      WELCOME_BACK_INCOMPLETE_PROFILE:
+        'Es sieht so aus, als ob du dein Profil nicht ausgefüllt hast. Willst du es jetzt beenden?',
+      WELCOME_HELP: '',
+      WELCOME_HELP_LISTEN: '',
+
+      GENERIC_ERROR: 'Ich habe dich nicht verstanden. ',
+
+      GOODBYE: 'Danke für die Suche mit ' + SKILL_NAME_DE
+    }
+  }
+  */
 });

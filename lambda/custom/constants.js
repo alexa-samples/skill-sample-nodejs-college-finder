@@ -34,11 +34,11 @@ module.exports = Object.freeze({
 
   // API Parameters
   FIELDS:
-    '&_fields=id,school.name,school.city,school.state,2015.cost.tuition.in_state,2015.cost.tuition.out_of_state,' +
-    '2014.admissions.admission_rate.overall,2015.student.size,2015.completion.completion_rate_4yr_150nt,' +
-    '2013.earnings.10_yrs_after_entry.median',
-  SORTBYSIZE: '&_sort=2015.student.size:desc',
-  LIMITCOST: '&2015.cost.tuition.in_state__range=0.0..100000.0',
+    '&_fields=id,school.name,school.city,school.state,latest.cost.tuition.in_state,latest.cost.tuition.out_of_state,' +
+    'latest.admissions.admission_rate.overall,latest.student.size,latest.completion.completion_rate_4yr_150nt,' +
+    'latest.earnings.10_yrs_after_entry.median',
+  SORTBYSIZE: '&_sort=latest.student.size:desc',
+  LIMITCOST: '&latest.cost.tuition.in_state__range=0.0..100000.0',
   SEARCHPAGING: '&per_page=12',
   RECORD_LIMIT: 12,
   PER_PAGE: 3,
