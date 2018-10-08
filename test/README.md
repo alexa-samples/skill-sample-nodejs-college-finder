@@ -99,7 +99,7 @@ For CodeCov to work with a Github repo like this one, just go to their site and 
 Once signed up, you will see a list of repos - just select a repo and enable it for testing.
 
 ## Wrapup
-There are many aspects to testing and automation, and we have run through a few here. To learn more about it and how Bespoken approaches it, take a look at this site:   https://bespoken.io/testing.
+There are many aspects to testing and automation, and we have run through a few here. To learn more about it and how Bespoken approaches it, take a look at this site:     https://bespoken.io/testing.
 
 And if you need assistance, reach out to Bespoken on any of these channels:
 * [Email](mailto:support@bespoken.io)
