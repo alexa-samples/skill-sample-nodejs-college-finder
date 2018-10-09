@@ -20,7 +20,7 @@ To get started with testing, install the Bespoken CLI:
 ## Running Unit Tests
 Unit tests can be found under the `test/unit` folder.
 
-Key configuration settings for the tests are found in the [testing.json](/test/testing.json). For full details on how the testing.json works, read [here](https://read.bespoken.io/end-to-end/guide/#configuration).
+Key configuration settings for the tests are found in the [testing.json](testing.json). For full details on how the testing.json works, read [here](https://read.bespoken.io/end-to-end/guide/#configuration).
 
 To run the tests, simply open a command-line terminal, go to the project directory and type:  
 ```
@@ -77,7 +77,7 @@ To use the end-to-end testing, it is necessary to do the following:
 * Enable it for testing via the Alexa app
 * Setup a [Virtual Device Token](https://read.bespoken.io/end-to-end/setup/) with Bespoken
 
-The virtual device token should then be included in the [testing.json](../testing.json#L2) file. It is what allows us to interact with Alexa programmatically.
+The virtual device token should then be included in the [testing.json](testing.json#L2) file. It is what allows us to interact with Alexa programmatically.
 
 ## Setting Up Continuous Integration (CI)
 We configured the project with Travis CI so that unit tests are run everytime code is pushed to Github. There are any number of great Continuous Integration tools out there - we use Travis here as just one example to get developers started with using CI.
