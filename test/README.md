@@ -77,14 +77,14 @@ To use the end-to-end testing, it is necessary to do the following:
 * Enable it for testing via the Alexa app
 * Setup a [Virtual Device Token](https://read.bespoken.io/end-to-end/setup/) with Bespoken
 
-The virtual device token should then be included in the [testing.json](../testing.json#L2) file. It is what allows us to interact with Alexa programmatically.
+The virtual device token should then be included in the [testing.json](../testing.json#L8) file. It is what allows us to interact with Alexa programmatically.
 
 ## Setting Up Continuous Integration (CI)
 We configured the project with Travis CI so that unit tests are run everytime code is pushed to Github. There are any number of great Continuous Integration tools out there - we use Travis here as just one example to get developers started with using CI.
 
 The Travis configuration is stored under [.travis.yml](../.travis.yml). For running unit-tests, we install the Bespoken CLI and the CodeCov CLI. Then we run the unit tests and send the data to CodeCov.
 
-To setup Travis for your own project, go to [travisci.org](https://travis-ci.org) - if you have not signed up before, choose "Sign In With Github" and then you will see a list of your Github repos. Select your repo to enable it, and you should be all set!
+To setup Travis for your own project, go to [travis-ci.org](https://travis-ci.org) - if you have not signed up before, choose "Sign In With Github" and then you will see a list of your Github repos. Select your repo to enable it, and you should be all set!
 
 ## Using CodeCov
 CodeCov.io is a hosted version of the Code Coverage we explained earlier.
