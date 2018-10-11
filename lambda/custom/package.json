@@ -8,8 +8,5 @@
   },
   "dependencies": {
     "ask-sdk": "^2.1.0-beta.1"
-  },
-  "devDependencies": {
-    "bespoken-tools": "^2.0.22"
   }
 }
