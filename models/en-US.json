@@ -492,6 +492,10 @@
         {
           "name": "AMAZON.FallbackIntent",
           "samples": []
+        },
+        {
+            "name": "ResetProfileIntent",
+            "samples": ["click your heels together three times"]
         }
       ],
       "types": [

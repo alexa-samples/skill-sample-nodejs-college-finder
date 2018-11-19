@@ -3,3 +3,5 @@
 node_modules/
 .vscode/
 npm-debug.log
+coverage/
+*.code-workspace

@@ -1,0 +1,129 @@
+#=====================================================================================================================
+#     ______    _ ____  ______        __  _
+#    / __/ /__ (_) / / /_  __/__ ___ / /_(_)__  ___ _
+#   _\ \/  '_// / / /   / / / -_|_-</ __/ / _ \/ _ `/
+#  /___/_/\_\/_/_/_/   /_/  \__/___/\__/_/_//_/\_, /
+#                                             /___/
+#
+# Created by Bespoken
+# Learn more at https://read.bespoken.io/unit-testing/getting-started/
+#
+# Skill name: "College Finder" by Amazon
+# Test scope: RefineSearchIntent
+# Description: Test suite for search intents
+#=====================================================================================================================
+
+---
+configuration:
+  dynamo: mock
+
+---
+- test: Launch request, then refine search by state
+- LaunchRequest: # LaunchRequest is not an utterance but a request type and reserved word
+  - response.outputSpeech.ssml: Welcome to U.S. College Finder, I can help you find a college in the United States that's right for you using your personal preferences and test scores.
+- SearchByLocationIntent STATE=Maryland: You can refine your search or hear the first 12 results
+- RefineSearchIntent:
+  - prompt: What zip code would you like to search for?
+  - request.request.dialogState: STARTED
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    HOME: "20816"
+    DISTANCE: "20"
+    STATE: Maryland
+    REGION: Southeast
+    MAJOR: history
+    COST: 50000
+    TYPE: public
+    SIZE: large
+  - prompt: You now have * results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+
+---
+- test: Refine search by region
+- LaunchRequest
+- SearchByLocationIntent REGION="New England": You can refine your search or hear the first 12 results
+- RefineSearchIntent:
+  - prompt: What zip code would you like to search for?
+  - request.request.dialogState: STARTED
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    HOME: "20816"
+    DISTANCE: "20"
+    STATE: Maryland
+    REGION: Southeast
+    MAJOR: history
+    COST: 50000
+    TYPE: public
+    SIZE: large
+  - response.outputSpeech.ssml: You now have * results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+
+---
+- test: Test add and remove favorites
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    LOCATION: state
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    HOME: "20816"
+    DISTANCE: "20"
+    STATE: Maryland
+    REGION: Southeast
+    MAJOR: history
+    COST: 50000
+    TYPE: public
+    SIZE: large
+- ListSchoolsIntent: 
+  - response.outputSpeech.ssml: Here are your search results.
+  - response.outputSpeech.ssml: You can hear details about one of these, or hear more results. Which would you like?
+- NumberIntent NUMBER=1: You can save this school to your favorites list or go back. Which would you like to do?
+- AddToFavoritesIntent: You can hear your results again or list your favorites. Which would you like to do?
+- ListSchoolsIntent
+- NumberIntent NUMBER=2: You can save this school to your favorites list or go back. Which would you like to do?
+- AddToFavoritesIntent
+- ListFavoritesIntent: You have 2 schools on this list
+- DeleteFromFavoritesIntent NUMBER=1: You have 1 schools on this list
+
+---
+- test: Test next and previous intents
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    LOCATION: state
+- RefineSearchIntent:
+  - intent: RefineSearchIntent
+    HOME: "20816"
+    DISTANCE: "20"
+    STATE: Maryland
+    REGION: Southeast
+    MAJOR: history
+    COST: 50000
+    TYPE: public
+    SIZE: large
+- ListSchoolsIntent # List the schools again to test next intent
+- AMAZON.NextIntent: You can hear details about one of these, or hear more results. Which would you like?
+- AMAZON.PreviousIntent: You can hear details about one of these, or hear more results. Which would you like?
+- AMAZON.PreviousIntent: You can hear details about one of these, or hear more results. Which would you like?
+
+---
+- test: Launch request, no further interaction.
+- LaunchRequest # We already tested the launch request
+- RefineSearchIntent:
+  - prompt: I can search by region, state, or zip code. Which option would you like?
+- RefineSearchIntent LOCATION=state:
+  - prompt: What zip code would you like to search for?
+- RefineSearchIntent HOME=20816:
+  - prompt: How many miles from your zip code do you want to search?
+- RefineSearchIntent DISTANCE=20:
+  - prompt: What state would you like to search for?
+- RefineSearchIntent STATE=Maryland:
+  - prompt: What region would you like to search for?
+- RefineSearchIntent REGION=Southeast:
+  - prompt: What major would you like to search for?
+- RefineSearchIntent MAJOR=history:
+  - prompt: What is the max you want to pay per year for tuition and fees?
+- RefineSearchIntent COST=50000:
+  - prompt:  Do you want to search for public, or private schools?
+- RefineSearchIntent TYPE=public:
+  - prompt: What size school do you want to search for. Small, medium, or large?
+- RefineSearchIntent SIZE=large:
+  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+- ListSchoolsIntent:
+  - response.outputSpeech.ssml: Here are your search results.

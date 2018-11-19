@@ -351,6 +351,18 @@ module.exports = {
       return handlerInput.responseBuilder.speak(message).reprompt(message).getResponse();
     }
   },
+  ResetProfileHandler: {
+    canHandle (handlerInput) {
+      return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+        handlerInput.requestEnvelope.request.intent.name === 'ResetProfileIntent';
+    },
+    handle (handlerInput) {
+      helpers.clearUser(handlerInput);
+      return handlerInput.responseBuilder.speak("Your profile has been reset")
+        .reprompt("Your profile has been reset. What would you like to do next?")
+        .getResponse();
+    }
+  },
   /**
    * Central error handler with contextual messaging.
    */

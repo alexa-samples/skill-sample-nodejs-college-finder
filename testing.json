@@ -1,0 +1,13 @@
+{
+  "handler": "lambda/custom/index.js",
+  "homophones": {
+    "set as": ["set is"]
+  },
+  "locale": "en-US",
+  "trace": true,
+  "virtualDeviceToken": "14c63318-1a59-4cf3-a51b-a405278c43c6",
+  "jest": {
+    "collectCoverageFrom": ["lambda/custom/*.js"],
+    "silent": false
+  }
+}

@@ -1,0 +1,56 @@
+#=====================================================================================================================
+#     ______    _ ____  ______        __  _
+#    / __/ /__ (_) / / /_  __/__ ___ / /_(_)__  ___ _
+#   _\ \/  '_// / / /   / / / -_|_-</ __/ / _ \/ _ `/
+#  /___/_/\_\/_/_/_/   /_/  \__/___/\__/_/_//_/\_, /
+#                                             /___/
+#
+# Created by Bespoken
+# Learn more at https://read.bespoken.io/end-to-end/getting-started/
+#
+# Skill name: "College Finder" by Amazon
+# Test scope: Basic search without refining
+# Description: General End-to-end test suite
+#=====================================================================================================================
+
+---
+configuration:
+  locale: en-US
+  voiceId: Joey
+  type: e2e
+
+---
+- test: Invoke skill, do not create profile, search by major without refining
+- open college finder
+- no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
+- search by major: what major would you like to search for
+- biology: i found * schools for biological and biomedical sciences you can refine your search or hear the first 12 results which would you like
+- i want to hear my results: here are your search results * you can hear details about one of these or hear more results which would you like
+- details about xavier university: xavier university is a school in cincinnati ohio
+- go back: you can hear details about one of these or hear more results which would you like
+- stop
+
+---
+# This test comes back with University of Maryland University College when College Park is requested
+- test.skip: Make sure UMCP is recognized correctly
+- ask college finder for information about university of maryland college park:
+  - prompt: University of Maryland College Park is a school in Adelphi Maryland the latest in-state tuition is $7,176 and out-of-state tuition is $12,336 you can save the school to your favorites list or go back which would you like to do
+
+---
+- test: Invoke skill, do not create profile, search by major without refining, hear 6 results and stop
+- open college finder
+- no
+- search by location: in what state or region would you like to search for schools
+- north dakota: i found * schools in north dakota you can refine your search or hear the first 12 results which would you like
+- i want to hear my results: here are your search results
+- details about bismarck state college: bismarck state college is a school in bismarck north dakota * you can save this school to your favorites list or go back which would you like to do
+- go back: you can hear details about one of these or hear more results which would you like
+- more results: 4 minot state university 5 north dakota state college of science 6 university of mary you can hear details about one of these or hear more results which would you like
+- stop
+
+---
+- test: Invoke skill, do not create profile, look up a specific school
+- open college finder
+- no
+- search for university of chicago: university of illinois at chicago is a school in chicago illinois
+- stop

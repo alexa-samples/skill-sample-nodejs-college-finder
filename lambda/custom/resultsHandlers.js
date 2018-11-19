@@ -228,6 +228,7 @@ module.exports = {
         schools = attributes[constants.LIST];
         empty = 'FAVORITES_EMPTY';
       } else if (attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS) {
+        schools = attributes[constants.LIST];
         attributes[constants.SEARCH_PAGE] = Math.max(0, attributes[constants.SEARCH_PAGE] - 1);
       } else {
         schools = attributes[constants.SEARCH_RESULTS];
@@ -508,7 +509,7 @@ module.exports = {
         } else {
           if (intentObj.slots['NUMBER'] && intentObj.slots['NUMBER'].value) {
             let number = parseInt(intentObj.slots['NUMBER'].value);
-            number -= number;
+            number -= 1;
 
             if (number < 0 || number > schools.length) {
               return notFound(handlerInput, attributes);
@@ -552,6 +553,7 @@ module.exports = {
 
           while (num < max) {
             schoolList += `${num + 1}. ${schools[num]['school.name']}. `;
+            num++;
           }
 
           message = helpers.getPromptMessage(

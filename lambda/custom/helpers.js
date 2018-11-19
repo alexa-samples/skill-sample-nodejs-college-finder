@@ -112,7 +112,7 @@ module.exports = {
   getSlotValidation (filledSlots) {
     const slotValues = {};
 
-    filledSlots.forEach(item => {
+    Object.keys(filledSlots).forEach(item => {
       const name = filledSlots[item].name;
 
       if (
@@ -223,6 +223,20 @@ module.exports = {
       return handlerInput.attributesManager.savePersistentAttributes();
     }
   },
+
+  clearUser (handlerInput) {
+    let attributes = handlerInput.attributesManager.getSessionAttributes();
+    console.info('Clearing Dynamo: ' + attributes);
+
+    for (const key of Object.keys(attributes)) {
+      attributes[key] = undefined;
+    }
+
+    handlerInput.attributesManager.setSessionAttributes(attributes);
+    handlerInput.attributesManager.setPersistentAttributes(attributes);
+    return handlerInput.attributesManager.savePersistentAttributes();
+  },
+
 
   /**
    * Helper function to clear out temporary search attributes on

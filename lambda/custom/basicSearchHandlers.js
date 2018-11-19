@@ -52,7 +52,7 @@ module.exports = {
     handle (handlerInput) {
       const intentName = handlerInput.requestEnvelope.request.intent.name;
       const filledSlots = handlerInput.requestEnvelope.request.intent.slots;
-      const slotValues = helpers.getSlotValues(filledSlots);
+      const slotValues = helpers.getSlotValidation(filledSlots);
       let slot;
 
       if (

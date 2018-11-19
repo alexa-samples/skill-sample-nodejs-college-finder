@@ -1,0 +1,33 @@
+#=====================================================================================================================
+#     ______    _ ____  ______        __  _
+#    / __/ /__ (_) / / /_  __/__ ___ / /_(_)__  ___ _
+#   _\ \/  '_// / / /   / / / -_|_-</ __/ / _ \/ _ `/
+#  /___/_/\_\/_/_/_/   /_/  \__/___/\__/_/_//_/\_, /
+#                                             /___/
+#
+# Created by Bespoken
+# Learn more at https://read.bespoken.io/unit-testing/getting-started/
+#
+# Skill name: "College Finder" by Amazon
+# Test scope: AMAZON.HelpIntent
+# Description: Test the basic search functionality
+#=====================================================================================================================
+
+---
+configuration:
+  dynamo: mock
+
+---
+- test: Get help for various intents
+- AMAZON.HelpIntent: This skill will help you narrow down your selection of schools in the United States using a curated set of criteria
+- ListFavoritesIntent
+- AMAZON.HelpIntent: You can add up to 12 schools to your favorites list from your search results.
+- ListSchoolsIntent
+- AMAZON.HelpIntent: This list is filtered by the preferences you set in your profile.
+- ResetProfileIntent: Your profile has been reset
+- SessionEndedRequest:
+  - response.outputSpeech: undefined
+
+---
+- test: Get region list
+- RegionListIntent: You can ask me for a state, or for a region like New England, Mid-Atlantic, Great Lakes, Plains, Southeast, Southwest, Far West, or Rocky Mountains
