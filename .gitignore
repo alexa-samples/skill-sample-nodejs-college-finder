@@ -4,5 +4,4 @@ node_modules/
 .vscode/
 npm-debug.log
 coverage/
-.ask
 *.code-workspace
