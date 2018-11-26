@@ -5,4 +5,3 @@ node_modules/
 npm-debug.log
 coverage/
 *.code-workspace
-lambda/custom/package-lock.json
