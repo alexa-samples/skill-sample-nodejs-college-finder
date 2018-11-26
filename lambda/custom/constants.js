@@ -55,7 +55,7 @@ module.exports = Object.freeze({
   FIRST_RUN: 'FIRST_RUN',
 
   // User information
-  SCORE: 'SCORE',
+  SCORES: 'SCORES',
   SAT: 'SAT',
   ACT: 'ACT',
   HOME: 'HOME',

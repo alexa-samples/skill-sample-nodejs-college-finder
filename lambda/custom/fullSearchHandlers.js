@@ -33,7 +33,7 @@ const config = require('./config');
  */
 function zeroOutLocation (intentObj, type) {
   console.info('Zeroing out location for location type of: ', type);
-  switch (type.toUpperCase()) {
+  switch (type.toString().toUpperCase()) {
     case constants.LOCATION_STATE: {
       intentObj.slots[constants.LOCATION].value = type;
       intentObj.slots[constants.LOCATION_REGION].value = constants.NO_PREFERENCE;
@@ -101,6 +101,29 @@ function confirmSlotManual (handlerInput, attributes, prompt, slot) {
     .speak(prompt)
     .reprompt(prompt)
     .addConfirmSlotDirective(slot, attributes[constants.SEARCH_INTENT])
+    .getResponse();
+}
+
+/**
+ * Helper function for calling Alexa to manually elicity a slot value and saving
+ * dialog state to the attributes.
+ *
+ * @param {Object} handlerInput
+ * @param {Object} attributes
+ * @param {String} prompt
+ * @param {String} slot
+ */
+function nextSlotManual (handlerInput, attributes, prompt, slot) {
+  attributes[constants.CURRENT_SLOT] = slot;
+  attributes[constants.SEARCH] = handlerInput.requestEnvelope.request.intent;
+  attributes[constants.STATE] = constants.STATES.REFINE_SEARCH;
+
+  helpers.saveUser(handlerInput, attributes, 'session');
+
+  return handlerInput.responseBuilder
+    .speak(prompt)
+    .reprompt(prompt)
+    .addElicitSlotDirective(slot, attributes[constants.SEARCH])
     .getResponse();
 }
 
@@ -184,11 +207,11 @@ function getSearchData (attributes) {
   }
 
   // SAT or ACT scores are a range value
-  if (intentObj[constants.SCORE].value === constants.SAT) {
+  if (intentObj['SCORE'].value === constants.SAT) {
     url += `&latest.admissions.sat_scores.average.overall__range=400..${parseFloat(
       attributes[constants.SAT]
     )}`;
-  } else if (intentObj[constants.SCORE].value === constants.ACT) {
+  } else if (intentObj['SCORE'].value === constants.ACT) {
     url += `&latest.admissions.act_scores.25th_percentile.cumulative__range=1..
       ${parseFloat(attributes[constants.ACT])}`;
   }
@@ -281,12 +304,12 @@ module.exports = {
       }
 
       if (attributes[constants.SAT]) {
-        intentObj.slots[constants.SCORE].value = constants.SAT;
+        intentObj.slots['SCORE'].value = constants.SAT;
       } else if (attributes[constants.ACT]) {
-        intentObj.slots[constants.SCORE].value = constants.ACT;
+        intentObj.slots['SCORE'].value = constants.ACT;
       } else {
-        intentObj.slots[constants.SCORE].value = constants.NO_PREFERENCE;
-        intentObj.slots[constants.SCORE].confirmationStatus = constants.CONFIRMED;
+        intentObj.slots['SCORE'].value = constants.NO_PREFERENCE;
+        intentObj.slots['SCORE'].confirmationStatus = constants.CONFIRMED;
       }
 
       // Start of slot filling should either solicit a major or a location
@@ -356,37 +379,35 @@ module.exports = {
             console.log('Current slot: ', JSON.stringify(currentSlot));
 
             if (currentSlot.confirmationStatus === constants.NONE) {
-              if (currentSlot.value) {
-                console.log(currentSlot.value);
+              const validValue = helpers.getSlotResolution(handlerInput, slotName);
+
+              // First check that the value given matches a slot value
+              if (validValue) {
+                console.log('ER Result: ', validValue);
+                intentObj.slots[slotName].confirmationStatus = constants.CONFIRMED;
+                intentObj.slots[slotName].value = validValue;
                 switch (slotName) {
                   case constants.LOCATION: {
-                    const choice = helpers.getSlotResolution(handlerInput, slotName);
-                    intentObj.slots[constants.LOCATION].confirmationStatus = constants.CONFIRMED;
-
                     // If the user selected zip code, check if there is a stored home zip code and confirm
                     if (
-                      choice.toUpperCase() === constants.HOME &&
+                      validValue.toUpperCase() === constants.HOME &&
                       intentObj.slots[constants.HOME].value
                     ) {
-                      intentObj = zeroOutLocation(intentObj, choice);
+                      intentObj = zeroOutLocation(intentObj, validValue);
                       prompt = helpers.getMessage(handlerInput, 'INTRODUCTION_HOME_CONFIRM');
                       handlerInput.requestEnvelope.request.intent = intentObj;
 
                       return confirmSlotManual(handlerInput, attributes, prompt, slotName);
                     } else {
-                      intentObj = zeroOutLocation(intentObj, choice);
+                      intentObj = zeroOutLocation(intentObj, validValue);
                     }
                     break;
                   }
                   case constants.MAJOR: {
-                    if (intentObj.slots[constants.MAJOR].resolutions) {
-                      attributes[constants.SCHOOL_MAJOR_ID] = helpers.getSlotResolutionId(
-                        handlerInput,
-                        constants.MAJOR
-                      );
-                    } else {
-                      attributes[constants.SCHOOL_MAJOR_ID] = attributes[constants.MAJOR_ID];
-                    }
+                    attributes[constants.SCHOOL_MAJOR_ID] = helpers.getSlotResolutionId(
+                      handlerInput,
+                      slotName
+                    );
                     break;
                   }
                   case constants.COST: {
@@ -397,7 +418,7 @@ module.exports = {
                     return confirmSlotManual(handlerInput, attributes, prompt, slotName);
                     break;
                   }
-                  case constants.SCORE: {
+                  case 'SCORE': {
                     prompt = helpers
                       .getMessage(handlerInput, 'INTRODUCTION_SCORE_CONFIRM')
                       .replace('%%SCORE%%', currentSlot.value);
@@ -406,9 +427,16 @@ module.exports = {
                     break;
                   }
                 }
+                currentSlot.confirmationStatus = constants.CONFIRMED;
+                return nextSlotDelegate(handlerInput, attributes, intentObj);
+              } else if (currentSlot.value && validValue == false) {
+                prompt =
+                  helpers.getMessage(handlerInput, 'REFINE_SEARCH_NO_MATCH') +
+                  helpers.getMessage(handlerInput, 'INTRODUCTION_' + slotName);
+                return nextSlotManual(handlerInput, attributes, prompt, slotName);
+              } else {
+                return nextSlotDelegate(handlerInput, attributes, intentObj);
               }
-
-              return nextSlotDelegate(handlerInput, attributes, intentObj);
             }
           }
         }

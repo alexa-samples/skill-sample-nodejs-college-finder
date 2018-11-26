@@ -162,6 +162,8 @@ module.exports = Object.freeze({
       REFINE_SEARCH_UNACCEPTED:
         "That's not a valid option. You can refine your search or start over. Which would you like to do?",
 
+      REFINE_SEARCH_NO_MATCH: "That's not a valid option. ",
+
       INTRODUCTION_NO_PREFERENCE: 'Ok, you have no preference.',
 
       INTRODUCTION_MAJOR: 'What major would you like to search for?',
@@ -174,21 +176,25 @@ module.exports = Object.freeze({
         'You saved your <say-as interpret-as="spell-out">%%SCORE%%</say-as>. Do you want to include it in your search?',
       INTRODUCTION_HOME_CONFIRM: 'Do you want to use the zip code stored in your profile?',
 
-      INTRODUCTION_LOCATION_STATES: 'In which state would you like to study?',
+      INTRODUCTION_LOCATION:
+        'I can search by region, state, or zip code. Which option would you like?',
+      INTRODUCTION_STATE: 'In which state would you like to study?',
+      INTRODUCTION_REGION: 'In which region would you like to study?',
       INTRODUCTION_LOCATION_STATES_VALUE: "Ok, I'll look for schools in %%STATES%%.",
 
+      INTRODUCTION_DISTANCE: 'How many miles from your zip code do you want to search?',
       INTRODUCTION_LOCATION_ZIP_CODE_DISTANCE:
         "What's the maximum distance from your zip code you want to search?",
       INTRODUCTION_LOCATION_ZIP_CODE_DISTANCE_VALUE:
         "Ok, I'll search for schools within %%DISTANCE%% miles.",
 
-      INTRODUCTION_SCHOOL_TYPE: 'Do you prefer a public or a private school?',
+      INTRODUCTION_TYPE: 'Do you prefer a public or a private school?',
       INTRODUCTION_SCHOOL_TYPE_PUBLIC: "I've noted your preference for a public school.",
       INTRODUCTION_SCHOOL_TYPE_PRIVATE: "I've noted your preference for a private school.",
       INTRODUCTION_SCHOOL_TYPE_HELP:
         'By understanding your preference for public or private schools, I can narrow down your school search results. You can also skip this question if you have no preference. Do you prefer a public or private school?',
 
-      INTRODUCTION_SCHOOL_SIZE: 'Are you interested in a small, medium, or large school?',
+      INTRODUCTION_SIZE: 'Are you interested in a small, medium, or large school?',
       INTRODUCTION_SCHOOL_SIZE_SMALL: "Ok, I'll search for only small-sized schools.",
       INTRODUCTION_SCHOOL_SIZE_MEDIUM: "Ok, I'll search for only medium-sized schools.",
       INTRODUCTION_SCHOOL_SIZE_LARGE: "Ok, I'll search for only large-sized schools.",

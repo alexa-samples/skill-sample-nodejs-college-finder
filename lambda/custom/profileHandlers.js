@@ -34,7 +34,7 @@ const helpers = require('./helpers');
 function numberError (handlerInput, attributes, number) {
   if (attributes[constants.STATE] === constants.STATES.SCORES) {
     let rangeLow, rangeHigh;
-    if (attributes[constants.SCORE] === constants.SAT) {
+    if (attributes[constants.SCORES] === constants.SAT) {
       rangeLow = 400;
       rangeHigh = 1600;
     } else {
@@ -43,7 +43,7 @@ function numberError (handlerInput, attributes, number) {
     }
     attributes[constants.INTRO_MESSAGE] = helpers
       .getMessage(handlerInput, 'SCORE_NUMBER_ERROR')
-      .replace('%%SCORE%%', attributes[constants.SCORE])
+      .replace('%%SCORE%%', attributes[constants.SCORES])
       .replace('%%RANGELOW%%', rangeLow)
       .replace('%%RANGEHIGH%%', rangeHigh);
   } else if (attributes[constants.STATE] === constants.STATES.COST) {
@@ -125,10 +125,7 @@ function moveOn (handlerInput, attributes) {
   helpers.saveUser(handlerInput, attributes, 'session');
   helpers.saveUser(handlerInput, attributes, 'persistent');
 
-  return handlerInput.responseBuilder
-    .speak(message)
-    .reprompt(message)
-    .getResponse();
+  return handlerInput.responseBuilder.speak(message).reprompt(message).getResponse();
 }
 
 function allNull (attributes) {
@@ -443,27 +440,27 @@ module.exports = {
 
       let selection;
 
-      if (attributes[constants.SCORE]) {
-        selection = attributes[constants.SCORE];
-      } else if (helpers.getSlotResolution(handlerInput, 'TEST') !== undefined) {
-        selection = helpers.getSlotResolution(handlerInput, 'TEST');
+      if (attributes[constants.SCORES]) {
+        selection = attributes[constants.SCORES];
+      } else if (helpers.getSlotResolution(handlerInput, constants.SCORES)) {
+        selection = helpers.getSlotResolution(handlerInput, constants.SCORES);
       }
 
       console.info('SCORE Type: ', selection);
       let message;
       switch (selection) {
         case constants.SAT: {
-          attributes[constants.SCORE] = constants.SAT;
+          attributes[constants.SCORES] = constants.SAT;
           message = 'INTRODUCTION_SAT';
           break;
         }
         case constants.ACT: {
-          attributes[constants.SCORE] = constants.ACT;
+          attributes[constants.SCORES] = constants.ACT;
           message = 'INTRODUCTION_ACT';
           break;
         }
         case 'BOTH': {
-          attributes[constants.SCORE] = 'BOTH';
+          attributes[constants.SCORES] = 'BOTH';
           message = 'INTRODUCTION_SAT';
           break;
         }
@@ -601,21 +598,21 @@ module.exports = {
 
       switch (attributes[constants.STATE]) {
         case constants.STATES.SCORES: {
-          if (attributes[constants.SCORE]) {
-            if (attributes[constants.SCORE] === 'BOTH') {
+          if (attributes[constants.SCORES]) {
+            if (attributes[constants.SCORES] === 'BOTH') {
               attributes[constants.SAT] = constants.NO_PREFERENCE;
-              attributes[constants.SCORE] = constants.ACT;
+              attributes[constants.SCORES] = constants.ACT;
 
               return handlerInput.responseBuilder
                 .speak(helpers.getMessage(handlerInput, 'INTRODUCTION_ACT'))
                 .reprompt(helpers.getMessage(handlerInput, 'INTRODUCTION_ACT'))
                 .getResponse();
-            } else if (attributes[constants.SCORE] === constants.SAT) {
+            } else if (attributes[constants.SCORES] === constants.SAT) {
               attributes[constants.INTRO_MESSAGE] = helpers.getMessage(
                 handlerInput,
                 'NO_SAT_SCORE'
               );
-            } else if (attributes[constants.SCORE] === constants.ACT) {
+            } else if (attributes[constants.SCORES] === constants.ACT) {
               attributes[constants.INTRO_MESSAGE] = helpers.getMessage(
                 handlerInput,
                 'NO_ACT_SCORE'
@@ -668,7 +665,8 @@ module.exports = {
       return (
         handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
         handlerInput.requestEnvelope.request.intent.name === 'NumberIntent' &&
-        ((attributes[constants.STATE] === constants.STATES.SCORES && attributes[constants.SCORE]) ||
+        ((attributes[constants.STATE] === constants.STATES.SCORES &&
+          attributes[constants.SCORES]) ||
           attributes[constants.STATE] === constants.STATES.COST ||
           attributes[constants.STATE] === constants.STATES.HOME)
       );
@@ -683,7 +681,7 @@ module.exports = {
       if (attributes[constants.STATE] === constants.STATES.SCORES) {
         // SAT Score range: 400 - 1600
         // ACT Score range: 1 - 36
-        if (attributes[constants.SCORE] === constants.SAT) {
+        if (attributes[constants.SCORES] === constants.SAT) {
           let validSATScore = !Number.isNaN(number) && (number >= 400 && number <= 1600);
 
           if (!validSATScore) {
@@ -691,7 +689,7 @@ module.exports = {
           }
 
           attributes[constants.SAT] = number;
-        } else if (attributes[constants.SCORE] === constants.ACT) {
+        } else if (attributes[constants.SCORES] === constants.ACT) {
           let validACTScore = !Number.isNaN(number) && (number >= 1 && number <= 36);
 
           if (!validACTScore) {
@@ -707,7 +705,7 @@ module.exports = {
           }
 
           attributes[constants.SAT] = number;
-          attributes[constants.SCORE] = constants.ACT;
+          attributes[constants.SCORES] = constants.ACT;
 
           return handlerInput.responseBuilder
             .speak(helpers.getMessage(handlerInput, 'INTRODUCTION_ACT'))
@@ -717,9 +715,9 @@ module.exports = {
 
         attributes[constants.INTRO_MESSAGE] = helpers
           .getMessage(handlerInput, 'SCORE_CONFIRM')
-          .replace('%%SCORE%%', attributes[constants.SCORE])
+          .replace('%%SCORE%%', attributes[constants.SCORES])
           .replace('%%NUMBER%%', number);
-        delete attributes[constants.SCORE];
+        delete attributes[constants.SCORES];
       } else if (attributes[constants.STATE] === constants.STATES.COST) {
         let validCost = !isNaN(number) && number >= 0;
 

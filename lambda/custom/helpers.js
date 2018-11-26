@@ -117,7 +117,7 @@ module.exports = {
 
     return false;
   },
-  
+
   /**
    * Gets the ID for the slot for API search values that are not user friendly.
    *
@@ -155,7 +155,7 @@ module.exports = {
 
     return false;
   },
-  
+
   /**
    * Determines if a valid slot value was provided in order to fill CanHandleIntentRequest
    *
@@ -267,7 +267,6 @@ module.exports = {
     handlerInput.attributesManager.setPersistentAttributes(attributes);
     return handlerInput.attributesManager.savePersistentAttributes();
   },
-
 
   /**
    * Helper function to clear out temporary search attributes on
