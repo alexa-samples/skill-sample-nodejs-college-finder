@@ -89,20 +89,73 @@ module.exports = {
    * @returns {String} The root value of the slot
    */
   getSlotResolution (handlerInput, slot) {
-    let slots = handlerInput.requestEnvelope.request.intent.slots;
+    const intent = handlerInput.requestEnvelope.request.intent;
     if (
-      slots[slot] &&
-      slots[slot].resolutions &&
-      slots[slot].resolutions.resolutionsPerAuthority[0] &&
-      slots[slot].resolutions.resolutionsPerAuthority[0].values[0] &&
-      slots[slot].resolutions.resolutionsPerAuthority[0].values[0].value
+      intent.slots[slot] &&
+      intent.slots[slot].resolutions &&
+      intent.slots[slot].resolutions.resolutionsPerAuthority[0]
     ) {
-      return slots[slot].resolutions.resolutionsPerAuthority[0].values[0].value.name;
-    } else {
-      return false;
-    }
-  },
+      const resolutions = intent.slots[slot].resolutions.resolutionsPerAuthority;
 
+      for (let i = 0; i < resolutions.length; i++) {
+        const authoritySource = resolutions[i];
+
+        if (
+          authoritySource.authority.includes('amzn1.er-authority.echo-sdk.' + config.APPID) &&
+          authoritySource.authority.includes(slot)
+        ) {
+          if (authoritySource.status.code === 'ER_SUCCESS_MATCH') {
+            return authoritySource.values[0].value.name;
+          }
+        }
+      }
+      return false;
+    } else if (intent.slots[slot].value && !intent.slots[slot].resolutions) {
+      // For built-in slots that haven't been extended with ER
+      return intent.slots[slot].value;
+    }
+
+    return false;
+  },
+  
+  /**
+   * Gets the ID for the slot for API search values that are not user friendly.
+   *
+   * @param {Object} handlerInput
+   * @param {String} slot
+   * @returns {String} The id for the given slot
+   */
+  getSlotResolutionId (handlerInput, slot) {
+    const intent = handlerInput.requestEnvelope.request.intent;
+    if (
+      intent.slots[slot] &&
+      intent.slots[slot].resolutions &&
+      intent.slots[slot].resolutions.resolutionsPerAuthority[0]
+    ) {
+      const resolutions = intent.slots[slot].resolutions.resolutionsPerAuthority;
+
+      for (let i = 0; i < resolutions.length; i++) {
+        const authoritySource = resolutions[i];
+
+        if (
+          authoritySource.authority.includes('amzn1.er-authority.echo-sdk.' + config.APPID) &&
+          authoritySource.authority.includes(slot)
+        ) {
+          if (authoritySource.status.code === 'ER_SUCCESS_MATCH') {
+            return authoritySource.values[0].value.id;
+          }
+        }
+      }
+
+      return false;
+    } else if (intent.slots[slot].value && !intent.slots[slot].resolutions) {
+      // For built-in slots that haven't been extended with ER
+      return intent.slots[slot].value;
+    }
+
+    return false;
+  },
+  
   /**
    * Determines if a valid slot value was provided in order to fill CanHandleIntentRequest
    *
@@ -144,28 +197,6 @@ module.exports = {
     }, this);
 
     return slotValues;
-  },
-
-  /**
-   * Gets the ID for the slot for API search values that are not user friendly.
-   *
-   * @param {Object} handlerInput
-   * @param {String} slot
-   * @returns {String} The id for the given slot
-   */
-  getSlotResolutionId (handlerInput, slot) {
-    let slots = handlerInput.requestEnvelope.request.intent.slots;
-    if (
-      slots[slot] &&
-      slots[slot].resolutions &&
-      slots[slot].resolutions.resolutionsPerAuthority[0] &&
-      slots[slot].resolutions.resolutionsPerAuthority[0].values[0] &&
-      slots[slot].resolutions.resolutionsPerAuthority[0].values[0].value
-    ) {
-      return slots[slot].resolutions.resolutionsPerAuthority[0].values[0].value.id;
-    } else {
-      return false;
-    }
   },
 
   /**
