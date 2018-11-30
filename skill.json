@@ -5,56 +5,56 @@
         "en-US": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa, open college finder",
-            "Alexa, ask college finder about Washington University",
-            "Alexa, ask College Finder about schools in Washington."
+            "Alexa, open university finder",
+            "Alexa, ask university finder about Washington University",
+            "Alexa, ask University Finder about schools in Washington."
           ],
-          "keywords": ["college", "university", "college", "search", "college", "finder"],
-          "name": "College Finder",
-          "description": "College Finder helps you find the college that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
+          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "name": "University Finder",
+          "description": "University Finder helps you find the university that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
         "en-CA": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa, open College Finder",
-            "Alexa, ask College Finder about University of Washington",
-            "Alexa, ask College Finder about schools in Washington"
+            "Alexa, open University Finder",
+            "Alexa, ask University Finder about University of Washington",
+            "Alexa, ask University Finder about schools in Washington"
           ],
-          "keywords": ["college", "university", "college", "search", "college", "finder"],
-          "name": "College Finder",
-          "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
+          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "name": "University Finder",
+          "description": "University Finder helps you find the university in the United States that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
         "en-IN": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa, open College Finder",
-            "Alexa, ask College Finder about University of Washington"
+            "Alexa, open University Finder",
+            "Alexa, ask University Finder about University of Washington"
           ],
-          "keywords": ["college", "university", "college", "search", "college", "finder"],
-          "name": "College Finder",
-          "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
+          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "name": "University Finder",
+          "description": "University Finder helps you find the university in the United States that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
         "en-AU": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa, open College Finder",
-            "Alexa, ask College Finder about University of Washington",
-            "Alexa, ask College Finder about schools in Washington"
+            "Alexa, open University Finder",
+            "Alexa, ask University Finder about University of Washington",
+            "Alexa, ask University Finder about schools in Washington"
           ],
-          "keywords": ["college", "university", "college", "search", "college", "finder"],
-          "name": "College Finder",
-          "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
+          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "name": "University Finder",
+          "description": "University Finder helps you find the university in the United States that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
         "en-GB": {
           "summary": "A skill to help you narrow down colleges in the United States.",
           "examplePhrases": [
-            "Alexa, open College Finder",
-            "Alexa, ask College Finder about University of Washington",
-            "Alexa, ask College Finder about schools in Washington"
+            "Alexa, open University Finder",
+            "Alexa, ask University Finder about University of Washington",
+            "Alexa, ask University Finder about schools in Washington"
           ],
-          "keywords": ["college", "university", "college", "search", "college", "finder"],
-          "name": "College Finder",
-          "description": "College Finder helps you find the college in the United States that is right for you, matching your preferences with the public College Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
+          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "name": "University Finder",
+          "description": "University Finder helps you find the university in the United States that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         }
       },
       "isAvailableWorldwide": true,

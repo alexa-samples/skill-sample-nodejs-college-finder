@@ -8,7 +8,7 @@
 # Created by Bespoken
 # Learn more at https://read.bespoken.io/unit-testing/getting-started/
 #
-# Skill name: "College Finder" by Amazon
+# Skill name: "University Finder" by Amazon
 # Test scope: ListProfileIntent, ChangeProfileIntent
 # Description: Tests for profile intents
 #=====================================================================================================================
@@ -19,9 +19,9 @@ configuration:
 
 ---
 - test: Setting profile information
-- ListProfileIntent: To get the best college matches, I'll need to know a little more about you. Would you like to finish your profile now?
+- ListProfileIntent: To get the best university matches, I'll need to know a little more about you. Would you like to finish your profile now?
 - AMAZON.YesIntent: To make searching easier, let's build your student profile. You can ask me to skip any of these questions if you're not sure or don't have a preference. OK. First question
-- TestScoresIntent TEST=ACT: Ok. What is your cumulative <say-as interpret-as=\"spell-out\">ACT</say-as> score?
+- TestScoresIntent SCORES=ACT: Ok. What is your cumulative <say-as interpret-as=\"spell-out\">ACT</say-as> score?
 - NumberIntent NUMBER=30: What is the max amount you want to pay annually in <say-as interpret-as=\"spell-out\">US</say-as> dollars?
 - NumberIntent NUMBER=50000: Do you want to pursue a bachelor's degree, or associate's degree?
 - DegreeIntent DEGREE=bachelors:  Do you know your major?
@@ -34,7 +34,7 @@ configuration:
 - ListProfileIntent: You have set the following for your profile
 - ChangeProfileIntent: You can change your scores, degree, major, cost, or zip code. Which would you like to change?
 - ChangeProfileIntent PROFILE=score: Would you like to provide an <say-as interpret-as=\"spell-out\">SAT</say-as> score or <say-as interpret-as=\"spell-out\">ACT</say-as> score?
-- TestScoresIntent TEST=SAT: Ok. What is your <say-as interpret-as="spell-out">SAT</say-as> score?
+- TestScoresIntent SCORES=SAT: Ok. What is your <say-as interpret-as="spell-out">SAT</say-as> score?
 - NumberIntent NUMBER=1300: That's all for your profile.
 - ChangeProfileIntent
 - ChangeProfileIntent PROFILE=major: What field of study would you like to major in?

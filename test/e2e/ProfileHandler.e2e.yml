@@ -8,7 +8,7 @@
 # Created by Bespoken
 # Learn more at https://read.bespoken.io/end-to-end/getting-started/
 #
-# Skill name: "College Finder" by Amazon
+# Skill name: "University Finder" by Amazon
 # Test scope: Creating, updating and adding/removing schools to profile
 # Description: General End-to-end test suite
 #=====================================================================================================================
@@ -21,7 +21,7 @@ configuration:
 
 ---
 - test: Invoke skill, complete profile # Will fail if run more than once. To reset profile info try disabling/enabling skill in alexa.amazon page
-- open college finder
+- open university finder
 - yes: to make searching easier let's build your student profile you can ask me to skip any of these questions if you're not sure or don't have a preference ok first question you can save your sat score or act score which one do you have
 - s-a-t: ok what is your sat score
 - 45: that's not a valid score please provide a sat score between 400 and 1600 what is your score
@@ -35,13 +35,13 @@ configuration:
 
 ---
 - test: Invoke skill, show profile
-- open college finder: welcome back to us college finder
+- open university finder: welcome back to us university finder
 - show me my profile: you have set the following for your profile sat score of 450 tuition and fees of $14,400 and degree preference of bachelors major in the field of business management marketing and related support services and a zip code of 57559 you can change your profile or go back which would you like to do
 - stop
 
 ---
 - test: Invoke skill, update profile (major)
-- open college finder
+- open university finder
 - change my profile: you can change your scores degree major cost or zip code which would you like to change
 - change major: your current program of study is business management marketing and related support services what field of study would you like to major in
 - psychology: psychology is part of psychology i'll save that program to your profile that's all for your profile you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
@@ -50,7 +50,7 @@ configuration:
 
 ---
 - test: Direct search intent call, save/delete result to profile
-- ask college finder to search schools of psychology: i found * schools for psychology you can refine your search or hear the first 12 results which would you like
+- ask university finder to search schools of psychology: i found * schools for psychology you can refine your search or hear the first 12 results which would you like
 - i want to hear my results
 - one: you can save this school to your favorites list or go back which would you like to do
 - save this school to my favorites list: added * to your list you can hear your results again or list your favorites which would you like to do

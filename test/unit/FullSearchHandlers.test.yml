@@ -8,7 +8,7 @@
 # Created by Bespoken
 # Learn more at https://read.bespoken.io/unit-testing/getting-started/
 #
-# Skill name: "College Finder" by Amazon
+# Skill name: "University Finder" by Amazon
 # Test scope: RefineSearchIntent
 # Description: Test suite for search intents
 #=====================================================================================================================
@@ -20,7 +20,7 @@ configuration:
 ---
 - test: Launch request, then refine search by state
 - LaunchRequest: # LaunchRequest is not an utterance but a request type and reserved word
-  - response.outputSpeech.ssml: Welcome to U.S. College Finder, I can help you find a college in the United States that's right for you using your personal preferences and test scores.
+  - response.outputSpeech.ssml: Welcome to U.S. University Finder, I can help you find a university in the United States that's right for you using your personal preferences and test scores.
 - SearchByLocationIntent STATE=Maryland: You can refine your search or hear the first 12 results
 - RefineSearchIntent:
   - prompt: What zip code would you like to search for?
