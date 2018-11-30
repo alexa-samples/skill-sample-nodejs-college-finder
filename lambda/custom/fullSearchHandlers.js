@@ -207,11 +207,11 @@ function getSearchData (attributes) {
   }
 
   // SAT or ACT scores are a range value
-  if (intentObj['SCORE'].value === constants.SAT) {
+  if (intentObj[constants.SCORES].value === constants.SAT) {
     url += `&latest.admissions.sat_scores.average.overall__range=400..${parseFloat(
       attributes[constants.SAT]
     )}`;
-  } else if (intentObj['SCORE'].value === constants.ACT) {
+  } else if (intentObj[constants.SCORES].value === constants.ACT) {
     url += `&latest.admissions.act_scores.25th_percentile.cumulative__range=1..
       ${parseFloat(attributes[constants.ACT])}`;
   }
@@ -304,12 +304,12 @@ module.exports = {
       }
 
       if (attributes[constants.SAT]) {
-        intentObj.slots['SCORE'].value = constants.SAT;
+        intentObj.slots[constants.SCORES].value = constants.SAT;
       } else if (attributes[constants.ACT]) {
-        intentObj.slots['SCORE'].value = constants.ACT;
+        intentObj.slots[constants.SCORES].value = constants.ACT;
       } else {
-        intentObj.slots['SCORE'].value = constants.NO_PREFERENCE;
-        intentObj.slots['SCORE'].confirmationStatus = constants.CONFIRMED;
+        intentObj.slots[constants.SCORES].value = constants.NO_PREFERENCE;
+        intentObj.slots[constants.SCORES].confirmationStatus = constants.CONFIRMED;
       }
 
       // Start of slot filling should either solicit a major or a location
@@ -418,7 +418,7 @@ module.exports = {
                     return confirmSlotManual(handlerInput, attributes, prompt, slotName);
                     break;
                   }
-                  case 'SCORE': {
+                  case constants.SCORES: {
                     prompt = helpers
                       .getMessage(handlerInput, 'INTRODUCTION_SCORE_CONFIRM')
                       .replace('%%SCORE%%', currentSlot.value);
