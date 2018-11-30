@@ -442,8 +442,8 @@ module.exports = {
 
       if (attributes[constants.SCORES]) {
         selection = attributes[constants.SCORES];
-      } else if (helpers.getSlotResolution(handlerInput, constants.SCORES)) {
-        selection = helpers.getSlotResolution(handlerInput, constants.SCORES);
+      } else if (helpers.getSlotResolution(handlerInput, constants.TEST, constants.SCORES)) {
+        selection = helpers.getSlotResolution(handlerInput, constants.TEST, constants.SCORES);
       }
 
       console.info('SCORE Type: ', selection);

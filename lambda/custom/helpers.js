@@ -88,13 +88,17 @@ module.exports = {
    * @param {String} slot
    * @returns {String} The root value of the slot
    */
-  getSlotResolution (handlerInput, slot) {
+  getSlotResolution (handlerInput, slot, slotType) {
     const intent = handlerInput.requestEnvelope.request.intent;
     if (
       intent.slots[slot] &&
       intent.slots[slot].resolutions &&
       intent.slots[slot].resolutions.resolutionsPerAuthority[0]
     ) {
+      // If not slot type is supplied, we assume it has the same name as the slot
+      if (!slotType) {
+        slotType = slot;
+      }
       const resolutions = intent.slots[slot].resolutions.resolutionsPerAuthority;
 
       for (let i = 0; i < resolutions.length; i++) {
@@ -102,7 +106,7 @@ module.exports = {
 
         if (
           authoritySource.authority.includes('amzn1.er-authority.echo-sdk.' + config.APPID) &&
-          authoritySource.authority.includes(slot)
+          authoritySource.authority.includes(slotType)
         ) {
           if (authoritySource.status.code === 'ER_SUCCESS_MATCH') {
             return authoritySource.values[0].value.name;
