@@ -389,9 +389,11 @@ module.exports = {
    */
   AddFavoriteHandler: {
     canHandle (handlerInput) {
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
       return (
         handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'AddToFavoritesIntent'
+        handlerInput.requestEnvelope.request.intent.name === 'AddToFavoritesIntent' &&
+        attributes[constants.SEARCH_RESULTS]
       );
     },
     handle (handlerInput) {
@@ -404,7 +406,7 @@ module.exports = {
         attributes[constants.LIST] && attributes[constants.LIST] !== undefined
           ? attributes[constants.LIST]
           : [];
-      const list = attributes[constants.SEARCH_RESULTS];
+      const list = attributes[constants.SEARCH_RESULTS] ? attributes[constants.SEARCH_RESULTS] : [];
       let school;
 
       // First check for duplicates
