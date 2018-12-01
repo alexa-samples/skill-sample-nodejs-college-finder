@@ -216,7 +216,7 @@ module.exports = {
 
           return new Promise(resolve => {
             helpers.getSchools(url, (error, res) => {
-              if (error || res === undefined) {
+              if (error || res.results === undefined) {
                 let message =
                   helpers.getPromptMessage(
                     attributes,
@@ -335,7 +335,7 @@ module.exports = {
 
         return new Promise(resolve => {
           helpers.getSchools(url, (error, res) => {
-            if (error || res === undefined) {
+            if (error || res.results === undefined) {
               let message =
                 helpers.getPromptMessage(
                   attributes,
@@ -467,7 +467,7 @@ module.exports = {
         return new Promise(resolve => {
           helpers.getSchools(url, (error, res) => {
             console.log(res);
-            if (error || res === undefined) {
+            if (error || res.results === undefined) {
               let message =
                 helpers.getPromptMessage(
                   attributes,
