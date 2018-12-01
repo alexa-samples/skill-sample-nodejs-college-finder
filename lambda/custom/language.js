@@ -75,7 +75,7 @@ module.exports = Object.freeze({
       NO_ACT_SCORE:
         'Ok, you can always come back later to add your <say-as interpret-as="spell-out">ACT</say-as> score.',
       SCORE_CONFIRM:
-        'I\'ve noted your <say-as interpret-as="spell-out">%%SCORE%%</say-as> score of <say-as interpret-as="date" format="y">%%NUMBER%%</say-as>. ',
+        'I\'ve noted your <say-as interpret-as="spell-out">%%SCORE%%</say-as> score of %%NUMBER%% ',
       SCORE_HELP:
         'Say <say-as interpret-as="spell-out">SAT<say-as>, <say-as interpret-as="spell-out">ACT<say-as>, or say no score if you don\'t know your score or don\'t have a score yet. Would you like to provide an <say-as interpret-as="spell-out">SAT</say-as> score, <say-as interpret-as="spell-out">ACT</say-as> score, or no score?',
       SCORE_NUMBER_HELP:
@@ -85,7 +85,7 @@ module.exports = Object.freeze({
       SCORE_ERROR:
         'I didn\'t quite get that. I can store an <say-as interpret-as="spell-out">SAT<say-as> or <say-as interpret-as="spell-out">ACT<say-as> score. Which score do you have?',
       SCORE_CHANGE:
-        'Your stored <say-as interpret-as="spell-out">%%SCORE%%</say-as> score is <say-as interpret-as="date" format="y">%%NUMBER%%</say-as>.',
+        'Your stored <say-as interpret-as="spell-out">%%SCORE%%</say-as> score is %%NUMBER%%.',
 
       // Profile - Cost
       INTRODUCTION_COST:

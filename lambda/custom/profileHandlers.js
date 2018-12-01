@@ -315,6 +315,9 @@ module.exports = {
         switch (criteria) {
           case 'score': {
             if (attributes[constants.SAT]) {
+              attributes[constants.SCORES] === constants.SAT
+                ? '<say-as interpret-as="date" format="y">' + number + '</say-as>'
+                : number;
               attributes[constants.INTRO_MESSAGE] = helpers
                 .getMessage(handlerInput, 'SCORE_CHANGE')
                 .replace('%%SCORE%%', constants.SAT)
@@ -713,10 +716,15 @@ module.exports = {
             .getResponse();
         }
 
+        const ssml =
+          attributes[constants.SCORES] === constants.SAT
+            ? '<say-as interpret-as="date" format="y">' + number + '</say-as>'
+            : number;
+
         attributes[constants.INTRO_MESSAGE] = helpers
           .getMessage(handlerInput, 'SCORE_CONFIRM')
           .replace('%%SCORE%%', attributes[constants.SCORES])
-          .replace('%%NUMBER%%', number);
+          .replace('%%NUMBER%%', ssml);
         delete attributes[constants.SCORES];
       } else if (attributes[constants.STATE] === constants.STATES.COST) {
         let validCost = !isNaN(number) && number >= 0;
