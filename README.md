@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/jkelvie/alexa-sample-college-finder-nodejs.svg?branch=master)](https://travis-ci.org/jkelvie/alexa-sample-college-finder-nodejs)
-[![codecov](https://codecov.io/gh/jkelvie/alexa-sample-college-finder-nodejs/branch/master/graph/badge.svg)](https://codecov.io/gh/jkelvie/alexa-sample-college-finder-nodejs)
-
+[![Build Status](https://travis-ci.com/sharpstef/skill-sample-nodejs-college-finder.svg?branch=master)](https://travis-ci.org/sharpstef/skill-sample-nodejs-college-finder)
 
 ## Alexa Sample: College Finder (Node.js)
 
@@ -29,4 +27,4 @@ Take a look at the unit-tests and end-to-end tests provided for this skill by [B
 
 ## License
 
-This library is licensed under the Amazon Software License.
+This sample is licensed under the Amazon Software License.

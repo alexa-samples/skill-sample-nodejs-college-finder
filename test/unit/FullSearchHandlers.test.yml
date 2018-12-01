@@ -8,7 +8,7 @@
 # Created by Bespoken
 # Learn more at https://read.bespoken.io/unit-testing/getting-started/
 #
-# Skill name: "College Finder" by Amazon
+# Skill name: "University Finder" by Amazon
 # Test scope: RefineSearchIntent
 # Description: Test suite for search intents
 #=====================================================================================================================
@@ -20,18 +20,18 @@ configuration:
 ---
 - test: Launch request, then refine search by state
 - LaunchRequest: # LaunchRequest is not an utterance but a request type and reserved word
-  - response.outputSpeech.ssml: Welcome to U.S. College Finder, I can help you find a college in the United States that's right for you using your personal preferences and test scores.
-- SearchByLocationIntent STATE=Maryland: You can refine your search or hear the first 12 results
-- RefineSearchIntent:
-  - prompt: What zip code would you like to search for?
-  - request.request.dialogState: STARTED
+  - response.outputSpeech.ssml: Welcome to U.S. University Finder, I can help you find a university in the United States that's right for you using your personal preferences and test scores.
+- ResetProfileIntent: Your profile has been reset
+- SearchByLocationIntent STATE="Texas": You can refine your search or hear the first 12 results
+- RefineSearchIntent: I can search by region, state, or zip code. Which option would you like?
 - RefineSearchIntent:
   - intent: RefineSearchIntent
-    HOME: "20816"
-    DISTANCE: "20"
-    STATE: Maryland
+    LOCATION: state
+    MAJOR: computer
+    HOME: "0"
+    DISTANCE: "0"
+    STATE: Texas
     REGION: Southeast
-    MAJOR: history
     COST: 50000
     TYPE: public
     SIZE: large
@@ -40,17 +40,16 @@ configuration:
 ---
 - test: Refine search by region
 - LaunchRequest
-- SearchByLocationIntent REGION="New England": You can refine your search or hear the first 12 results
-- RefineSearchIntent:
-  - prompt: What zip code would you like to search for?
-  - request.request.dialogState: STARTED
+- SearchByLocationIntent REGION="Southwest": You can refine your search or hear the first 12 results
+- RefineSearchIntent: I can search by region, state, or zip code. Which option would you like?
 - RefineSearchIntent:
   - intent: RefineSearchIntent
-    HOME: "20816"
-    DISTANCE: "20"
-    STATE: Maryland
+    LOCATION: region
+    HOME: "0"
+    DISTANCE: "0"
+    STATE: Texas
     REGION: Southeast
-    MAJOR: history
+    MAJOR: computer
     COST: 50000
     TYPE: public
     SIZE: large
@@ -63,11 +62,12 @@ configuration:
     LOCATION: state
 - RefineSearchIntent:
   - intent: RefineSearchIntent
+    LOCATION: state
     HOME: "20816"
     DISTANCE: "20"
-    STATE: Maryland
+    STATE: Texas
     REGION: Southeast
-    MAJOR: history
+    MAJOR: computer
     COST: 50000
     TYPE: public
     SIZE: large
@@ -89,11 +89,12 @@ configuration:
     LOCATION: state
 - RefineSearchIntent:
   - intent: RefineSearchIntent
+    LOCATION: state
     HOME: "20816"
     DISTANCE: "20"
-    STATE: Maryland
+    STATE: Texas
     REGION: Southeast
-    MAJOR: history
+    MAJOR: computer
     COST: 50000
     TYPE: public
     SIZE: large
@@ -107,23 +108,23 @@ configuration:
 - LaunchRequest # We already tested the launch request
 - RefineSearchIntent:
   - prompt: I can search by region, state, or zip code. Which option would you like?
-- RefineSearchIntent LOCATION=state:
+- RefineSearchIntent LOCATION=home:
   - prompt: What zip code would you like to search for?
 - RefineSearchIntent HOME=20816:
   - prompt: How many miles from your zip code do you want to search?
 - RefineSearchIntent DISTANCE=20:
   - prompt: What state would you like to search for?
-- RefineSearchIntent STATE=Maryland:
+- RefineSearchIntent STATE=Texas:
   - prompt: What region would you like to search for?
 - RefineSearchIntent REGION=Southeast:
   - prompt: What major would you like to search for?
-- RefineSearchIntent MAJOR=history:
+- RefineSearchIntent MAJOR="computer science":
   - prompt: What is the max you want to pay per year for tuition and fees?
 - RefineSearchIntent COST=50000:
   - prompt:  Do you want to search for public, or private schools?
 - RefineSearchIntent TYPE=public:
   - prompt: What size school do you want to search for. Small, medium, or large?
 - RefineSearchIntent SIZE=large:
-  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">9</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">6</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
 - ListSchoolsIntent:
   - response.outputSpeech.ssml: Here are your search results.

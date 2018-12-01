@@ -8,7 +8,7 @@
 # Created by Bespoken
 # Learn more at https://read.bespoken.io/end-to-end/getting-started/
 #
-# Skill name: "College Finder" by Amazon
+# Skill name: "University Finder" by Amazon
 # Test scope: Searching and refining results
 # Description: General End-to-end test suite
 #=====================================================================================================================
@@ -21,7 +21,7 @@ configuration:
 
 ---
 - test: Invoke skill, do not create profile, search by major, refine by state
-- open college finder
+- open university finder
 - no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
 - search by major: what major would you like to search for
 - business: i found * schools for business management marketing and related support services you can refine your search or hear the first 12 results which would you like
@@ -35,7 +35,7 @@ configuration:
 ---
 # This test does not seem to work - when it asks for the size of the school, it goes haywire for some reason
 - test.skip: Invoke skill, do not create profile, search by location, refine 
-- open college finder
+- open university finder
 - no
 - search for schools in far west: i found * schools in the far west you can refine your search or hear the first 12 results which would you like
 - refine my search: what major would you like to search for

@@ -8,7 +8,7 @@
 # Created by Bespoken
 # Learn more at https://read.bespoken.io/end-to-end/getting-started/
 #
-# Skill name: "College Finder" by Amazon
+# Skill name: "University Finder" by Amazon
 # Test scope: Invoking skill. Help, stop, cancel intents and SessionEndedRequest. Direct calls to search intent.
 # Description: General End-to-end test suite
 #=====================================================================================================================
@@ -21,34 +21,34 @@ configuration:
 
 ---
 - test: Invoke skill and stop, no further interaction.
-- open college finder:
+- open university finder:
   - prompt:
-    - welcome to us college finder i can help you find a college in the united states that's right for you using your personal preferences and test scores to get the best college matches i'll need to know a little more about you would you like to finish your profile now
-    - welcome back to us college finder to get the best college matches i'll need to know a little more about you would you like to finish your profile now
-    - welcome back to us College finder it looks like you're not done filling out your profile do you want to finish it now
+    - welcome to us university finder i can help you find a university in the united states that's right for you using your personal preferences and test scores to get the best university matches i'll need to know a little more about you would you like to finish your profile now
+    - welcome back to us university finder to get the best university matches i'll need to know a little more about you would you like to finish your profile now
+    - welcome back to us University finder it looks like you're not done filling out your profile do you want to finish it now
   - reprompt: undefined
   - card: undefined
 - stop: thank you
 
 ---
 - test: Invoke skill, do not continue, cancel
-- open college finder
+- open university finder
 - no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
 - cancel: thank you
 
 ---
 - test: Invoke skill, do not continue, ask for help and exit
-- open college finder
+- open university finder
 - no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
 - help: this skill will help you narrow down your selection of schools in the united states
 - exit: /^$/ # This regex matches an empty string
 
 ---
 - test: Direct intent invocation (searching for universities by state)
-- ask college finder about schools in new mexico: i found * schools in new mexico you can refine your search are here the first 12 results which would you like
+- ask university finder about schools in new mexico: i found * schools in new mexico you can refine your search are here the first 12 results which would you like
 - stop
 
 ---
-- test: Direct intent invocation (searching for specific college)
-- ask college finder about xavier university: xavier university is a school in cincinnati ohio * you can save this school to your favorites list or go back which would you like to do
+- test: Direct intent invocation (searching for specific university)
+- ask university finder about xavier university: xavier university is a school in cincinnati ohio * you can save this school to your favorites list or go back which would you like to do
 - stop

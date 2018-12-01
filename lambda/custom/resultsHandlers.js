@@ -55,13 +55,13 @@ function pageResults (handlerInput, attributes) {
   // Determine if this is the favorites or result list
   if (attributes[constants.STATE] === constants.STATES.FAVORITES) {
     page = attributes[constants.LIST_PAGE];
-    schools = attributes[constants.LIST];
+    schools = attributes[constants.LIST] ? attributes[constants.LIST] : [];
     end = 'FAVORITES_NO_MORE_ITEMS';
     prompt = 'FAVORITES_CURRENT_ITEM_PROMPT';
     title = 'FAVORITES_TITLE';
   } else {
     page = attributes[constants.SEARCH_PAGE];
-    schools = attributes[constants.SEARCH_RESULTS];
+    schools = attributes[constants.SEARCH_RESULTS] ? attributes[constants.SEARCH_RESULTS] : [];
     end = 'LIST_SCHOOLS_END_OF_LIST';
     prompt = 'LIST_SCHOOLS_PROMPT';
     title = 'RESULTS_TITLE';
@@ -389,9 +389,11 @@ module.exports = {
    */
   AddFavoriteHandler: {
     canHandle (handlerInput) {
+      const attributes = handlerInput.attributesManager.getSessionAttributes();
       return (
         handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'AddToFavoritesIntent'
+        handlerInput.requestEnvelope.request.intent.name === 'AddToFavoritesIntent' &&
+        attributes[constants.SEARCH_RESULTS]
       );
     },
     handle (handlerInput) {
@@ -404,7 +406,7 @@ module.exports = {
         attributes[constants.LIST] && attributes[constants.LIST] !== undefined
           ? attributes[constants.LIST]
           : [];
-      const list = attributes[constants.SEARCH_RESULTS];
+      const list = attributes[constants.SEARCH_RESULTS] ? attributes[constants.SEARCH_RESULTS] : [];
       let school;
 
       // First check for duplicates
@@ -427,7 +429,11 @@ module.exports = {
           .getResponse();
       }
 
-      if (attributes[constants.CURRENT_SCHOOL_ID] === attributes[constants.CURRENT_SCHOOL].id) {
+      if (
+        attributes[constants.CURRENT_SCHOOL] &&
+        attributes[constants.CURRENT_SCHOOL_ID] &&
+        attributes[constants.CURRENT_SCHOOL_ID] === attributes[constants.CURRENT_SCHOOL].id
+      ) {
         school = attributes[constants.CURRENT_SCHOOL];
       } else {
         const item = list.find(listItem => {
@@ -454,10 +460,7 @@ module.exports = {
         helpers.saveUser(handlerInput, attributes, 'session');
         helpers.saveUser(handlerInput, attributes, 'persistent');
 
-        return handlerInput.responseBuilder
-          .speak(message)
-          .reprompt(message)
-          .getResponse();
+        return handlerInput.responseBuilder.speak(message).reprompt(message).getResponse();
       } else {
         return notFound(handlerInput, attributes);
       }
@@ -569,10 +572,7 @@ module.exports = {
         helpers.saveUser(handlerInput, attributes, 'session');
         helpers.saveUser(handlerInput, attributes, 'persistent');
 
-        return handlerInput.responseBuilder
-          .speak(message)
-          .reprompt(message)
-          .getResponse();
+        return handlerInput.responseBuilder.speak(message).reprompt(message).getResponse();
       }
     }
   },

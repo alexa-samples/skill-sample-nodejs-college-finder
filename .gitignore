@@ -5,3 +5,6 @@ node_modules/
 npm-debug.log
 coverage/
 *.code-workspace
+*.zip
+lambda/custom/package-lock.json
+lambda/custom/.env

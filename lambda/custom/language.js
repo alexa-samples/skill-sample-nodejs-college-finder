@@ -13,7 +13,7 @@ express or implied. See the License for the specific language governing
 permissions and limitations under the License.
 *********************************************************************/
 'use strict';
-const SKILL_NAME = 'U.S. College Finder';
+const SKILL_NAME = 'U.S. University Finder';
 // const SKILL_NAME_DE = 'U.S. Universitätsfinder';
 
 module.exports = Object.freeze({
@@ -24,15 +24,15 @@ module.exports = Object.freeze({
       WELCOME_LONG:
         'Welcome to ' +
         SKILL_NAME +
-        ", I can help you find a college in the United States that's right for you using your personal preferences and test scores. ",
+        ", I can help you find a university in the United States that's right for you using your personal preferences and test scores. ",
       WELCOME_LISTEN: "Say 'Yes' to get started or 'No' to exit.",
       WELCOME_TOP_PICK: 'My current top pick for you is %%SCHOOL%%. ',
       WELCOME_MENU:
         'You can search for schools by major or location, hear your favorites list, or look up a specific school. Which would you like to do?',
       SEARCH:
-        'You can search over 3000 colleges by major, location, or ask about a school by name. Which would you like?',
+        'You can search over 3000 universities by major, location, or ask about a school by name. Which would you like?',
       WELCOME_BACK_NO_PROFILE:
-        "To get the best college matches, I'll need to know a little more about you. Would you like to finish your profile now?",
+        "To get the best university matches, I'll need to know a little more about you. Would you like to finish your profile now?",
       WELCOME_BACK_INCOMPLETE_PROFILE:
         "It looks like you're not done filling out your profile. Do you want to finish it now?",
       WELCOME_HELP:
@@ -157,7 +157,7 @@ module.exports = Object.freeze({
       START_LISTEN:
         'Say search by major, search by location, or search for specific school. Which would you like?',
       START_HELP:
-        'You can search for colleges starting with your chosen major, your desired location, or look up a specific college by name. Which would you like to do?',
+        'You can search for universities starting with your chosen major, your desired location, or look up a specific university by name. Which would you like to do?',
       SEARCH_ERROR: "I didn't quite understand you. We're refining your search right now.",
       REFINE_SEARCH_UNACCEPTED:
         "That's not a valid option. You can refine your search or start over. Which would you like to do?",
