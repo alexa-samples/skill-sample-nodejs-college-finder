@@ -22,7 +22,7 @@ configuration:
 ---
 - test: Invoke skill, do not create profile, search by major without refining
 - open university finder
-- no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
+- no: welcome
 - search by major: what major would you like to search for
 - biology: i found * schools for biological and biomedical sciences you can refine your search or hear the first 12 results which would you like
 - i want to hear my results: here are your search results * you can hear details about one of these or hear more results which would you like
@@ -39,7 +39,6 @@ configuration:
 ---
 - test: Invoke skill, do not create profile, search by major without refining, hear 6 results and stop
 - open university finder
-- no
 - search by location: in what state or region would you like to search for schools
 - north dakota: i found * schools in north dakota you can refine your search or hear the first 12 results which would you like
 - i want to hear my results: here are your search results
@@ -51,6 +50,5 @@ configuration:
 ---
 - test: Invoke skill, do not create profile, look up a specific school
 - open university finder
-- no
 - search for university of chicago: university of illinois at chicago is a school in chicago illinois
 - stop

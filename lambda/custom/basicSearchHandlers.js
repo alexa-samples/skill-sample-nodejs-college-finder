@@ -227,10 +227,7 @@ module.exports = {
                   ' ' +
                   helpers.getMessage(handlerInput, 'WELCOME_MENU');
                 resolve(
-                  handlerInput.responseBuilder
-                    .speak(message)
-                    .reprompt(message)
-                    .getResponse()
+                  handlerInput.responseBuilder.speak(message).reprompt(message).getResponse()
                 );
               }
 
@@ -463,9 +460,9 @@ module.exports = {
 
         // Search paramaters - school ID, school name, school state, latest in-state tuition, latest out-of-state tuition, latest percentage of population attending
         // for the selected major. Limited to 10% or more for the major and sorted by the percentage descending.
-        let url = `${config.API_URI}&${variable}__range=0.01..1.0${constants.LIMITCOST}${
-          constants.FIELDS
-        }&_sort=${variable}:desc${constants.SEARCHPAGING}`;
+        let url = `${config.API_URI}&${variable}__range=0.01..1.0${constants.LIMITCOST}${constants.FIELDS}&_sort=${variable}:desc${constants.SEARCHPAGING}`;
+
+        console.info(url);
 
         return new Promise(resolve => {
           helpers.getSchools(url, (error, res) => {

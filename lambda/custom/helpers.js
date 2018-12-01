@@ -101,13 +101,17 @@ module.exports = {
         const authoritySource = resolutions[i];
 
         if (
-          authoritySource.authority.includes('amzn1.er-authority.echo-sdk.' + config.APPID) &&
+          authoritySource.authority.includes('amzn1.er-authority.echo-sdk.') &&
           authoritySource.authority.includes(slot)
         ) {
           if (authoritySource.status.code === 'ER_SUCCESS_MATCH') {
             return authoritySource.values[0].value.name;
           }
         }
+      }
+
+      if (intent.slots[slot].value) {
+        return intent.slots[slot].value;
       }
       return false;
     } else if (intent.slots[slot].value && !intent.slots[slot].resolutions) {
@@ -138,7 +142,7 @@ module.exports = {
         const authoritySource = resolutions[i];
 
         if (
-          authoritySource.authority.includes('amzn1.er-authority.echo-sdk.' + config.APPID) &&
+          authoritySource.authority.includes('amzn1.er-authority.echo-sdk.') &&
           authoritySource.authority.includes(slot)
         ) {
           if (authoritySource.status.code === 'ER_SUCCESS_MATCH') {

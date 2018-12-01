@@ -22,7 +22,7 @@ configuration:
 ---
 - test: Invoke skill, complete profile # Will fail if run more than once. To reset profile info try disabling/enabling skill in alexa.amazon page
 - open university finder
-- yes: to make searching easier let's build your student profile you can ask me to skip any of these questions if you're not sure or don't have a preference ok first question you can save your sat score or act score which one do you have
+- yes
 - s-a-t: ok what is your sat score
 - 45: that's not a valid score please provide a sat score between 400 and 1600 what is your score
 - 450: i've noted your sat score of 450 i can limit your picks to a maximum annual cost for tuition and fees what is the max amount you want to pay annually in us dollars
