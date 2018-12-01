@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/alexa/skill-sample-nodejs-college-finder.svg?branch=master)](https://travis-ci.org/alexa/skill-sample-nodejs-college-finder)
+[![Build Status](https://travis-ci.org/alexa/skill-sample-nodejs-college-finder.svg?branch=master)](https://travis-ci.org/alexa/skill-sample-nodejs-college-finder)
 
 ## Alexa Sample: College Finder (Node.js)
 
