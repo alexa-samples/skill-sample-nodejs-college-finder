@@ -23,8 +23,8 @@ configuration:
   - response.outputSpeech.ssml: Welcome to U.S. University Finder, I can help you find a university in the United States that's right for you using your personal preferences and test scores.
 - ResetProfileIntent: Your profile has been reset
 - SearchByLocationIntent STATE="Texas": You can refine your search or hear the first 12 results
-- RefineSearchIntent: I can search by region, state, or zip code. Which option would you like?
 - RefineSearchIntent:
+  - request.request.dialogState: "COMPLETED" # Set the dialog state explicitly to completed
   - intent: RefineSearchIntent
     LOCATION: state
     MAJOR: computer
@@ -41,8 +41,8 @@ configuration:
 - test: Refine search by region
 - LaunchRequest
 - SearchByLocationIntent REGION="Southwest": You can refine your search or hear the first 12 results
-- RefineSearchIntent: I can search by region, state, or zip code. Which option would you like?
 - RefineSearchIntent:
+  - request.request.dialogState: "COMPLETED"
   - intent: RefineSearchIntent
     LOCATION: region
     HOME: "0"
@@ -58,9 +58,7 @@ configuration:
 ---
 - test: Test add and remove favorites
 - RefineSearchIntent:
-  - intent: RefineSearchIntent
-    LOCATION: state
-- RefineSearchIntent:
+  - request.request.dialogState: "COMPLETED"
   - intent: RefineSearchIntent
     LOCATION: state
     HOME: "20816"
@@ -85,9 +83,7 @@ configuration:
 ---
 - test: Test next and previous intents
 - RefineSearchIntent:
-  - intent: RefineSearchIntent
-    LOCATION: state
-- RefineSearchIntent:
+  - request.request.dialogState: "COMPLETED"
   - intent: RefineSearchIntent
     LOCATION: state
     HOME: "20816"
@@ -106,25 +102,25 @@ configuration:
 ---
 - test: Launch request, no further interaction.
 - LaunchRequest # We already tested the launch request
-- RefineSearchIntent:
-  - prompt: I can search by region, state, or zip code. Which option would you like?
-- RefineSearchIntent LOCATION=home:
-  - prompt: What zip code would you like to search for?
+- RefineSearchIntent LOCATION=home: # Check to see all the slot values are set to undefined
+  - response.directives[0].updatedIntent.slots.LOCATION.value: "home"
+  - response.directives[0].updatedIntent.slots.HOME.value: undefined 
+  - response.directives[0].updatedIntent.slots.DISTANCE.value: undefined 
+  - response.directives[0].updatedIntent.slots.COST.value: 0 # Cost starts at 0 - we do not need to ask it unless already set
 - RefineSearchIntent HOME=20816:
-  - prompt: How many miles from your zip code do you want to search?
-- RefineSearchIntent DISTANCE=20:
-  - prompt: What state would you like to search for?
-- RefineSearchIntent STATE=Texas:
-  - prompt: What region would you like to search for?
+  - response.directives[0].updatedIntent.slots.HOME.value: "20816"
+- RefineSearchIntent DISTANCE=100:
+  - response.directives[0].updatedIntent.slots.DISTANCE.value: "100"
+- RefineSearchIntent STATE=Maryland:
+  - response.directives[0].updatedIntent.slots.STATE.value: "Maryland"
 - RefineSearchIntent REGION=Southeast:
-  - prompt: What major would you like to search for?
+  - response.directives[0].updatedIntent.slots.REGION.value: "Southeast"
 - RefineSearchIntent MAJOR="computer science":
-  - prompt: What is the max you want to pay per year for tuition and fees?
-- RefineSearchIntent COST=50000:
-  - prompt:  Do you want to search for public, or private schools?
+  - response.directives[0].updatedIntent.slots.MAJOR.value: "Computer and Information Sciences and Support Services"
 - RefineSearchIntent TYPE=public:
-  - prompt: What size school do you want to search for. Small, medium, or large?
+  - response.directives[0].updatedIntent.slots.TYPE.value: "public"
 - RefineSearchIntent SIZE=large:
-  - response.outputSpeech.ssml: You now have <say-as interpret-as="number">6</say-as> results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
+  - request.request.dialogState: "COMPLETED"
+  - response.outputSpeech.ssml: You now have * results. You can hear the first 12 schools, search for a school by name, or review your favorites list. Which would you like?
 - ListSchoolsIntent:
   - response.outputSpeech.ssml: Here are your search results.
