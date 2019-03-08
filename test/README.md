@@ -57,7 +57,9 @@ The results show:
 * Summarize the results as a whole
 * Provide abbreviated code coverage information 
 
-To take a look at the code coverage for the tests in more depth, go to the directory `<PROJECT_ROOT>/coverage/lcov-report/index.html`. The code coverage shows you which code is being executed by the tests, and which parts are not. For more information on how to understand this output, [read here](https://github.com/dwyl/learn-istanbul/blob/master/README.md).
+To take a look at the code coverage for the tests in more depth, go to the directory `<PROJECT_ROOT>/test_output/coverage/lcov-report/index.html`. The code coverage shows you which code is being executed by the tests, and which parts are not. For more information on how to understand this output, [read here](https://github.com/dwyl/learn-istanbul/blob/master/README.md).
+
+You can also see a pretty-printed HTML report of the test results here: `<PROJECT_ROOT>/test_output/report/index.html`.
 
 ## Runing End-to-end Tests
 End-to-end tests will interact with your actual Alexa skill using our simple testing scripts. Here is an example test:  
