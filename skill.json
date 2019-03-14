@@ -9,7 +9,14 @@
             "Alexa, ask university finder about Washington University",
             "Alexa, ask University Finder about schools in Washington."
           ],
-          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "keywords": [
+            "university",
+            "university",
+            "university",
+            "search",
+            "university",
+            "finder"
+          ],
           "name": "University Finder",
           "description": "University Finder helps you find the university that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
@@ -20,7 +27,14 @@
             "Alexa, ask University Finder about University of Washington",
             "Alexa, ask University Finder about schools in Washington"
           ],
-          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "keywords": [
+            "university",
+            "university",
+            "university",
+            "search",
+            "university",
+            "finder"
+          ],
           "name": "University Finder",
           "description": "University Finder helps you find the university in the United States that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
@@ -30,9 +44,34 @@
             "Alexa, open University Finder",
             "Alexa, ask University Finder about University of Washington"
           ],
-          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "keywords": [
+            "university",
+            "university",
+            "university",
+            "search",
+            "university",
+            "finder"
+          ],
           "name": "University Finder",
           "description": "University Finder helps you find the university in the United States that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
+        },
+        "fr-CA": {
+          "summary": "Une skill pour vous aider à trouver les Universités aux États-Unis.",
+          "examplePhrases": [
+            "Alexa, demande au chercheur d'université à propos de Université de Washington",
+            "Alexa, demande au chercheur  d'université à propos des Université dans l’état de Washington"
+          ],
+          "keywords": [
+            "université",
+            "université",
+            "université",
+            "trouver",
+            "recherche",
+            "university",
+            "chercheur"
+          ],
+          "name": "chercheur d'université",
+          "description": "Chercheur d'université vous aide à trouver la meilleure université aux États-Unis pour vous selon vos préférences versus la base de données publique de l’Université Scorecard. Vous pouvez remplir un profil et faire une recherche rapide pour les écoles par emplacement majeur ou nom de l’emplacement."
         },
         "en-AU": {
           "summary": "A skill to help you narrow down colleges in the United States.",
@@ -41,7 +80,14 @@
             "Alexa, ask University Finder about University of Washington",
             "Alexa, ask University Finder about schools in Washington"
           ],
-          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "keywords": [
+            "university",
+            "university",
+            "university",
+            "search",
+            "university",
+            "finder"
+          ],
           "name": "University Finder",
           "description": "University Finder helps you find the university in the United States that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         },
@@ -52,7 +98,14 @@
             "Alexa, ask University Finder about University of Washington",
             "Alexa, ask University Finder about schools in Washington"
           ],
-          "keywords": ["university", "university", "university", "search", "university", "finder"],
+          "keywords": [
+            "university",
+            "university",
+            "university",
+            "search",
+            "university",
+            "finder"
+          ],
           "name": "University Finder",
           "description": "University Finder helps you find the university in the United States that is right for you, matching your preferences with the public University Scorecard database to narrow down a list of schools for you to learn more about. You can fill out a profile, and do a quick search for schools by major, location, or name."
         }
