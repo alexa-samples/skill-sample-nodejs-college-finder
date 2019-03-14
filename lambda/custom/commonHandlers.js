@@ -20,6 +20,9 @@ Handler.
 const constants = require('./constants');
 const helpers = require('./helpers');
 
+const Jargon = require('@jargon/alexa-skill-sdk');
+const ri = Jargon.ri;
+
 module.exports = {
   /**
    * Handler for when a skill is launched. Delivers a response based on if a user is new or
@@ -33,7 +36,7 @@ module.exports = {
           handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StartOverIntent')
       );
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       console.info('LaunchRequest');
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       let welcome;
@@ -48,30 +51,36 @@ module.exports = {
       if (attributes[constants.PROFCOMPLETE]) {
         if (attributes[constants.SEARCH_RESULTS]) {
           let school = attributes[constants.SEARCH_RESULTS][0];
-          message =
-            helpers.getMessage(handlerInput, 'WELCOME_SHORT') +
-            '<break time="500ms"/>' +
-            helpers
-              .getMessage(handlerInput, 'WELCOME_TOP_PICK')
-              .replace('%%SCHOOL%%', school['school.name'].replace('&', 'and')) +
-            helpers.getMessage(handlerInput, 'WELCOME_MENU');
+          let welcome = await handlerInput.jrm.render(ri("WELCOME_SHORT"))
+          console.log(`welcome: ${welcome}`)
+          let topPick = await handlerInput.jrm.render(ri("WELCOME_TOP_PICK", {"school": school['school.name'].replace('&', 'and')} ))
+          console.log(`topPick: ${topPick}`)
+          let menu = await handlerInput.jrm.render(ri("WELCOME_MENU"))
+          console.log(`menu: ${menu}`)
+
+          let message = welcome + '<break time="500ms"/>' + topPick + ' ' + menu
+          console.log(`message: ${message}`)
 
           handlerInput.responseBuilder.speak(message).reprompt(message);
           attributes[constants.INTRO_MESSAGE] = message;
           helpers.saveUser(handlerInput, 'session');
 
           if (helpers.hasDisplay(handlerInput)) {
+            let notAvailableMsg = await handlerInput.jrm.render(ri("NOT_AVAILABLE"))
             handlerInput.responseBuilder.addRenderTemplateDirective(
-              helpers.buildSchoolTemplate(helpers.getMessage(handlerInput, 'NOT_AVAILABLE'), school)
+              helpers.buildSchoolTemplate(notAvailableMsg, school)
             );
           }
 
           return handlerInput.responseBuilder.getResponse();
         }
-        welcome =
-          helpers.getMessage(handlerInput, 'WELCOME_SHORT') +
-          '<break time="500ms"/>' +
-          helpers.getMessage(handlerInput, 'WELCOME_MENU');
+        let welcomeShort = await handlerInput.jrm.render(ri("WELCOME_SHORT"))
+        console.log(`welcome: ${welcomeShort}`)
+        console.log('welcome short message: ', welcomeShort);
+        let menu = await handlerInput.jrm.render(ri("WELCOME_MENU"))
+        console.log(`menu: ${menu}`)
+        welcome = welcomeShort + '<break time="500ms"/>' + menu
+
         attributes[constants.STATE] = constants.STATES.SEARCH;
       } else if (
         (!attributes[constants.PROFCOMPLETE] &&
@@ -82,27 +91,41 @@ module.exports = {
             attributes[constants.HOME])) ||
         attributes[constants.MAJOR]
       ) {
-        welcome = `${helpers.getMessage(
-          handlerInput,
-          'WELCOME_SHORT'
-        )}<break time="500ms"/>${helpers.getMessage(
-          handlerInput,
-          'WELCOME_BACK_INCOMPLETE_PROFILE'
-        )}`;
+        let welcomeShort = await handlerInput.jrm.render(ri("WELCOME_SHORT"))
+        console.log(`welcome: ${welcomeShort}`)
+        let welcomeBackIncompleteProfile = await handlerInput.jrm.render(ri("WELCOME_BACK_INCOMPLETE_PROFILE"))
+        welcome = `${welcomeShort}<break time="500ms"/>${welcomeBackIncompleteProfile}`;
+        console.log(`welcomeShort: ${welcomeShort}`)
+
         attributes[constants.STATE] = constants.STATES.PROFILE;
       } else if (!attributes[constants.PROFCOMPLETE] && attributes[constants.FIRST_RUN] === false) {
+        let welcomeShort = await handlerInput.jrm.render(ri("WELCOME_SHORT"))
+        console.log(`welcome: ${welcomeShort}`)
+        let welcomeBackNoProfile = await handlerInput.jrm.render(ri("WELCOME_BACK_NO_PROFILE"));
+        console.log(`welcomeBackNoProfile: ${welcomeBackNoProfile}`)
+
+        console.log('welcomeBackNoProfile_message 2', welcomeBackNoProfile)
+
         welcome =
-          helpers.getMessage(handlerInput, 'WELCOME_SHORT') +
+          welcomeShort +
           '<break time="500ms"/>' +
-          helpers.getMessage(handlerInput, 'WELCOME_BACK_NO_PROFILE');
+          welcomeBackNoProfile
         attributes[constants.STATE] = constants.STATES.PROFILE;
       } else {
-        welcome = helpers.getMessage(handlerInput, 'WELCOME_LONG');
+        let welcomeLong = await handlerInput.jrm.render(ri("WELCOME_LONG"))
+        console.log(`welcomeLong: ${welcomeLong}`)
+        let welcomeBackNoProfile = await handlerInput.jrm.render(ri("WELCOME_BACK_NO_PROFILE"))
+        console.log(`welcomeBackNoProfile: ${welcomeBackNoProfile}`)
+
+        console.log('welcomeBackNoProfile_message 3', welcomeBackNoProfile)
+
+        welcome = welcomeLong;
         welcome +=
-          '<break time="500ms"/>' + helpers.getMessage(handlerInput, 'WELCOME_BACK_NO_PROFILE');
+          '<break time="500ms"/>' + welcomeBackNoProfile;
         attributes[constants.STATE] = constants.STATES.PROFILE;
       }
 
+      console.log('just before the return')
       attributes[constants.INTRO_MESSAGE] = welcome;
 
       return helpers.simpleDisplayResponse(handlerInput, attributes, welcome);
@@ -120,7 +143,7 @@ module.exports = {
         handlerInput.requestEnvelope.request.intent.name === 'AMAZON.NoIntent'
       );
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info('Generic AMAZON.NoIntent');
       let message;
@@ -128,15 +151,13 @@ module.exports = {
       // Message is determined by the State of the user in the skill
       if (attributes[constants.STATE] === constants.STATES.PROFILE) {
         attributes[constants.STATE === constants.STATES.SEARCH];
-        message = helpers.getMessage(handlerInput, 'WELCOME_MENU');
+        message = await handlerInput.jrm.render(ri("WELCOME_MENU"));
       } else if (attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS) {
-        message = helpers
-          .getMessage(handlerInput, 'REVIEW_RESULTS')
-          .replace('%%RESULT_COUNT%%', attributes[constants.SEARCH_RESULTS].length);
+        message = await handlerInput.jrm.render(ri("REVIEW_RESULTS", {"count": attributes[constants.SEARCH_RESULTS].length}));
       } else if (attributes[constants.STATE] === constants.STATES.REFINE_SEARCH) {
         attributes[constants.PREVIOUS_STATE] = constants.STATES.REFINE_SEARCH;
         attributes[constants.STATE] = constants.STATES.REFINE_NO;
-        message = helpers.getMessage(handlerInput, 'REFINE_SEARCH_UNACCEPTED');
+        message = await handlerInput.jrm.render(ri("REFINE_SEARCH_UNACCEPTED"));
       }
 
       return helpers.simpleDisplayResponse(handlerInput, attributes, message);
@@ -154,10 +175,10 @@ module.exports = {
           handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StartOverIntent')
       );
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.log(`${attributes[constants.STATE]}, AMAZON.PreviousIntent`);
-      const message = helpers.getMessage(handlerInput, 'WELCOME_MENU');
+      message = await handlerInput.jrm.render(ri("WELCOME_MENU"));
 
       return helpers.simpleDisplayResponse(handlerInput, attributes, message);
     }
@@ -172,13 +193,13 @@ module.exports = {
         handlerInput.requestEnvelope.request.intent.name === 'RegionListIntent'
       );
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.log(`${attributes[constants.STATE]}, RegionListIntent`);
-      const message =
-        helpers.getMessage(handlerInput, 'LOCATION_HELP') +
-        ' ' +
-        attributes[constants.INTRO_MESSAGE];
+      let locationHelp = await handlerInput.jrm.render(ri("LOCATION_HELP"))
+      const message = locationHelp +
+      ' ' +
+      attributes[constants.INTRO_MESSAGE];
 
       helpers.saveUser(handlerInput, attributes, 'session');
       return helpers.simpleDisplayResponse(handlerInput, attributes, message);
@@ -196,86 +217,97 @@ module.exports = {
         handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent'
       );
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.log(`${attributes[constants.STATE]}, AMAZON.HelpIntent`);
       let message;
 
       // If there is no Intro Message stored for Alexa to say after the help then use the welcome menu
+
+      let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
+
       attributes[constants.INTRO_MESSAGE] = attributes[constants.INTRO_MESSAGE]
         ? attributes[constants.INTRO_MESSAGE]
-        : helpers.getMessage(handlerInput, 'WELCOME_MENU');
+        : welcomeMenu;
 
       switch (attributes[constants.STATE]) {
         case constants.STATES.SCORES: {
           if (attributes[constants.SCORE]) {
-            message = helpers.getMessage(handlerInput, 'SCORE_NUMBER_HELP');
+            message = await handlerInput.jrm.render(ri("SCORE_NUMBER_HELP"));
           } else {
-            message = helpers.getMessage(handlerInput, 'SCORE_HELP');
+            message = await handlerInput.jrm.render(ri("SCORE_HELP"));
           }
           break;
         }
         case constants.STATES.COST: {
-          message = helpers.getMessage(handlerInput, 'COST_HELP');
+          message = await handlerInput.jrm.render(ri("COST_HELP"));
           break;
         }
         case constants.STATES.DEGREE: {
-          message = helpers.getMessage(handlerInput, 'DEGREE_HELP');
+          message = await handlerInput.jrm.render(ri("DEGREE_HELP"));
           break;
         }
         case constants.STATES.MAJOR: {
-          message = helpers.getMessage(handlerInput, 'MAJOR_HELP');
+          message = await handlerInput.jrm.render(ri("MAJOR_HELP"));
           break;
         }
         case constants.STATES.HOME: {
+          let homeHelp = await handlerInput.jrm.render(ri("HOME_HELP"));
+          let homeZipCode = await handlerInput.jrm.render(ri("HOME_ZIP_CODE"));
           message =
-            helpers.getMessage(handlerInput, 'HOME_HELP') +
-            ' ' +
-            helpers.getMessage(handlerInput, 'HOME_ZIP_CODE');
+            homeHelp + 
+          ' ' +
+            homeZipCode;
           break;
         }
         case constants.STATES.LIST_SCHOOLS: {
-          message = helpers.getMessage(handlerInput, 'LIST_SCHOOLS_HELP');
+          message = await handlerInput.jrm.render(ri("LIST_SCHOOLS_HELP"));
           break;
         }
         case constants.STATES.FAVORITES: {
-          message = helpers.getMessage(handlerInput, 'FAVORITES_HELP');
+          message = await handlerInput.jrm.render(ri("FAVORITES_HELP"));
           break;
         }
         case constants.STATES.SEARCH_BY_LOCATION: {
-          message = helpers.getMessage(handlerInput, 'LOCATION_HELP');
+          message = await handlerInput.jrm.render(ri("LOCATION_HELP"));
           break;
         }
         case constants.STATES.START: {
           if (!attributes[constants.PROFCOMPLETE]) {
             attributes[constants.STATE] = constants.STATES.PROFILE;
+            let welcomeHelp = await handlerInput.jrm.render(ri("WELCOME_HELP"));
+            let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
             message =
-              helpers.getMessage(handlerInput, 'WELCOME_HELP') +
+              welcomeHelp +
               ' ' +
-              helpers.getMessage(handlerInput, 'WELCOME_MENU');
+              welcomeMenu;
           } else {
-            message =
-              helpers.getMessage(handlerInput, 'WELCOME_HELP') +
+              let welcomeHelp = await handlerInput.jrm.render(ri("WELCOME_HELP"));
+              message =
+              welcomeHelp +
               ' ' +
               attributes[constants.INTRO_MESSAGE];
-          }
+            }
           break;
         }
         // At session end, the skill deletes the STATE variable so this case
         // handles when the HELP intent is triggered as a one-shot
         case undefined: {
-          message =
-            helpers.getMessage(handlerInput, 'WELCOME_HELP') +
+            let welcomeHelp = await handlerInput.jrm.render(ri("WELCOME_HELP"));
+            let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
+            message =
+            welcomeHelp +
             ' ' +
-            helpers.getMessage(handlerInput, 'WELCOME_MENU');
-          break;
+            welcomeMenu;
+            break;
         }
         default: {
-          message =
-            helpers.getMessage(handlerInput, 'WELCOME_HELP') +
+            let welcomeHelp = await handlerInput.jrm.render(ri("WELCOME_HELP"));
+            message =
+            welcomeHelp +
             ' ' +
             attributes[constants.INTRO_MESSAGE];
-        }
+          }
       }
 
       helpers.saveUser(handlerInput, attributes, 'session');
@@ -294,15 +326,17 @@ module.exports = {
           handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent')
       );
     },
-    handle (handlerInput) {
+    handle : async (handlerInput) => {
       console.info('Cancel and Stop Handler');
 
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       attributes = helpers.clearSessionAttributes(attributes);
       helpers.saveUser(handlerInput, attributes, 'persistent');
 
+      let goodbyeMessage = await handlerInput.jrm.render(ri("GOODBYE"));
+
       return handlerInput.responseBuilder
-        .speak(helpers.getMessage(handlerInput, 'GOODBYE'))
+        .speak(goodbyeMessage)
         .withShouldEndSession(true)
         .getResponse();
     }
@@ -333,7 +367,7 @@ module.exports = {
     canHandle () {
       return true;
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       console.info('Unhandled');
       let attributes = handlerInput.attributesManager.getSessionAttributes();
 
@@ -343,10 +377,11 @@ module.exports = {
         helpers.saveUser(handlerInput, 'session');
       }
 
-      const message = `${helpers.getMessage(handlerInput, 'ERROR_CANT')} ${helpers.getMessage(
-        handlerInput,
-        'WELCOME_MENU'
-      )}`;
+      let errorCant = await handlerInput.jrm.render(ri("ERROR_CANT"));
+      let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
+
+
+      const message = `${errorCant} ${welcomeMenu}`;
 
       return handlerInput.responseBuilder.speak(message).reprompt(message).getResponse();
     }
@@ -356,11 +391,13 @@ module.exports = {
       return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
         handlerInput.requestEnvelope.request.intent.name === 'ResetProfileIntent';
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       helpers.clearUser(handlerInput);
-      return handlerInput.responseBuilder.speak("Your profile has been reset")
-        .reprompt("Your profile has been reset. What would you like to do next?")
-        .getResponse();
+      let profileReset = await handlerInput.jrm.render(ri("PROFILE_RESET"));
+      let profileResetNext = await handlerInput.jrm.render(ri("PROFILE_RESET_NEXT"));
+      return handlerInput.responseBuilder.speak(profileReset)
+        .reprompt(profileResetNext)
+      .getResponse();
     }
   },
   /**
@@ -370,7 +407,7 @@ module.exports = {
     canHandle () {
       return true;
     },
-    handle (handlerInput, error) {
+    handle: async (handlerInput, error) => {
       console.error(`Error handled: ${error.message}`);
       console.info('Full error: ', error);
 
@@ -388,12 +425,7 @@ module.exports = {
               rangeLow = 1;
               rangeHigh = 36;
             }
-            message = helpers
-              .getMessage(handlerInput, 'SCORE_NUMBER_ERROR')
-              .replace('%%NUMBER%%', number)
-              .replace('%%SCORE%%', attributes[constants.SCORE])
-              .replace('%%RANGELOW%%', rangeLow)
-              .replace('%%RANGEHIGH%%', rangeHigh);
+            message = await handlerInput.jrm.render(ri("SCORE_NUMBER_ERROR", {"score": attributes[constants.SCORE], "rangeLow": rangeLow, "rangeHigh": rangeHigh}));
 
             return handlerInput.responseBuilder.speak(message).reprompt(message).getResponse();
           } else {
@@ -446,14 +478,15 @@ module.exports = {
           break;
         }
         default: {
-          message = helpers.getMessage(handlerInput, 'ERROR_NOT_UNDERSTOOD');
+          message  = await handlerInput.jrm.render(ri("ERROR_NOT_UNDERSTOOD"));
         }
       }
 
+      let speakMsg = await handlerInput.jrm.render(ri(message));
       return handlerInput.responseBuilder
-        .speak(helpers.getMessage(handlerInput, message))
-        .reprompt(helpers.getMessage(handlerInput, message))
-        .getResponse();
+      .speak(speakMsg)
+      .reprompt(speakMsg)
+      .getResponse();
     }
   },
   /**
