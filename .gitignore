@@ -9,3 +9,4 @@ coverage/
 lambda/custom/package-lock.json
 lambda/custom/.env
 test_output
+hooks/pre_deploy_hook.ps1
