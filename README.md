@@ -11,7 +11,9 @@ This skill queries the College Scorecard API public dataset. For more informatio
 
 ### Jargon.
 
-make sure you install jargon for multi-language support by running this in the folder skill_root\lambda\custom:
+This skill has a Jargon library dependency. https://www.npmjs.com/package/@jargon/alexa-skill-sdk
+
+To add the Jargon SDK as a dependency of your lambda code go to skill_root/lambda/custom and run:
 
 `npm i --save @jargon/alexa-skill-sdk`
 `yarn add @jargon/alexa-skill-sdk`
