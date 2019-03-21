@@ -24,6 +24,8 @@ const constants = require('./constants');
 const helpers = require('./helpers');
 const config = require('./config');
 
+const Jargon = require('@jargon/alexa-skill-sdk');
+const ri = Jargon.ri;
 /**
  * Helper function for setting the remaining location parameters that were not
  * chosen by the user to be skipped in search.

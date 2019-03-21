@@ -11,3 +11,4 @@ lambda/custom/.env
 test_output
 hooks/pre_deploy_hook.ps1
 lambda/custom/yarn.lock
+bst-debug.log

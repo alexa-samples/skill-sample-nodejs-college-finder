@@ -354,7 +354,7 @@ module.exports = {
         let searchByNoResults = await handlerInput.jrm.render(ri("SEARCH_BY_NO_RESULTS"));
 
           return new Promise(resolve => {
-          helpers.getSchools(url, (error, res) => {
+          helpers.getSchools(url, async (error, res) => {
             if (error || res.results === undefined) {
               resolve(
                 helpers.simpleDisplayResponse(
@@ -394,17 +394,17 @@ module.exports = {
               attributes[constants.SEARCH] = constants.STATES.SEARCH_BY_LOCATION;
               attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;
 
-              let searchByLocationRefine = handlerInput.jrm.render(ri("SEARCH_BY_LOCATION_REFINE", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "location": slotText}));
+              let searchByLocationRefine = await handlerInput.jrm.render(ri("SEARCH_BY_LOCATION_REFINE", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "location": slotText}));
               
               const message = searchByLocationRefine;
 
               if (schools.length < 2) {
-                let searchFewResults = handlerInput.jrm.render(ri("SEARCH_FEW_RESULTS"))
+                let searchFewResults = await handlerInput.jrm.render(ri("SEARCH_FEW_RESULTS"))
                 attributes[constants.INTRO_MESSAGE] =
                   message + searchFewResults;
                 } else {
                   console.log('SEARCH MORE ONE ', number);
-                  let searchFewResults = handlerInput.jrm.render(ri("SEARCH_MORE_ONE",{"number": number}));
+                  let searchFewResults = await handlerInput.jrm.render(ri("SEARCH_MORE_ONE",{"number": number}));
                   attributes[constants.INTRO_MESSAGE] =
                   message + searchFewResults
               }
@@ -491,7 +491,7 @@ module.exports = {
         let myMessage = await handlerInput.jrm.render(ri(message));
 
         return new Promise(resolve => {
-          helpers.getSchools(url, (error, res) => {
+          helpers.getSchools(url, async (error, res) => {
             console.log(res);
             if (error || res.results === undefined) {
               resolve(
@@ -503,7 +503,7 @@ module.exports = {
               );
             } else if (!res || !res.results || res.results.length < 1) {
               attributes[constants.STATE] = constants.STATES.SEARCH_BY_MAJOR;
-              let searchNoResults = handlerInput.jrm.render(ri("SEARCH_BY_NO_RESULTS"))
+              let searchNoResults = await handlerInput.jrm.render(ri("SEARCH_BY_NO_RESULTS"))
               resolve(
                 helpers.simpleDisplayResponse(
                   handlerInput,
@@ -532,15 +532,15 @@ module.exports = {
               attributes[constants.SEARCH] = constants.STATES.SEARCH_BY_MAJOR;
               attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;
 
-              const message = handlerInput.jrm.render(ri("SEARCH_BY_MAJOR_REFINE", {"count": count, "major": major}));
-              let searchFewResults = handlerInput.jrm.render(ri("SEARCH_FEW_RESULTS"));
+              const message = await handlerInput.jrm.render(ri("SEARCH_BY_MAJOR_REFINE", {"count": count, "major": major}));
+              let searchFewResults = await handlerInput.jrm.render(ri("SEARCH_FEW_RESULTS"));
 
               if (schools.length < 2) {
                 attributes[constants.INTRO_MESSAGE] =
                   message + searchFewResults;
                 } else {
                   console.log('SEARCH MORE ONE next one ', number);
-                  let searchMoreOne = handlerInput.jrm.render(ri("SEARCH_MORE_ONE", {"number": number}));
+                  let searchMoreOne = await handlerInput.jrm.render(ri("SEARCH_MORE_ONE", {"number": number}));
                   attributes[constants.INTRO_MESSAGE] =
                   message +
                   searchMoreOne
