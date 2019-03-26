@@ -278,7 +278,7 @@ module.exports = {
       );
     },
     handle: async (handlerInput) => {
-      let attributes = handlerInput.attributesManager.getSessionAttributes();
+      let attributes = await handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, SearchByLocationIntent`);
 
       const intentObj = handlerInput.requestEnvelope.request.intent;
@@ -340,6 +340,8 @@ module.exports = {
           constants.FIELDS +
           constants.SORTBYSIZE +
           constants.SEARCHPAGING;
+        
+        console.info(url, 'url');
 
           let searchByLocationError = await handlerInput.jrm.render(ri("SEARCH_BY_LOCATION_SEARCH_ERROR", {"location": slotText}));
           let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
@@ -350,6 +352,7 @@ module.exports = {
           ) +
           ' ' +
           welcomeMenu;
+          
         let locationSearchMessage = await handlerInput.jrm.render(ri(message));
         let searchByNoResults = await handlerInput.jrm.render(ri("SEARCH_BY_NO_RESULTS"));
 

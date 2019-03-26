@@ -15,7 +15,9 @@ There are four key aspects to the testing provided:
 
 ## Setup
 To get started with testing, install the Bespoken CLI:  
-`npm install bespoken-tools -g`
+```
+npm install bespoken-tools -g
+```
 
 ## Running Unit Tests
 Unit tests can be found under the `test/unit` folder.
