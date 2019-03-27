@@ -25,13 +25,18 @@ const constants = require('./constants');
 const config = require('./config');
 const helpers = require('./helpers');
 
-function searchQueryExit (handlerInput, attributes) {
+const Jargon = require('@jargon/alexa-skill-sdk');
+const ri = Jargon.ri;
+
+async function searchQueryExit (handlerInput, attributes) {
   console.info('Cancel and Stop Handler');
 
   attributes = helpers.clearSessionAttributes(attributes);
   helpers.saveUser(handlerInput, attributes, 'persistent');
 
-  return handlerInput.responseBuilder.speak(helpers.getMessage(handlerInput, 'GOODBYE'));
+  let goodbyMessage = await handlerInput.jrm.render(ri("GOODBYE"))
+
+  return handlerInput.responseBuilder.speak(goodbyMessage);
 }
 
 module.exports = {
@@ -49,7 +54,7 @@ module.exports = {
           handlerInput.requestEnvelope.request.intent.name === 'SearchByMajorIntent')
       );
     },
-    handle (handlerInput) {
+    handle: async  (handlerInput) => {
       const intentName = handlerInput.requestEnvelope.request.intent.name;
       const filledSlots = handlerInput.requestEnvelope.request.intent.slots;
       const slotValues = helpers.getSlotValidation(filledSlots);
@@ -121,7 +126,7 @@ module.exports = {
           attributes[constants.STATE] === constants.STATES.SEARCH_BY_NAME)
       );
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, SearchByStartOver`);
 
@@ -139,11 +144,13 @@ module.exports = {
           break;
       }
 
+      let promptMessage = await handlerInput.jrm.render(ri(prompt))
+
       return helpers.simpleDisplayResponse(
         handlerInput,
         attributes,
-        helpers.getMessage(handlerInput, prompt)
-      );
+        promptMessage
+);
     }
   },
   /**
@@ -162,7 +169,7 @@ module.exports = {
           attributes[constants.STATE] !== constants.STATES.REFINE_SEARCH)
       );
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, SearchByNameIntent`);
 
@@ -176,11 +183,13 @@ module.exports = {
           (!intentObj.slots.SEARCHQUERY || !intentObj.slots.SEARCHQUERY.value))
       ) {
         attributes[constants.STATE] = constants.STATES.SEARCH_BY_NAME;
+        
+        let searchByNamePrompt = await handlerInput.jrm.render(ri("SEARCH_BY_NAME_PROMPT"))
 
         return helpers.simpleDisplayResponse(
           handlerInput,
           attributes,
-          helpers.getMessage(handlerInput, 'SEARCH_BY_NAME_PROMPT')
+          searchByNamePrompt
         );
       } else if (helpers.currentResult(handlerInput, attributes)) {
         // Check to see if there are search results and find the school in that list to avoid an extra API call
@@ -200,9 +209,9 @@ module.exports = {
         if (name === 'stop' || name === 'exit' || name === 'cancel') {
           return searchQueryExit(handlerInput, attributes);
         } else {
-          attributes[constants.INTRO_MESSAGE] = helpers
-            .getMessage(handlerInput, 'SEARCH_BY_NAME_SCHOOL_NAME')
-            .replace('%%SCHOOL_NAME%%', name); // TODO progressive response
+          
+          let searchBySchoolName = await handlerInput.jrm.render(ri("SEARCH_BY_NAME_SCHOOL_NAME", {"school": name}));          
+          attributes[constants.INTRO_MESSAGE] = searchBySchoolName
           console.info(`Searching for ${name}`);
 
           // Search paramaters - school ID, school name, school state, latest in-state tuition, latest out-of-state tuition
@@ -214,18 +223,14 @@ module.exports = {
             constants.SORTBYSIZE +
             constants.SEARCHPAGING;
 
+          let searchByNameError = await handlerInput.jrm.render(ri("SEARCH_BY_NAME_SEARCH_ERROR", {school: name}));
+          let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
+          let searchByNoResults = await handlerInput.jrm.render(ri("SEARCH_BY_NO_RESULTS"));
+
           return new Promise(resolve => {
             helpers.getSchools(url, (error, res) => {
               if (error || res.results === undefined) {
-                let message =
-                  helpers.getPromptMessage(
-                    attributes,
-                    helpers
-                      .getMessage(handlerInput, 'SEARCH_BY_NAME_SEARCH_ERROR')
-                      .replace('%%SCHOOL_NAME%%', name)
-                  ) +
-                  ' ' +
-                  helpers.getMessage(handlerInput, 'WELCOME_MENU');
+                let message = searchByNameError + ' ' + welcomeMenu;
                 resolve(
                   handlerInput.responseBuilder.speak(message).reprompt(message).getResponse()
                 );
@@ -233,11 +238,12 @@ module.exports = {
 
               if (res === undefined || res.results.length < 1) {
                 attributes[constants.STATE] = constants.STATES.SEARCH_BY_NAME;
+
                 resolve(
                   helpers.simpleDisplayResponse(
                     handlerInput,
                     attributes,
-                    helpers.getMessage(handlerInput, 'SEARCH_BY_NO_RESULTS')
+                    searchByNoResults
                   )
                 );
               } else {
@@ -271,8 +277,8 @@ module.exports = {
         attributes[constants.STATE] !== constants.STATES.REFINE_SEARCH
       );
     },
-    handle (handlerInput) {
-      let attributes = handlerInput.attributesManager.getSessionAttributes();
+    handle: async (handlerInput) => {
+      let attributes = await handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, SearchByLocationIntent`);
 
       const intentObj = handlerInput.requestEnvelope.request.intent;
@@ -288,10 +294,12 @@ module.exports = {
       ) {
         attributes[constants.STATE] = constants.STATES.SEARCH_BY_LOCATION;
 
+        let searchByLocationPrompt = await handlerInput.jrm.render(ri("SEARCH_BY_LOCATION_PROMPT"));
+        
         return helpers.simpleDisplayResponse(
           handlerInput,
           attributes,
-          helpers.getMessage(handlerInput, 'SEARCH_BY_LOCATION_PROMPT')
+          searchByLocationPrompt
         );
       } else {
         let search;
@@ -317,9 +325,9 @@ module.exports = {
           search = `&school.region_id=${attributes[constants.REGION_ID]}`;
         }
 
-        attributes[constants.INTRO_MESSAGE] = helpers
-          .getMessage(handlerInput, 'SEARCH_BY_LOCATION')
-          .replace('%%LOCATION%%', slotText); // TODO progressive response
+        let searchByLocation = await handlerInput.jrm.render(ri("SEARCH_BY_LOCATION", {"location": slotText}));
+
+        attributes[constants.INTRO_MESSAGE] = searchByLocation // TODO progressive response
         console.info(`Searching for ${search}`);
 
         // Search paramaters - school ID, school name, school state, latest in-state tuition, latest out-of-state tuition,
@@ -332,33 +340,40 @@ module.exports = {
           constants.FIELDS +
           constants.SORTBYSIZE +
           constants.SEARCHPAGING;
+        
+        console.info(url, 'url');
 
-        return new Promise(resolve => {
-          helpers.getSchools(url, (error, res) => {
+          let searchByLocationError = await handlerInput.jrm.render(ri("SEARCH_BY_LOCATION_SEARCH_ERROR", {"location": slotText}));
+          let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
+          let message =
+          helpers.getPromptMessage(
+            attributes,
+            searchByLocationError
+          ) +
+          ' ' +
+          welcomeMenu;
+          
+        let locationSearchMessage = await handlerInput.jrm.render(ri(message));
+        let searchByNoResults = await handlerInput.jrm.render(ri("SEARCH_BY_NO_RESULTS"));
+
+          return new Promise(resolve => {
+          helpers.getSchools(url, async (error, res) => {
             if (error || res.results === undefined) {
-              let message =
-                helpers.getPromptMessage(
-                  attributes,
-                  helpers
-                    .getMessage(handlerInput, 'SEARCH_BY_LOCATION_SEARCH_ERROR')
-                    .replace('%%LOCATION%%', slotText)
-                ) +
-                ' ' +
-                helpers.getMessage(handlerInput, 'WELCOME_MENU');
               resolve(
                 helpers.simpleDisplayResponse(
                   handlerInput,
                   attributes,
-                  helpers.getMessage(handlerInput, message)
+                  locationSearchMessage
                 )
               );
             } else if (!res || !res.results || res.results.length < 1) {
               attributes[constants.STATE] = constants.STATES.SEARCH_BY_LOCATION;
+
               resolve(
                 helpers.simpleDisplayResponse(
                   handlerInput,
                   attributes,
-                  helpers.getMessage(handlerInput, 'SEARCH_BY_NO_RESULTS')
+                  searchByNoResults
                 )
               );
             } else {
@@ -381,18 +396,20 @@ module.exports = {
               attributes[constants.SEARCH_RESULTS] = list;
               attributes[constants.SEARCH] = constants.STATES.SEARCH_BY_LOCATION;
               attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;
-              const message = helpers
-                .getMessage(handlerInput, 'SEARCH_BY_LOCATION_REFINE')
-                .replace('%%COUNT%%', attributes[constants.SEARCH_RESULTS_TOTAL])
-                .replace('%%LOCATION%%', slotText);
+
+              let searchByLocationRefine = await handlerInput.jrm.render(ri("SEARCH_BY_LOCATION_REFINE", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "location": slotText}));
+              
+              const message = searchByLocationRefine;
 
               if (schools.length < 2) {
+                let searchFewResults = await handlerInput.jrm.render(ri("SEARCH_FEW_RESULTS"))
                 attributes[constants.INTRO_MESSAGE] =
-                  message + helpers.getMessage('SEARCH_FEW_RESULTS');
-              } else {
-                attributes[constants.INTRO_MESSAGE] =
-                  message +
-                  helpers.getMessage(handlerInput, 'SEARCH_MORE_ONE').replace('%%NUMBER%%', number);
+                  message + searchFewResults;
+                } else {
+                  console.log('SEARCH MORE ONE ', number);
+                  let searchFewResults = await handlerInput.jrm.render(ri("SEARCH_MORE_ONE",{"number": number}));
+                  attributes[constants.INTRO_MESSAGE] =
+                  message + searchFewResults
               }
 
               resolve(
@@ -423,7 +440,7 @@ module.exports = {
         attributes[constants.STATE] !== constants.STATES.REFINE_SEARCH
       );
     },
-    handle (handlerInput) {
+    handle: async (handlerInput) => {
       const attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, SearchByMajorIntent`);
 
@@ -439,10 +456,13 @@ module.exports = {
         helpers.getSlotResolutionId(handlerInput, constants.MAJOR) === 0
       ) {
         attributes[constants.SEARCH] = constants.STATES.SEARCH_BY_MAJOR;
+
+        let searchByMajorPrompt = await handlerInput.jrm.render(ri("SEARCH_BY_MAJOR_PROMPT"));
+
         return helpers.simpleDisplayResponse(
           handlerInput,
           attributes,
-          helpers.getMessage(handlerInput, 'SEARCH_BY_MAJOR_PROMPT')
+          searchByMajorPrompt
         );
       } else {
         let major = helpers.getSlotResolution(handlerInput, constants.MAJOR);
@@ -450,9 +470,10 @@ module.exports = {
         attributes[constants.SCHOOL_MAJOR_ID] = id; // Required for querying the API
         attributes[constants.MAJOR] = major; // User friendly value from entity resolution
 
-        attributes[constants.INTRO_MESSAGE] = helpers
-          .getMessage(handlerInput, 'SEARCH_BY_MAJOR')
-          .replace('%%MAJOR%%', major); // TODO progressive response
+        let searchByMajor = await handlerInput.jrm.render(ri("SEARCH_BY_MAJOR", {major, major}));
+
+        attributes[constants.INTRO_MESSAGE] = searchByMajor;  // TODO progressive response
+
         console.info(`Searching for ${major} with an ID of ${id}`);
 
         // Each major has it's own percentage variable for the amount of students attending for that major
@@ -463,34 +484,34 @@ module.exports = {
         let url = `${config.API_URI}&${variable}__range=0.01..1.0${constants.LIMITCOST}${constants.FIELDS}&_sort=${variable}:desc${constants.SEARCHPAGING}`;
 
         console.info(url);
+        let searchByMajorSearchError = await handlerInput.jrm.render(ri("SEARCH_BY_MAJOR_SEARCH_ERROR", {major, major}));
+        let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
+        let message =
+          helpers.getPromptMessage(
+            attributes,
+            searchByMajorSearchError + ' ' + welcomeMenu);
+
+        let myMessage = await handlerInput.jrm.render(ri(message));
 
         return new Promise(resolve => {
-          helpers.getSchools(url, (error, res) => {
+          helpers.getSchools(url, async (error, res) => {
             console.log(res);
             if (error || res.results === undefined) {
-              let message =
-                helpers.getPromptMessage(
-                  attributes,
-                  helpers
-                    .getMessage(handlerInput, 'SEARCH_BY_MAJOR_SEARCH_ERROR')
-                    .replace('%%MAJOR%%', major)
-                ) +
-                ' ' +
-                helpers.getMessage(handlerInput, 'WELCOME_MENU');
               resolve(
                 helpers.simpleDisplayResponse(
                   handlerInput,
                   attributes,
-                  helpers.getMessage(handlerInput, message)
+                  myMessage 
                 )
               );
             } else if (!res || !res.results || res.results.length < 1) {
               attributes[constants.STATE] = constants.STATES.SEARCH_BY_MAJOR;
+              let searchNoResults = await handlerInput.jrm.render(ri("SEARCH_BY_NO_RESULTS"))
               resolve(
                 helpers.simpleDisplayResponse(
                   handlerInput,
                   attributes,
-                  helpers.getMessage(handlerInput, 'SEARCH_BY_NO_RESULTS')
+                  searchNoResults
                 )
               );
             } else {
@@ -513,18 +534,19 @@ module.exports = {
               attributes[constants.SEARCH_RESULTS] = list;
               attributes[constants.SEARCH] = constants.STATES.SEARCH_BY_MAJOR;
               attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;
-              const message = helpers
-                .getMessage(handlerInput, 'SEARCH_BY_MAJOR_REFINE')
-                .replace('%%COUNT%%', attributes[constants.SEARCH_RESULTS_TOTAL])
-                .replace('%%MAJOR%%', major);
+
+              const message = await handlerInput.jrm.render(ri("SEARCH_BY_MAJOR_REFINE", {"count": count, "major": major}));
+              let searchFewResults = await handlerInput.jrm.render(ri("SEARCH_FEW_RESULTS"));
 
               if (schools.length < 2) {
                 attributes[constants.INTRO_MESSAGE] =
-                  message + helpers.getMessage('SEARCH_FEW_RESULTS');
-              } else {
-                attributes[constants.INTRO_MESSAGE] =
+                  message + searchFewResults;
+                } else {
+                  console.log('SEARCH MORE ONE next one ', number);
+                  let searchMoreOne = await handlerInput.jrm.render(ri("SEARCH_MORE_ONE", {"number": number}));
+                  attributes[constants.INTRO_MESSAGE] =
                   message +
-                  helpers.getMessage(handlerInput, 'SEARCH_MORE_ONE').replace('%%NUMBER%%', number);
+                  searchMoreOne
               }
 
               resolve(
