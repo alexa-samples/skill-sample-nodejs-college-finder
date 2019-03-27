@@ -8,6 +8,7 @@ install:
   - npm install -g bespoken-tools
   - npm install codecov -g
   - cd lambda/custom && npm install && cd ../..
+before_script: cd lambda/custom
 script:
   - bst test test/unit
   - codecov
