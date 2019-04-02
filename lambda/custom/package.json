@@ -7,10 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@jargon/alexa-skill-sdk": "^1.2.1",
     "ask-sdk": "^2.1.0-beta.1"
-  },
-  "devDependencies": {
-    "bespoken-tools": "^2.3.4"
   }
 }

@@ -24,9 +24,6 @@ major, home zip code.
 const constants = require('./constants');
 const helpers = require('./helpers');
 
-const Jargon = require('@jargon/alexa-skill-sdk');
-const ri = Jargon.ri;
-
 /**
  * Sends error message to user for invalid numeric inputs.
  *
@@ -34,7 +31,7 @@ const ri = Jargon.ri;
  * @param {Object} attributes
  * @param {Number} number
  */
-async function numberError (handlerInput, attributes, number) {
+function numberError (handlerInput, attributes, number) {
   if (attributes[constants.STATE] === constants.STATES.SCORES) {
     let rangeLow, rangeHigh;
     if (attributes[constants.SCORES] === constants.SAT) {
@@ -44,14 +41,19 @@ async function numberError (handlerInput, attributes, number) {
       rangeLow = 1;
       rangeHigh = 36;
     }
-    let scoreNumberError = await handlerInput.jrm.render(ri("SCORE_NUMBER_ERROR", {"score": attributes[constants.SCORES], "rangelow": rangeLow, "rangehigh": rangeHigh}));
-    attributes[constants.INTRO_MESSAGE] = scoreNumberError
+    attributes[constants.INTRO_MESSAGE] = helpers
+      .getMessage(handlerInput, 'SCORE_NUMBER_ERROR')
+      .replace('%%SCORE%%', attributes[constants.SCORES])
+      .replace('%%RANGELOW%%', rangeLow)
+      .replace('%%RANGEHIGH%%', rangeHigh);
   } else if (attributes[constants.STATE] === constants.STATES.COST) {
-    let costNumberError = await handlerInput.jrm.render(ri("COST_NUMBER_ERROR", {"number": number}));
-    attributes[constants.INTRO_MESSAGE] = costNumberError
+    attributes[constants.INTRO_MESSAGE] = helpers
+      .getMessage(handlerInput, 'COST_NUMBER_ERROR')
+      .replace('%%NUMBER%%', number);
   } else {
-      let homeZipError = await handlerInput.jrm.render(ri("HOME_ZIP_CODE_ERROR", {"zipcode": number}));
-      attributes[constants.INTRO_MESSAGE] = homeZipError
+    attributes[constants.INTRO_MESSAGE] = helpers
+      .getMessage(handlerInput, 'HOME_ZIP_CODE_ERROR')
+      .replace('%%ZIP_CODE%%', '<say-as interpret-as="digits">' + number + '</say-as> ');
   }
 
   return handlerInput.responseBuilder
@@ -67,7 +69,7 @@ async function numberError (handlerInput, attributes, number) {
  * @param {Object} handlerInput
  * @param {Object} attributes
  */
-async function moveOn (handlerInput, attributes) {
+function moveOn (handlerInput, attributes) {
   let message;
   attributes[constants.PREVIOUS_STATE] = attributes['STATE'];
 
@@ -77,52 +79,45 @@ async function moveOn (handlerInput, attributes) {
     (attributes[constants.ACT] === undefined || attributes[constants.ACT] == null)
   ) {
     attributes[constants.STATE] = constants.STATES.SCORES;
-    let introScores = await handlerInput.jrm.render(ri("INTRODUCTION_SCORES"))
     message = helpers.getPromptMessage(
       attributes,
-      introScores
+      helpers.getMessage(handlerInput, 'INTRODUCTION_SCORES')
     );
   } else if (attributes[constants.COST] === undefined || attributes[constants.COST] === null) {
-    let introCost = await handlerInput.jrm.render(ri("INTRODUCTION_COST"))
     attributes[constants.STATE] = constants.STATES.COST;
     message = helpers.getPromptMessage(
       attributes,
-      introCost
+      helpers.getMessage(handlerInput, 'INTRODUCTION_COST')
     );
   } else if (attributes[constants.DEGREE] === undefined || attributes[constants.DEGREE] === null) {
-    let introDegree = await handlerInput.jrm.render(ri("INTRODUCTION_DEGREE"));
     attributes[constants.STATE] = constants.STATES.DEGREE;
     message = helpers.getPromptMessage(
       attributes,
-      introDegree
+      helpers.getMessage(handlerInput, 'INTRODUCTION_DEGREE')
     );
   } else if (
     attributes[constants.MAJOR_CATEGORY] === undefined ||
     attributes[constants.MAJOR_CATEGORY] === null
   ) {
     attributes[constants.STATE] = constants.STATES.MAJOR;
-    let profileMajor = await handlerInput.jrm.render(ri("PROFILE_MAJOR"));
     message = helpers.getPromptMessage(
       attributes,
-      profileMajor
+      helpers.getMessage(handlerInput, 'PROFILE_MAJOR')
     );
   } else if (attributes[constants.HOME] === undefined || attributes[constants.HOME] === null) {
     attributes[constants.STATE] = constants.STATES.HOME;
-    let introHome = await handlerInput.jrm.render(ri("INTRODUCTION_HOME"));
     message = helpers.getPromptMessage(
       attributes,
-      introHome
+      helpers.getMessage(handlerInput, 'INTRODUCTION_HOME')
     );
   } else {
     attributes[constants.STATE] = constants.STATES.START;
     attributes[constants.PROFCOMPLETE] = true;
-    let profComplete = await handlerInput.jrm.render(ri("PROFILE_COMPLETE"));
-    let welcomeMenu = await handlerInput.jrm.render(ri("WELCOME_MENU"));
     message = helpers.getPromptMessage(
       attributes,
-      profComplete +
+      helpers.getMessage(handlerInput, 'PROFILE_COMPLETE') +
         ' ' +
-      welcomeMenu
+        helpers.getMessage(handlerInput, 'WELCOME_MENU')
     );
   }
 
@@ -182,16 +177,14 @@ module.exports = {
           handlerInput.requestEnvelope.request.intent.name === 'AMAZON.YesIntent')
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, YesIntent`);
 
       if (attributes[constants.STATE] === constants.STATES.MAJOR) {
-        let constantMajor = await handlerInput.jrm.render(ri(constants.MAJOR));
-        attributes[constants.INTRO_MESSAGE] = constantMajor;
+        attributes[constants.INTRO_MESSAGE] = helpers.getMessage(handlerInput, constants.MAJOR);
       } else if (attributes[constants.STATE] === constants.STATES.HOME) {
-        let homeZipCode = await handlerInput.jrm.render(ri("HOME_ZIP_CODE"));
-        attributes[constants.INTRO_MESSAGE] = homeZipCode;
+        attributes[constants.INTRO_MESSAGE] = helpers.getMessage(handlerInput, 'HOME_ZIP_CODE');
       }
 
       return handlerInput.responseBuilder
@@ -211,7 +204,7 @@ module.exports = {
         handlerInput.requestEnvelope.request.intent.name === 'ListProfileIntent'
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, ListProfileIntent`);
 
@@ -219,61 +212,62 @@ module.exports = {
 
       // Check if their profile exists first. Prompt to fill out profile.
       if (allNull(attributes)) {
-        let welcomeBackNoProfile = await handlerInput.jrm.render(ri("WELCOME_BACK_NO_PROFILE"));
         return helpers.simpleDisplayResponse(
           handlerInput,
           attributes,
-          welcomeBackNoProfile
+          helpers.getMessage(handlerInput, 'WELCOME_BACK_NO_PROFILE')
         );
       } else {
         let score;
-        let summaryScoreNo = await handlerInput.jrm.render(ri("SUMMARY_SCORE_NO"));
-        let summaryScore = await handlerInput.jrm.render(ri("SUMMARY_SCORE_NO", {"score": constants.SAT, "number": attributes[constants.SAT]}));
         if (attributes[constants.SAT]) {
           score = helpers.noContent(attributes[constants.SAT])
-            ? summaryScoreNo
-            : summaryScore
-          } else if (attributes[constants.ACT]) {
+            ? helpers.getMessage(handlerInput, 'SUMMARY_SCORE_NO')
+            : helpers
+                .getMessage(handlerInput, 'SUMMARY_SCORE')
+                .replace('%%SCORE%%', constants.SAT)
+                .replace('%%NUMBER%%', attributes[constants.SAT]);
+        } else if (attributes[constants.ACT]) {
           score = helpers.noContent(attributes[constants.ACT])
-            ? summaryScoreNo
-            : summaryScore
-          } else {
-          score = summaryScoreNo;
-          }
-        
-        let summaryCostNo = await handlerInput.jrm.render(ri("SUMMARY_COST_NO"));
-        let summaryCost = await handlerInput.jrm.render(ri("SUMMARY_COST", {"currency": attributes[constants.COST]}));
-        const cost = helpers.noContent(attributes[constants.COST])
-          ? summaryCostNo
-          : summaryCost;
-        let summaryDegreeNo = await handlerInput.jrm.render(ri("SUMMARY_DEGREE_NO"));
-        let summaryDegree = await handlerInput.jrm.render(ri("SUMMARY_DEGREE", {"degree": attributes[constants.DEGREE]}));
-        const degree = helpers.noContent(attributes[constants.DEGREE])
-          ? summaryDegreeNo
-          : summaryDegree;
-        let summaryMajorNo = await handlerInput.jrm.render(ri("SUMMARY_MAJOR_NO"));
-        let summaryMajor = await handlerInput.jrm.render(ri("SUMMARY_MAJOR", {"major": attributes[constants.MAJOR_CATEGORY]}));
-        const major = helpers.noContent(attributes[constants.MAJOR_CATEGORY])
-          ? summaryMajorNo
-          : summaryMajor;
-        let summaryHomeNo = await handlerInput.jrm.render(ri("SUMMARY_HOME_NO"));
-        let summaryHome = await handlerInput.jrm.render(ri("SUMMARY_HOME", {"zipcode": attributes[constants.HOME]}));
-        const home = helpers.noContent(attributes[constants.HOME])
-          ? summaryHomeNo
-          : summaryHome;
+            ? helpers.getMessage(handlerInput, 'SUMMARY_SCORE_NO')
+            : helpers
+                .getMessage(handlerInput, 'SUMMARY_SCORE')
+                .replace('%%SCORE%%', constants.ACT)
+                .replace('%%NUMBER%%', attributes[constants.ACT]);
+        } else {
+          score = helpers.getMessage(handlerInput, 'SUMMARY_SCORE_NO');
+        }
 
-        let summaryProfile = await handlerInput.jrm.render(ri("SUMMARY_PROFILE"));
+        const cost = helpers.noContent(attributes[constants.COST])
+          ? helpers.getMessage(handlerInput, 'SUMMARY_COST_NO')
+          : helpers
+              .getMessage(handlerInput, 'SUMMARY_COST')
+              .replace('%%CURRENCY%%', attributes[constants.COST]);
+        const degree = helpers.noContent(attributes[constants.DEGREE])
+          ? helpers.getMessage(handlerInput, 'SUMMARY_DEGREE_NO')
+          : helpers
+              .getMessage(handlerInput, 'SUMMARY_DEGREE')
+              .replace('%%DEGREE%%', attributes[constants.DEGREE]);
+        const major = helpers.noContent(attributes[constants.MAJOR_CATEGORY])
+          ? helpers.getMessage(handlerInput, 'SUMMARY_MAJOR_NO')
+          : helpers
+              .getMessage(handlerInput, 'SUMMARY_MAJOR')
+              .replace('%%MAJOR%%', attributes[constants.MAJOR_CATEGORY]);
+        const home = helpers.noContent(attributes[constants.HOME])
+          ? helpers.getMessage(handlerInput, 'SUMMARY_HOME_NO')
+          : helpers
+              .getMessage(handlerInput, 'SUMMARY_HOME')
+              .replace('%%ZIP_CODE%%', attributes[constants.HOME]);
+
         attributes[constants.INTRO_MESSAGE] =
-          summaryProfile +
+          helpers.getMessage(handlerInput, 'SUMMARY_PROFILE') +
           score +
           cost +
           degree +
           major +
           home;
-        let summaryPrompt = await handlerInput.jrm.render(ri("SUMMARY_PROMPT"));
         const message = helpers.getPromptMessage(
           attributes,
-          summaryPrompt
+          helpers.getMessage(handlerInput, 'SUMMARY_PROMPT')
         );
 
         return helpers.buildProfileTemplate(handlerInput, attributes, message);
@@ -293,7 +287,7 @@ module.exports = {
         handlerInput.requestEnvelope.request.intent.name === 'ChangeProfileIntent'
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, ChangeProfileIntent`);
 
@@ -309,11 +303,10 @@ module.exports = {
       ) {
         attributes[constants.STATE] = constants.STATES.PROFILE;
         helpers.saveUser(handlerInput, attributes, 'session');
-        
-        let profileUpdate = await handlerInput.jrm.render(ri("PROFILE_UPDATE"));
+
         return handlerInput.responseBuilder
-          .speak(profileUpdate)
-          .reprompt(profileUpdate)
+          .speak(helpers.getMessage(handlerInput, 'PROFILE_UPDATE'))
+          .reprompt(helpers.getMessage(handlerInput, 'PROFILE_UPDATE'))
           .getResponse();
       } else {
         const criteria = helpers.getSlotResolution(handlerInput, 'PROFILE');
@@ -322,22 +315,30 @@ module.exports = {
         switch (criteria) {
           case 'score': {
             if (attributes[constants.SAT]) {
-              let scoreChangeSAT = await handlerInput.jrm.render(ri("SCORE_CHANGE",{"score": constants.SAT, "number": helpers.noPreferenceDialog(handlerInput, attributes, constants.SAT)}));
               attributes[constants.SCORES] === constants.SAT
                 ? '<say-as interpret-as="date" format="y">' + number + '</say-as>'
                 : number;
-              attributes[constants.INTRO_MESSAGE] = 
-                scoreChangeSAT
+              attributes[constants.INTRO_MESSAGE] = helpers
+                .getMessage(handlerInput, 'SCORE_CHANGE')
+                .replace('%%SCORE%%', constants.SAT)
+                .replace(
+                  '%%NUMBER%%',
+                  helpers.noPreferenceDialog(handlerInput, attributes, constants.SAT)
+                );
             } else if (attributes[constants.ACT]) {
-              let scoreChangeACT = await handlerInput.jrm.render(ri("SCORE_CHANGE",{"score": constants.ACT, "number": helpers.noPreferenceDialog(handlerInput, attributes, constants.ACT)}));
-              attributes[constants.INTRO_MESSAGE] = 
-                scoreChangeACT;
+              attributes[constants.INTRO_MESSAGE] = helpers
+                .getMessage(handlerInput, 'SCORE_CHANGE')
+                .replace('%%SCORE%%', constants.ACT)
+                .replace(
+                  '%%NUMBER%%',
+                  helpers.noPreferenceDialog(handlerInput, attributes, constants.ACT)
+                );
             } else {
               attributes[constants.INTRO_MESSAGE] = '';
             }
 
             attributes[constants.STATE] = constants.STATES.SCORES;
-            message = await handlerInput.jrm.render(ri("INTRODUCTION_SCORES_SHORT"));
+            message = helpers.getMessage(handlerInput, 'INTRODUCTION_SCORES_SHORT');
             break;
           }
           case 'cost': {
@@ -345,60 +346,70 @@ module.exports = {
               attributes[constants.COST] &&
               attributes[constants.COST] !== constants.NO_PREFERENCE
             ) {
-              let costChange = await handlerInput.jrm.render(ri("COST_CHANGE", {"currency": attributes[constants.COST]}));
-              attributes[constants.INTRO_MESSAGE] = 
-                costChange;
+              attributes[constants.INTRO_MESSAGE] = helpers
+                .getMessage(handlerInput, 'COST_CHANGE')
+                .replace('%%CURRENCY%%', attributes[constants.COST]);
             } else {
               attributes[constants.INTRO_MESSAGE] = '';
             }
 
             attributes[constants.STATE] = constants.STATES.COST;
-            message = await handlerInput.jrm.render(ri("INTRODUCTION_COST"));
+            message = helpers.getMessage(handlerInput, 'INTRODUCTION_COST');
             break;
           }
           case 'degree': {
             if (attributes[constants.DEGREE]) {
-              let degreeChange = await handlerInput.jrm.render(ri("DEGREE_CHANGE", {"degree": helpers.noPreferenceDialog(handlerInput, attributes, constants.DEGREE)}));
-              attributes[constants.INTRO_MESSAGE] = 
-                degreeChange;
+              attributes[constants.INTRO_MESSAGE] = helpers
+                .getMessage(handlerInput, 'DEGREE_CHANGE')
+                .replace(
+                  '%%DEGREE%%',
+                  helpers.noPreferenceDialog(handlerInput, attributes, constants.DEGREE)
+                );
             } else {
               attributes[constants.INTRO_MESSAGE] = '';
             }
 
             attributes[constants.STATE] = constants.STATES.DEGREE;
-            message = await handlerInput.jrm.render(ri("INTRODUCTION_DEGREE"));
+            message = helpers.getMessage(handlerInput, 'INTRODUCTION_DEGREE');
             break;
           }
           case 'major': {
             if (attributes[constants.MAJOR_CATEGORY]) {
-              let majorChange = await handlerInput.jrm.render(ri("MAJOR_CHANGE", {"major": helpers.noPreferenceDialog(handlerInput, attributes, constants.MAJOR_CATEGORY)}));
-              attributes[constants.INTRO_MESSAGE] = 
-                majorChange;
+              attributes[constants.INTRO_MESSAGE] = helpers
+                .getMessage(handlerInput, 'MAJOR_CHANGE')
+                .replace(
+                  '%%MAJOR%%',
+                  helpers.noPreferenceDialog(handlerInput, attributes, constants.MAJOR_CATEGORY)
+                );
             } else {
               attributes[constants.INTRO_MESSAGE] = '';
             }
 
             attributes[constants.STATE] = constants.STATES.MAJOR;
-            message = await handlerInput.jrm.render(ri(constants.MAJOR));
+            message = helpers.getMessage(handlerInput, constants.MAJOR);
             break;
           }
           case 'home': {
             if (attributes[constants.HOME]) {
-              let homeChange = await handlerInput.jrm.render(ri("HOME_CHANGE", {"zipcode": helpers.noPreferenceDialog(handlerInput, attributes, constants.HOME)}));
-              attributes[constants.INTRO_MESSAGE] = 
-                homeChange;
+              attributes[constants.INTRO_MESSAGE] = helpers
+                .getMessage(handlerInput, 'HOME_CHANGE')
+                .replace(
+                  '%%ZIP_CODE%%',
+                  helpers.noPreferenceDialog(handlerInput, attributes, constants.HOME)
+                );
             } else {
               attributes[constants.INTRO_MESSAGE] = '';
             }
 
             attributes[constants.STATE] = constants.STATES.HOME;
-            message = await handlerInput.jrm.render(ri("HOME_ZIP_CODE"));
+            message = helpers.getMessage(handlerInput, 'HOME_ZIP_CODE');
             break;
           }
           default: {
-            let profileNotFound = await handlerInput.jrm.render(ri("PROFILE_ITEM_NOT_FOUND"));
-            attributes[constants.INTRO_MESSAGE] = 
-              profileNotFound;
+            attributes[constants.INTRO_MESSAGE] = helpers.getMessage(
+              handlerInput,
+              'PROFILE_ITEM_NOT_FOUND'
+            );
             message = '';
           }
         }
@@ -426,7 +437,7 @@ module.exports = {
         attributes[constants.STATE] === constants.STATES.SCORES
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, TestScoresIntent`);
 
@@ -463,10 +474,9 @@ module.exports = {
 
       helpers.saveUser(handlerInput, attributes, 'session');
 
-      let promptMsg = await handlerInput.jrm.render(ri(message));
       return handlerInput.responseBuilder
-        .speak(promptMsg)
-        .reprompt(promptMsg)
+        .speak(helpers.getMessage(handlerInput, message))
+        .reprompt(helpers.getMessage(handlerInput, message))
         .getResponse();
     }
   },
@@ -481,7 +491,7 @@ module.exports = {
         handlerInput.requestEnvelope.request.intent.name === 'DegreeIntent'
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, DegreeIntent`);
 
@@ -497,21 +507,19 @@ module.exports = {
           break;
         }
         default: {
-          let degreeHelpMsg = await handlerInput.jrm.render(ri("DEGREE_HELP")); 
-          let degreeIntroMsg = await handlerInput.jrm.render(ri("DEGREE_HELP")); 
           return handlerInput.responseBuilder
-            .speak(degreeHelpMsg)
-            .reprompt(degreeIntroMsg)
+            .speak(helpers.getMessage(handlerInput, 'DEGREE_HELP'))
+            .reprompt(helpers.getMessage(handlerInput, 'DEGREE_INTRODUCTION'))
             .getResponse();
         }
       }
 
       helpers.saveUser(handlerInput, attributes, 'session');
 
-      let degreeConfirm = await handlerInput.jrm.render(ri("DEGREE_CONFIRM", {"degree": selection})); 
+      attributes[constants.INTRO_MESSAGE] = helpers
+        .getMessage(handlerInput, 'DEGREE_CONFIRM')
+        .replace('%%DEGREE%%', selection);
 
-      attributes[constants.INTRO_MESSAGE] = 
-        degreeConfirm
       return moveOn(handlerInput, attributes);
     }
   },
@@ -529,7 +537,7 @@ module.exports = {
         attributes[constants.STATE] === constants.STATES.MAJOR
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, MajorIntent`);
 
@@ -543,10 +551,9 @@ module.exports = {
       ) {
         helpers.saveUser(handlerInput, attributes, 'session');
 
-        let promptMsg = await handlerInput.jrm.render(ri(constants.MAJOR)); 
         return handlerInput.responseBuilder
-          .speak(promptMsg)
-          .reprompt(promptMsg)
+          .speak(helpers.getMessage(handlerInput, constants.MAJOR))
+          .reprompt(helpers.getMessage(handlerInput, constants.MAJOR))
           .getResponse();
       }
 
@@ -558,10 +565,11 @@ module.exports = {
         handlerInput,
         constants.MAJOR
       );
-      
-      let majorConfirmMsg = await handlerInput.jrm.render(ri(MAJOR_CONFIRM, {"major": userInput, field: attributes[constants.MAJOR_CATEGORY]})); 
-      attributes[constants.INTRO_MESSAGE] = 
-        majorConfirmMsg
+
+      attributes[constants.INTRO_MESSAGE] = helpers
+        .getMessage(handlerInput, 'MAJOR_CONFIRM')
+        .replace('%%MAJOR%%', userInput)
+        .replace('%%FIELD%%', attributes[constants.MAJOR_CATEGORY]);
 
       return moveOn(handlerInput, attributes);
     }
@@ -587,7 +595,7 @@ module.exports = {
             handlerInput.requestEnvelope.request.intent.name === 'AMAZON.NextIntent'))
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, AMAZON.NoIntent`);
 
@@ -597,24 +605,23 @@ module.exports = {
             if (attributes[constants.SCORES] === 'BOTH') {
               attributes[constants.SAT] = constants.NO_PREFERENCE;
               attributes[constants.SCORES] = constants.ACT;
-              
-              let introductionAct = await handlerInput.jrm.render(ri("INTRODUCTION_ACT")); 
+
               return handlerInput.responseBuilder
-                .speak(introductionAct)
-                .reprompt(introductionAct)
+                .speak(helpers.getMessage(handlerInput, 'INTRODUCTION_ACT'))
+                .reprompt(helpers.getMessage(handlerInput, 'INTRODUCTION_ACT'))
                 .getResponse();
             } else if (attributes[constants.SCORES] === constants.SAT) {
-              let noSatScore = await handlerInput.jrm.render(ri("NO_SAT_SCORE")); 
-              attributes[constants.INTRO_MESSAGE] = 
-              noSatScore
+              attributes[constants.INTRO_MESSAGE] = helpers.getMessage(
+                handlerInput,
+                'NO_SAT_SCORE'
+              );
             } else if (attributes[constants.SCORES] === constants.ACT) {
-              let noActScore = await handlerInput.jrm.render(ri("NO_ACT_SCORE")); 
-              attributes[constants.INTRO_MESSAGE] = 
-                noActScore
+              attributes[constants.INTRO_MESSAGE] = helpers.getMessage(
+                handlerInput,
+                'NO_ACT_SCORE'
+              );
             } else {
-              let noScore = await handlerInput.jrm.render(ri("NO_SCORE")); 
-              attributes[constants.INTRO_MESSAGE] = 
-              noScore
+              attributes[constants.INTRO_MESSAGE] = helpers.getMessage(handlerInput, 'NO_SCORE');
             }
           }
           attributes[constants.ACT] = attributes[constants.SAT] = constants.NO_PREFERENCE;
@@ -622,29 +629,28 @@ module.exports = {
         }
         case constants.STATES.COST: {
           attributes[constants.COST] = constants.NO_PREFERENCE;
-          let introNoPreference = await handlerInput.jrm.render(ri("INTRODUCTION_NO_PREFERENCE")); 
-          attributes[constants.INTRO_MESSAGE] = 
-            introNoPreference
+          attributes[constants.INTRO_MESSAGE] = helpers.getMessage(
+            handlerInput,
+            'INTRODUCTION_NO_PREFERENCE'
+          );
           break;
         }
         case constants.STATES.DEGREE: {
           attributes[constants.DEGREE] = constants.NO_PREFERENCE;
-          let introNoPreference = await handlerInput.jrm.render(ri("INTRODUCTION_NO_PREFERENCE")); 
-          attributes[constants.INTRO_MESSAGE] = 
-            introNoPreference
+          attributes[constants.INTRO_MESSAGE] = helpers.getMessage(
+            handlerInput,
+            'INTRODUCTION_NO_PREFERENCE'
+          );
           break;
         }
         case constants.STATES.MAJOR: {
           attributes[constants.MAJOR_CATEGORY] = constants.NO_PREFERENCE;
-          let majorNone = await handlerInput.jrm.render(ri("MAJOR_NONE")); 
-          attributes[constants.INTRO_MESSAGE] = majorNone
+          attributes[constants.INTRO_MESSAGE] = helpers.getMessage(handlerInput, 'MAJOR_NONE');
           break;
         }
         case constants.STATES.HOME: {
           attributes[constants.HOME] = constants.NO_PREFERENCE;
-          let homeNone = await handlerInput.jrm.render(ri("HOME_NONE")); 
-          attributes[constants.INTRO_MESSAGE] = 
-          homeNone
+          attributes[constants.INTRO_MESSAGE] = helpers.getMessage(handlerInput, 'HOME_NONE');
           break;
         }
       }
@@ -668,7 +674,7 @@ module.exports = {
           attributes[constants.STATE] === constants.STATES.HOME)
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, NumberIntent`);
 
@@ -704,10 +710,9 @@ module.exports = {
           attributes[constants.SAT] = number;
           attributes[constants.SCORES] = constants.ACT;
 
-          let introAct = await handlerInput.jrm.render(ri("INTRODUCTION_ACT"));
           return handlerInput.responseBuilder
-            .speak(introAct)
-            .reprompt(introAct)
+            .speak(helpers.getMessage(handlerInput, 'INTRODUCTION_ACT'))
+            .reprompt(helpers.getMessage(handlerInput, 'INTRODUCTION_ACT'))
             .getResponse();
         }
 
@@ -716,9 +721,10 @@ module.exports = {
             ? '<say-as interpret-as="date" format="y">' + number + '</say-as>'
             : number;
 
-        let scoreConfirm = await handlerInput.jrm.render(ri("SCORE_CONFIRM", {"score": attributes[constants.SCORES], "number": ssml}));
-        attributes[constants.INTRO_MESSAGE] = 
-          scoreConfirm
+        attributes[constants.INTRO_MESSAGE] = helpers
+          .getMessage(handlerInput, 'SCORE_CONFIRM')
+          .replace('%%SCORE%%', attributes[constants.SCORES])
+          .replace('%%NUMBER%%', ssml);
         delete attributes[constants.SCORES];
       } else if (attributes[constants.STATE] === constants.STATES.COST) {
         let validCost = !isNaN(number) && number >= 0;
@@ -728,18 +734,18 @@ module.exports = {
         }
 
         attributes[constants.COST] = number;
-        let costConfirm = await handlerInput.jrm.render(ri("COST_CONFIRM", {"currency": number}));
-        attributes[constants.INTRO_MESSAGE] = 
-          costConfirm;
+        attributes[constants.INTRO_MESSAGE] = helpers
+          .getMessage(handlerInput, 'COST_CONFIRM')
+          .replace('%%CURRENCY%%', number);
       } else if (attributes[constants.STATE] === constants.STATES.HOME) {
         let validZipCode = !Number.isNaN(number) && number.length === 5;
         if (!validZipCode) {
           numberError(handlerInput, attributes, number);
         }
 
-        let homeZipConfirm = await handlerInput.jrm.render(ri("HOME_ZIP_CODE_CONFIRM", {"zipcode": number}));
-        attributes[constants.INTRO_MESSAGE] = 
-          homeZipConfirm
+        attributes[constants.INTRO_MESSAGE] = helpers
+          .getMessage(handlerInput, 'HOME_ZIP_CODE_CONFIRM')
+          .replace('%%ZIP_CODE%%', '<say-as interpret-as="digits">' + number + '</say-as>');
         attributes[constants.HOME] = number;
         console.info('Setting zip code to: ' + number);
       }

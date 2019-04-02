@@ -24,8 +24,6 @@ const constants = require('./constants');
 const helpers = require('./helpers');
 const config = require('./config');
 
-const Jargon = require('@jargon/alexa-skill-sdk');
-const ri = Jargon.ri;
 /**
  * Helper function for setting the remaining location parameters that were not
  * chosen by the user to be skipped in search.
@@ -250,7 +248,7 @@ module.exports = {
         handlerInput.requestEnvelope.request.dialogState !== 'COMPLETED'
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, RefineSearchIntent`);
 
@@ -341,8 +339,10 @@ module.exports = {
           // If the user has a major set in their profile ask them if they want to include it
           if (attributes[constants.MAJOR_CATEGORY]) {
             intentObj.slots[constants.MAJOR].value = attributes[constants.MAJOR_CATEGORY];
+            prompt = helpers
+              .getMessage(handlerInput, 'INTRODUCTION_MAJOR_PROFILE')
+              .replace('%%MAJOR%%', attributes[constants.MAJOR_CATEGORY]);
 
-            prompt = await handlerInput.jrm.render(ri("INTRODUCTION_MAJOR_PROFILE", {"major": attributes[constants.MAJOR_CATEGORY]}));
             handlerInput.requestEnvelope.request.intent = intentObj;
 
             return confirmSlotManual(handlerInput, attributes, prompt, constants.MAJOR);
@@ -393,8 +393,8 @@ module.exports = {
                       validValue.toUpperCase() === constants.HOME &&
                       intentObj.slots[constants.HOME].value
                     ) {
-                      intentObj = zeroOutLocation(intentObj, validValue);                      
-                      prompt = await handlerInput.jrm.render(ri("INTRODUCTION_HOME_CONFIRM"));
+                      intentObj = zeroOutLocation(intentObj, validValue);
+                      prompt = helpers.getMessage(handlerInput, 'INTRODUCTION_HOME_CONFIRM');
                       handlerInput.requestEnvelope.request.intent = intentObj;
 
                       return confirmSlotManual(handlerInput, attributes, prompt, slotName);
@@ -411,13 +411,17 @@ module.exports = {
                     break;
                   }
                   case constants.COST: {
-                    prompt = await handlerInput.jrm.render(ri("INTRODUCTION_COST_CONFIRM", {"cost": currentSlot.value}));
+                    prompt = helpers
+                      .getMessage(handlerInput, 'INTRODUCTION_COST_CONFIRM')
+                      .replace('%%COST%%', currentSlot.value);
                     handlerInput.requestEnvelope.request.intent = intentObj;
                     return confirmSlotManual(handlerInput, attributes, prompt, slotName);
                     break;
                   }
                   case constants.SCORES: {
-                    prompt = await handlerInput.jrm.render(ri("INTRODUCTION_SCORE_CONFIRM", {"score": currentSlot.value}));
+                    prompt = helpers
+                      .getMessage(handlerInput, 'INTRODUCTION_SCORE_CONFIRM')
+                      .replace('%%SCORE%%', currentSlot.value);
                     handlerInput.requestEnvelope.request.intent = intentObj;
                     return confirmSlotManual(handlerInput, attributes, prompt, slotName);
                     break;
@@ -426,9 +430,9 @@ module.exports = {
                 currentSlot.confirmationStatus = constants.CONFIRMED;
                 return nextSlotDelegate(handlerInput, attributes, intentObj);
               } else if (currentSlot.value && validValue == false) {
-                let refineSearchNoMatch = await handlerInput.jrm.render(ri("REFINE_SEARCH_NO_MATCH"));
-                let introduction = await handlerInput.jrm.render(ri("INTRODUCTION_" + slotName));
-                prompt = refineSearchNoMatch + introduction;
+                prompt =
+                  helpers.getMessage(handlerInput, 'REFINE_SEARCH_NO_MATCH') +
+                  helpers.getMessage(handlerInput, 'INTRODUCTION_' + slotName);
                 return nextSlotManual(handlerInput, attributes, prompt, slotName);
               } else {
                 return nextSlotDelegate(handlerInput, attributes, intentObj);
@@ -453,7 +457,7 @@ module.exports = {
         handlerInput.requestEnvelope.request.dialogState === 'COMPLETED'
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, Complete Search`);
 
@@ -478,10 +482,9 @@ module.exports = {
           console.info('Search results: ', res);
 
           if (error) {
-            let reviewErrorMsg = handlerInput.jrm.render(ri("REVIEW_ERROR"))
             let message = helpers.getPromptMessage(
               attributes,
-              reviewErrorMsg
+              helpers.getMessage(handlerInput, 'REVIEW_ERROR')
             );
             resolve(
               handlerInput.responseBuilder
@@ -492,12 +495,11 @@ module.exports = {
           }
 
           if (!res || !res.results || res.results.length < 1) {
-            let reviewNoResults = handlerInput.jrm.render(ri("REVIEW_NO_RESULTS", {"score": currentSlot.value}))
             resolve(
               helpers.simpleDisplayResponse(
                 handlerInput,
                 attributes,
-                reviewNoResults
+                helpers.getMessage(handlerInput, 'REVIEW_NO_RESULTS')
               )
             );
           } else {
@@ -515,12 +517,13 @@ module.exports = {
             attributes[constants.SEARCH_RESULTS] = list;
             attributes[constants.INTRO_MESSAGE] = null;
 
-            let reviewResults = handlerInput.jrm.render(ri("REVIEW_RESULTS", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "number": constants.RECORD_LIMIT}))
-            let reviewResultsOne = handlerInput.jrm.render(ri("REVIEW_RESULTS_ONE", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "number": constants.RECORD_LIMIT}))
             let message =
               schools.length > 1
-                ? reviewResults
-                : reviewResultsOne;
+                ? helpers
+                    .getMessage(handlerInput, 'REVIEW_RESULTS')
+                    .replace('%%COUNT%%', attributes[constants.SEARCH_RESULTS_TOTAL])
+                    .replace('%%NUMBER%%', constants.RECORD_LIMIT)
+                : helpers.getMessage(handlerInput, 'REVIEW_RESULTS_ONE');
 
             message = helpers.getPromptMessage(attributes, message);
 

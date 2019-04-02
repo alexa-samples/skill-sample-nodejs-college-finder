@@ -22,9 +22,6 @@ in basicSearchHandlers.js handles the school name and lists details.
 const constants = require('./constants');
 const helpers = require('./helpers');
 
-const Jargon = require('@jargon/alexa-skill-sdk');
-const ri = Jargon.ri;
-
 /**
  * Central logic for item not found messages.
  *
@@ -34,9 +31,9 @@ const ri = Jargon.ri;
 function notFound (handlerInput, attributes) {
   helpers.saveUser(handlerInput, attributes, 'session');
 
-  return handlerInput.jrb
-    .speak(ri("FAVORITES_NOT_FOUND"))
-    .reprompt(ri("FAVORITES_NOT_FOUND"))
+  return handlerInput.responseBuilder
+    .speak(helpers.getMessage(handlerInput, 'FAVORITES_NOT_FOUND'))
+    .reprompt(helpers.getMessage(handlerInput, 'FAVORITES_NOT_FOUND'))
     .getResponse();
 }
 
@@ -47,7 +44,7 @@ function notFound (handlerInput, attributes) {
  * @param {Object} handlerInput
  * @param {Object} attributes
  */
-async function pageResults (handlerInput, attributes) {
+function pageResults (handlerInput, attributes) {
   console.info('Paging Results');
   let page;
   let schools;
@@ -57,40 +54,33 @@ async function pageResults (handlerInput, attributes) {
 
   // Determine if this is the favorites or result list
   if (attributes[constants.STATE] === constants.STATES.FAVORITES) {
-    console.info('List page');
     page = attributes[constants.LIST_PAGE];
     schools = attributes[constants.LIST] ? attributes[constants.LIST] : [];
-    end = "FAVORITES_NO_MORE_ITEMS";
-    prompt = "FAVORITES_CURRENT_ITEM_PROMPT";
-    title = "FAVORITES_TITLE";
+    end = 'FAVORITES_NO_MORE_ITEMS';
+    prompt = 'FAVORITES_CURRENT_ITEM_PROMPT';
+    title = 'FAVORITES_TITLE';
   } else {
-    console.info('search page');
     page = attributes[constants.SEARCH_PAGE];
     schools = attributes[constants.SEARCH_RESULTS] ? attributes[constants.SEARCH_RESULTS] : [];
-    end = "LIST_SCHOOLS_END_OF_LIST";
-    prompt = "LIST_SCHOOLS_PROMPT";
-    title = "RESULTS_TITLE";
+    end = 'LIST_SCHOOLS_END_OF_LIST';
+    prompt = 'LIST_SCHOOLS_PROMPT';
+    title = 'RESULTS_TITLE';
   }
 
   // If there are no more results, start back at the beginning of the list.
   if (page * constants.PER_PAGE > schools.length) {
     helpers.saveUser(handlerInput, attributes, 'session');
-    console.log('If there are no more results, start back at the beginning of the list');
 
-    return handlerInput.jrb
-      .speak(ri(end))
-      .reprompt(ri(end))
+    return handlerInput.responseBuilder
+      .speak(helpers.getMessage(handlerInput, end))
+      .reprompt(helpers.getMessage(handlerInput, end))
       .getResponse();
   }
 
-  let endStatementPrompt = await handlerInput.jrm.render(ri(prompt));
-  let endStatementEnd = await handlerInput.jrm.render(ri(end));
   const endStatement =
     page * constants.PER_PAGE < schools.length
-       ? endStatementPrompt
-       : endStatementEnd;
-
-  console.log('after end statement');
+      ? helpers.getMessage(handlerInput, prompt)
+      : helpers.getMessage(handlerInput, end);
 
   // Create the message for the current set of schools
   const max = Math.min((page + 1) * constants.PER_PAGE, schools.length);
@@ -104,8 +94,6 @@ async function pageResults (handlerInput, attributes) {
     num += 1;
   }
 
-  console.log('after Create the message for the current set of schools');
-
   // If this is the first page then speak the number of results first
   if (page === 0) {
     message = helpers.getPromptMessage(attributes, `${schoolList} ${endStatement}`);
@@ -113,24 +101,16 @@ async function pageResults (handlerInput, attributes) {
     message = `${schoolList} ${endStatement}`;
   }
 
-  console.log('after If this is the first page then speak the number of results first');
-  console.log(message);
-
   helpers.saveUser(handlerInput, attributes, 'session');
   handlerInput.responseBuilder.speak(message).reprompt(message);
 
-  console.log('after the response');
-
   if (helpers.hasDisplay(handlerInput)) {
-    let buildListTemplateTitle = await handlerInput.jrm.render(ri(title));
     handlerInput.responseBuilder.addRenderTemplateDirective(
-      buildListTemplateTitle
+      helpers.buildListTemplate(schools, helpers.getMessage(handlerInput, title))
     );
   }
 
-  console.log('after the template built');
   return handlerInput.responseBuilder.getResponse();
-
 }
 
 /**
@@ -168,7 +148,7 @@ module.exports = {
           handlerInput.requestEnvelope.request.intent.name === 'ListFavoritesIntent')
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, ListSchools`);
 
@@ -182,8 +162,8 @@ module.exports = {
         schools = attributes[constants.LIST] === undefined ? [] : attributes[constants.LIST];
         attributes[constants.STATE] = constants.STATES.FAVORITES;
         attributes[constants.LIST_PAGE] = 0;
-        empty = "FAVORITES_EMPTY";
-        intro = "FAVORITES_OVERVIEW";
+        empty = 'FAVORITES_EMPTY';
+        intro = 'FAVORITES_OVERVIEW';
       } else {
         schools =
           attributes[constants.SEARCH_RESULTS] === undefined
@@ -191,17 +171,17 @@ module.exports = {
             : attributes[constants.SEARCH_RESULTS];
         attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;
         attributes[constants.SEARCH_PAGE] = 0;
-        empty = "LIST_SCHOOLS_NO_ITEMS_PROMPT";
-        intro = "LIST_SCHOOLS_INTRO";
+        empty = 'LIST_SCHOOLS_NO_ITEMS_PROMPT';
+        intro = 'LIST_SCHOOLS_INTRO';
       }
 
       // No results. Prompt to do a search.
       if (schools === undefined || schools.length < 1) {
         helpers.saveUser(handlerInput, attributes, 'session');
 
-        return handlerInput.jrb
-          .speak(ri(empty))
-          .reprompt(ri(empty))
+        return handlerInput.responseBuilder
+          .speak(helpers.getMessage(handlerInput, empty))
+          .reprompt(helpers.getMessage(handlerInput, empty))
           .getResponse();
       } else {
         intro = schools.length === 1 ? `${intro}_ONE` : intro;
@@ -209,13 +189,11 @@ module.exports = {
         attributes[constants.SEARCH_PAGE] = 0;
 
         if (handlerInput.requestEnvelope.request.intent.name === 'ListFavoritesIntent') {
-          let introMessageCount = await handlerInput.jrm.render(ri(intro, {"count": schools.length}));
-          attributes[constants.INTRO_MESSAGE] = 
-            introMessageCount;
+          attributes[constants.INTRO_MESSAGE] = helpers
+            .getMessage(handlerInput, intro)
+            .replace('%%COUNT%%', schools.length);
         } else {
-          let introMessage = await handlerInput.jrm.render(ri(intro)); 
-          attributes[constants.INTRO_MESSAGE] = 
-            introMessage;
+          attributes[constants.INTRO_MESSAGE] = helpers.getMessage(handlerInput, intro);
         }
 
         return pageResults(handlerInput, attributes);
@@ -239,7 +217,7 @@ module.exports = {
           attributes[constants.STATE] === constants.STATES.FAVORITES)
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, AMAZON.PreviousIntent for Lists`);
 
@@ -269,16 +247,16 @@ module.exports = {
 
         helpers.saveUser(handlerInput, attributes, 'session');
 
-        return handlerInput.jrb
-          .speak(ri("WELCOME_MENU"))
-          .reprompt(ri("WELCOME_MENU"))
+        return handlerInput.responseBuilder
+          .speak(helpers.getMessage(handlerInput, 'WELCOME_MENU'))
+          .reprompt(helpers.getMessage(handlerInput, 'WELCOME_MENU'))
           .getResponse();
       } else if (schools.length < 1) {
         helpers.saveUser(handlerInput, attributes, 'session');
 
-        return handlerInput.jrb
-          .speak(ri(empty))
-          .reprompt(ri(empty))
+        return handlerInput.responseBuilder
+          .speak(helpers.getMessage(handlerInput, empty))
+          .reprompt(helpers.getMessage(handlerInput, empty))
           .getResponse();
       }
 
@@ -366,7 +344,7 @@ module.exports = {
           attributes[constants.STATE] === constants.STATES.MORE_INFORMATION)
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, AMAZON.NumberIntent`);
 
@@ -386,17 +364,18 @@ module.exports = {
       if (schools === undefined || schools.length < 1) {
         helpers.saveUser(handlerInput, attributes, 'session');
 
-        return handlerInput.jrb
-          .speak(ri(empty))
-          .reprompt(ri(empty))
+        return handlerInput.responseBuilder
+          .speak(helpers.getMessage(handlerInput, empty))
+          .reprompt(helpers.getMessage(handlerInput, empty))
+          .getResponse();
       }
 
       if (number < 0 || number > schools.length) {
+        attributes[constants.INTRO_MESSAGE] = helpers.getMessage(
+          handlerInput,
+          'ERROR_INVALID_VALUE'
+        );
 
-        let errorInvalidMsg = await handlerInput.jrm.render(ri("ERROR_INVALID_VALUE"));
-        attributes[constants.INTRO_MESSAGE] =
-
-        errorInvalidMsg;
         attributes[constants.SEARCH_PAGE] -= 1;
         return pageResults(handlerInput, attributes);
       }
@@ -413,11 +392,11 @@ module.exports = {
       const attributes = handlerInput.attributesManager.getSessionAttributes();
       return (
         handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-        handlerInput.requestEnvelope.request.intent.name === 'AddToFavoritesIntent' 
-        //&& attributes[constants.SEARCH_RESULTS]
+        handlerInput.requestEnvelope.request.intent.name === 'AddToFavoritesIntent' &&
+        attributes[constants.SEARCH_RESULTS]
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, AddToFavoritesIntent`);
 
@@ -436,10 +415,18 @@ module.exports = {
       });
 
       if (duplicate && duplicate !== undefined) {
-          return handlerInput.jrb
-            .speak(ri("FAVORITES_DUPLICATE", {"school": duplicate['school.name']}))
-            .reprompt(ri("FAVORITES_DUPLICATE", {"school": duplicate['school.name']}))
-            .getResponse();
+        return handlerInput.responseBuilder
+          .speak(
+            helpers
+              .getMessage(handlerInput, 'FAVORITES_DUPLICATE')
+              .replace('%%SCHOOL%%', duplicate['school.name'])
+          )
+          .reprompt(
+            helpers
+              .getMessage(handlerInput, 'FAVORITES_DUPLICATE')
+              .replace('%%SCHOOL%%', duplicate['school.name'])
+          )
+          .getResponse();
       }
 
       if (
@@ -465,7 +452,9 @@ module.exports = {
 
         schools.unshift(school);
 
-        let message = await handlerInput.jrm.render(ri("FAVORITES_ADDED", {"school": school['school.name'].replace('&', 'and')}));
+        let message = helpers
+          .getMessage(handlerInput, 'FAVORITES_ADDED')
+          .replace('%%SCHOOL%%', school['school.name'].replace('&', 'and'));
         attributes[constants.LIST] = schools;
 
         helpers.saveUser(handlerInput, attributes, 'session');
@@ -488,7 +477,7 @@ module.exports = {
         handlerInput.requestEnvelope.request.intent.name === 'DeleteFromFavoritesIntent'
       );
     },
-    handle: async (handlerInput) => {
+    handle (handlerInput) {
       let attributes = handlerInput.attributesManager.getSessionAttributes();
       console.info(`${attributes[constants.STATE]}, DeleteFromFavoritesIntent`);
 
@@ -500,10 +489,10 @@ module.exports = {
 
       // The list is empty so there is nothing to delete
       if (attributes[constants.LIST] === undefined || attributes[constants.LIST].length < 1) {
-          return handlerInput.jrb
-            .speak(ri("FAVORITES_EMPTY"))
-            .reprompt(ri("FAVORITES_EMPTY"))
-            .getResponse();
+        return handlerInput.responseBuilder
+          .speak(helpers.getMessage(handlerInput, 'FAVORITES_EMPTY'))
+          .reprompt(helpers.getMessage(handlerInput, 'FAVORITES_EMPTY'))
+          .getResponse();
       } else {
         if (
           !intentObj ||
@@ -548,13 +537,16 @@ module.exports = {
           }
         }
 
-        let favoriteRemoveConfirm = await handlerInput.jrm.render(ri("FAVORITES_REMOVE_CONFIRM", {school: school.replace('&', 'and')}));
-        attributes[constants.INTRO_MESSAGE] = 
-          favoriteRemoveConfirm;
+        attributes[constants.INTRO_MESSAGE] = helpers
+          .getMessage(handlerInput, 'FAVORITES_REMOVE_CONFIRM')
+          .replace('%%SCHOOL_NAME%%', school.replace('&', 'and'));
         attributes[constants.LIST] = schools;
 
-        if (attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS) {          
-          message = await handlerInput.jrm.render(ri("FAVORITES_FROM_SEARCH"));
+        if (attributes[constants.STATE] === constants.STATES.LIST_SCHOOLS) {
+          message = helpers.getPromptMessage(
+            attributes,
+            helpers.getMessage(handlerInput, 'FAVORITES_FROM_SEARCH')
+          );
         } else {
           // Create the message for the current set of schools
           let schoolList = '';
@@ -566,13 +558,15 @@ module.exports = {
             schoolList += `${num + 1}. ${schools[num]['school.name']}. `;
             num++;
           }
-          let favoritesOverview = await handlerInput.jrm.render(ri("FAVORITES_OVERVIEW", {"count": schools.length}));
+
           message = helpers.getPromptMessage(
             attributes,
-            favoritesOverview +
-            ' ' +
-            schoolList
-           );
+            helpers
+              .getMessage(handlerInput, 'FAVORITES_OVERVIEW')
+              .replace('%%COUNT%%', schools.length) +
+              ' ' +
+              schoolList
+          );
         }
 
         helpers.saveUser(handlerInput, attributes, 'session');
