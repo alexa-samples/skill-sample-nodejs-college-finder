@@ -1,15 +1,13 @@
 {
-  "handler": "index.js",
+  "handler": "lambda/custom/index.js",
   "homophones": {
     "set as": ["set is"]
   },
   "locale": "en-US",
-  "interactionModel": "../../models/en-US.json",
   "trace": false,
   "virtualDeviceToken": "<See test/README.MD for setup>",
   "jest": {
-    "collectCoverageFrom": ["*.js"],
-    "silent": false,
-    "testPathIgnorePatterns": []
+    "collectCoverageFrom": ["lambda/custom/*.js"],
+    "silent": false
   }
 }

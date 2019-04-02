@@ -1,0 +1,47 @@
+#=====================================================================================================================
+#     ______    _ ____  ______        __  _
+#    / __/ /__ (_) / / /_  __/__ ___ / /_(_)__  ___ _
+#   _\ \/  '_// / / /   / / / -_|_-</ __/ / _ \/ _ `/
+#  /___/_/\_\/_/_/_/   /_/  \__/___/\__/_/_//_/\_, /
+#                                             /___/
+#
+# Created by Bespoken
+# Learn more at https://read.bespoken.io/end-to-end/getting-started/
+#
+# Skill name: "University Finder" by Amazon
+# Test scope: Searching and refining results
+# Description: General End-to-end test suite
+#=====================================================================================================================
+
+---
+configuration:
+  locale: en-US
+  voiceId: Joey
+  type: e2e
+
+---
+- test: Invoke skill, do not create profile, search by major, refine by state
+- open university finder
+- no: you can search for schools by major or location hear your favorites list or look up a specific school which would you like to do
+- search by major: what major would you like to search for
+- business: i found * schools for business management marketing and related support services you can refine your search or hear the first 12 results which would you like
+- refine my search: i can search by region state or zip code which option would you like
+- state: what state would you like to search for
+- california: do you want to search for public or private schools
+- private: what size school do you want to search for small medium or large
+- medium: you * have * result* you can hear * search for a school by name or review your favorites list which would you like
+- stop
+
+---
+# This test does not seem to work - when it asks for the size of the school, it goes haywire for some reason
+- test.skip: Invoke skill, do not create profile, search by location, refine 
+- open university finder
+- no
+- search for schools in far west: i found * schools in the far west you can refine your search or hear the first 12 results which would you like
+- refine my search: what major would you like to search for
+- psychology: do you want to search for public or private schools
+- public: what size school do you want to search for small medium or large
+- medium sized: you * have * result* you can hear * search for a school by name or review your favorites list which would you like
+- i want to hear my results: here are your search results
+- details about first one: you can save this school to your favorites list or go back which would you like to do
+- stop
