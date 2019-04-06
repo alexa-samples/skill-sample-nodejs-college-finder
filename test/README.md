@@ -61,7 +61,7 @@ To take a look at the code coverage for the tests in more depth, go to the direc
 
 You can also see a pretty-printed HTML report of the test results here: `<PROJECT_ROOT>/test_output/report/index.html`.
 
-## Runing End-to-end Tests
+## Running End-to-end Tests
 End-to-end tests will interact with your actual Alexa skill using our simple testing scripts. Here is an example test:  
 ```
 - test: Invoke skill and search by major
@@ -72,7 +72,7 @@ End-to-end tests will interact with your actual Alexa skill using our simple tes
 - stop
 ```
 
-For this test, the utterances on the left-hand side will be turned into speech and sent to Alexa and your skill. The skill will respond, which will in turn be converted back into text, and compared to the expected respones on the right-hand side. It's easy to create full-cycle tests using this approach, which test all aspects of the system, including the interaction model (i.e., ensuring that utterances match up correctly to the intent), Display output, AudioPlayer behavior, etc.
+For this test, the utterances on the left-hand side will be turned into speech and sent to Alexa and your skill. The skill will respond, which will in turn be converted back into text, and compared to the expected response on the right-hand side. It's easy to create full-cycle tests using this approach, which test all aspects of the system, including the interaction model (i.e., ensuring that utterances match up correctly to the intent), Display output, AudioPlayer behavior, etc.
 
 To use the end-to-end testing, it is necessary to do the following:  
 * Deploy your skill (code and interaction model) via the ASK CLI
