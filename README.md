@@ -36,7 +36,7 @@ This will create a lambda function called ask-custom-University-Finder-default w
 
 Add the Environment variables to your Lambda function manually or run the below AWS command (Info on how to set up AWS CLI here: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 
-`aws lambda update-function-configuration --function-name ask-custom-University-Finder-default --environment Variables={SKILL_ID=amzn1.ask.skill.9307124e-4e1f-4be3-acf2-7555243989d3,LIST_IMAGE=https://s3.amazonaws.com/college-finder-display/list.jpg,API_KEY=kE8zKQcd5Hajuv15LBuE044KcBqWCbZcvJTJV0U4,GRAD_IMAGE=https://s3.amazonaws.com/college-finder-display/charles-deloye-660433-unsplash.jpg,MAIN_IMAGE=https://s3.amazonaws.com/college-finder-display/main.jpg}`
+`aws lambda update-function-configuration --function-name ask-custom-University-Finder-default --environment Variables={SKILL_ID=amzn1.ask.skill.86ef723e-4d6c-45cb-bde2-ac4b43df4225,LIST_IMAGE=https://s3.amazonaws.com/college-finder-display/list.jpg,API_KEY=kE8zKQcd5Hajuv15LBuE044KcBqWCbZcvJTJV0U4,GRAD_IMAGE=https://s3.amazonaws.com/college-finder-display/charles-deloye-660433-unsplash.jpg,MAIN_IMAGE=https://s3.amazonaws.com/college-finder-display/main.jpg}`
 
 Make sure to change the SKILL_ID to your skill ID
 
@@ -71,7 +71,7 @@ Take a look at the unit-tests and end-to-end tests provided for this skill by [B
 
 * The unit-tests ensure the code is working correctly
 * End-to-end tests ensure the skill as a whole is working right
-* Read more [here](/test)
+* Read more [here](/lambda/custom/test)
 
 ## License
 
