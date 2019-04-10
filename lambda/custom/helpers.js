@@ -17,6 +17,9 @@ const config = require('./config');
 const lang = require('./language');
 const http = require('https');
 
+const Jargon = require('@jargon/alexa-skill-sdk');
+const ri = Jargon.ri;
+
 const states = [
   ['Arizona', 'AZ'],
   ['Alabama', 'AL'],
@@ -211,10 +214,11 @@ module.exports = {
    * @param {Object} attributes
    * @param {String} value
    */
-  noPreferenceDialog (handlerInput, attributes, value) {
+  async noPreferenceDialog (handlerInput, attributes, value) {
     if (attributes[value] && attributes[value] === constants.NO_PREFERENCE) {
-      return module.exports.getMessage(handlerInput, 'NO_PREFERENCE_TEXT');
-    } else {
+      noPreferenceText = await handlerInput.jrm.render(ri("NO_PREFERENCE_TEXT"));
+      return noPreferenceText;
+} else {
       return attributes[value];
     }
   },
@@ -222,6 +226,8 @@ module.exports = {
   /**
    * Parses the user's locale and returns the matching language string for the
    * label in language.js.
+   * 
+   * payette : function deprecated, using Jargon for strings
    *
    * @param {Object} handlerInput
    * @param {String} label The variable name for the language string in language.js
@@ -401,7 +407,13 @@ module.exports = {
    * @param {Object} attributes
    * @param {String} message
    */
-  simpleDisplayResponse: function (handlerInput, attributes, message) {
+  simpleDisplayResponse: async function (handlerInput, attributes, message) {
+    console.log('entering simple display response')
+
+    
+    const labelName = await handlerInput.jrm.render(ri("LABEL_NAME"))
+    console.log('text label' + labelName)
+
     const template = {
       type: 'BodyTemplate6',
       token: 'Main',
@@ -415,8 +427,8 @@ module.exports = {
       },
       textContent: {
         primaryText: {
-          text: module.exports.getMessage(handlerInput, 'LABEL_NAME'),
-          type: 'PlainText'
+            text: labelName,
+        type: 'PlainText'
         }
       }
     };
@@ -424,11 +436,15 @@ module.exports = {
     handlerInput.responseBuilder.speak(message).reprompt(message);
 
     if (module.exports.hasDisplay(handlerInput)) {
-      const hints = module.exports.getMessage(handlerInput, 'HINT');
-      const hint = hints[Math.floor(Math.random() * hints.length)];
+      
+      const hint = await handlerInput.jrm.render(ri("HINTS")) //Jargon returns randomized hint
+
+      console.log(' hint is ' + hint)
+
       handlerInput.responseBuilder.addRenderTemplateDirective(template).addHintDirective(hint);
     }
 
+    console.log('end of simpleDisplay response')
     return handlerInput.responseBuilder.getResponse();
   },
   /**
@@ -440,7 +456,7 @@ module.exports = {
    * @param {Object} attributes
    * @param {Object} school
    */
-  moreInfoResponse: function (handlerInput, attributes, school) {
+  moreInfoResponse: async function (handlerInput, attributes, school) {
     let more = 'MORE_INFORMATION_SAVE_PROMPT';
     // Determine if this is the favorites or result list
     if (attributes[constants.STATE] === constants.STATES.FAVORITES) {
@@ -450,27 +466,31 @@ module.exports = {
     attributes[constants.CURRENT_SCHOOL_ID] = school.id;
     attributes[constants.CURRENT_SCHOOL] = school;
     const state = module.exports.abbrState(school['school.state'], 'name');
+    
+    attributes[constants.INTRO_MESSAGE] = 
+    await handlerInput.jrm.render(ri("MORE_INFORMATION_OVERVIEW", { 
+      school: school['school.name'].replace('&', 'and'),
+      city: school['school.city'],
+      state: state,
+      tuition_in_state: school['latest.cost.tuition.in_state'],
+      tuition_out_of_state: school['latest.cost.tuition.out_of_state']
+    }
+    ));
 
-    attributes[constants.INTRO_MESSAGE] = module.exports
-      .getMessage(handlerInput, 'MORE_INFORMATION_OVERVIEW')
-      .replace('%%SCHOOL_NAME%%', school['school.name'].replace('&', 'and'))
-      .replace('%%CITY%%', school['school.city'])
-      .replace('%%STATE%%', state)
-      .replace('%%TUITION_IN_STATE%%', school['latest.cost.tuition.in_state'])
-      .replace('%%TUITION_OUT_OF_STATE%%', school['latest.cost.tuition.out_of_state']);
-
+    moreMsg = await handlerInput.jrm.render(ri(more))
     const message = module.exports.getPromptMessage(
       attributes,
-      module.exports.getMessage(handlerInput, more)
+      moreMsg
     );
 
     module.exports.saveUser(handlerInput, attributes, 'session');
     handlerInput.responseBuilder.speak(message).reprompt(message);
-
+    
+    notAvailable = await handlerInput.jrm.render(ri("NOT_AVAILABLE"))
     if (module.exports.hasDisplay(handlerInput)) {
       handlerInput.responseBuilder.addRenderTemplateDirective(
         module.exports.buildSchoolTemplate(
-          module.exports.getMessage(handlerInput, 'NOT_AVAILABLE'),
+          notAvailable,
           school
         )
       );
@@ -621,8 +641,8 @@ module.exports = {
    * @param {Object} attributes
    * @param {String} message
    */
-  buildProfileTemplate (handlerInput, attributes, message) {
-    const noPreference = module.exports.getMessage(handlerInput, 'NO_PREFERENCE_TEXT');
+  async buildProfileTemplate (handlerInput, attributes, message) {
+    const noPreference = await handlerInput.jrm.render(ri("NO_PREFERENCE_TEXT"))
     let score;
     if (attributes[constants.SAT]) {
       score = module.exports.noContent(attributes[constants.SAT])
@@ -672,11 +692,13 @@ module.exports = {
     module.exports.saveUser(handlerInput, attributes, 'session');
     handlerInput.responseBuilder.speak(message).reprompt(message);
 
+    
     if (module.exports.hasDisplay(handlerInput)) {
+      profileHint = await handlerInput.jrm.render(ri("PROFILE_HINT"))
       handlerInput.responseBuilder
         .addRenderTemplateDirective(template)
-        .addHintDirective(module.exports.getMessage(handlerInput, 'PROFILE_HINT'));
-    }
+        .addHintDirective(profileHint);
+}
 
     return handlerInput.responseBuilder.getResponse();
   },
@@ -711,7 +733,6 @@ module.exports = {
         console.error('Error with the request:', err.message);
         callback(err);
       });
-
     req.end();
   }
 };
