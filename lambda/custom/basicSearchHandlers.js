@@ -228,7 +228,7 @@ module.exports = {
           let searchByNoResults = await handlerInput.jrm.render(ri("SEARCH_BY_NO_RESULTS"));
 
           return new Promise(resolve => {
-            helpers.getSchools(url, (error, res) => {
+            helpers.getSchools(url, async (error, res) => {
               if (error || res.results === undefined) {
                 let message = searchByNameError + ' ' + welcomeMenu;
                 resolve(
@@ -535,7 +535,7 @@ module.exports = {
               attributes[constants.SEARCH] = constants.STATES.SEARCH_BY_MAJOR;
               attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;
 
-              const message = await handlerInput.jrm.render(ri("SEARCH_BY_MAJOR_REFINE", {"count": count, "major": major}));
+              const message = await handlerInput.jrm.render(ri("SEARCH_BY_MAJOR_REFINE", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "major": major}));
               let searchFewResults = await handlerInput.jrm.render(ri("SEARCH_FEW_RESULTS"));
 
               if (schools.length < 2) {

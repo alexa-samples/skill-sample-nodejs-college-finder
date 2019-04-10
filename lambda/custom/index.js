@@ -46,7 +46,7 @@ const util = require('util')
  */
 const GetUserDataInterceptor = {
   process (handlerInput) {
-    console.log('Request: ', util.inspect(handlerInput));
+    //console.log('Request: ', util.inspect(handlerInput));
     let attributes = handlerInput.attributesManager.getSessionAttributes();
     if (
       handlerInput.requestEnvelope.request.type === 'LaunchRequest' ||

@@ -33,7 +33,7 @@ configuration:
 ---
 - test: SearchByNameIntent works properly
 - SearchByNameIntent SCHOOL_NAME="University of Maryland University College":
-  - response.outputSpeech.ssml: University of Maryland-University College is a school in Adelphi, Maryland
+  - response.outputSpeech.ssml: <speak>University of Maryland-University Collegeis a school in Adelphi, Maryland. The latest in-state tuition is <say-as interpret-as="unit">$7176</say-as> and out-of-state tuition is <say-as interpret-as="unit">$12336</say-as>.<break time="500ms"/> You can save this school to your favorites list or go back. Which would you like to do?</speak>
 
 ---
 - test: SearchByMajorIntent works properly

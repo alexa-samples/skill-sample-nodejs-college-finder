@@ -559,7 +559,8 @@ module.exports = {
         constants.MAJOR
       );
       
-      let majorConfirmMsg = await handlerInput.jrm.render(ri(MAJOR_CONFIRM, {"major": userInput, field: attributes[constants.MAJOR_CATEGORY]})); 
+      let majorConfirmMsg = await handlerInput.jrm.render(ri("MAJOR_CONFIRM", {"major": userInput, "field": attributes[constants.MAJOR_CATEGORY]})); 
+
       attributes[constants.INTRO_MESSAGE] = 
         majorConfirmMsg
 

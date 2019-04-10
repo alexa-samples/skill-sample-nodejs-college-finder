@@ -472,13 +472,17 @@ module.exports = {
 
       const url = getSearchData(attributes);
       console.info('URL for full query: ', url);
+      let reviewErrorMsg = await handlerInput.jrm.render(ri("REVIEW_ERROR"));
+      let reviewNoResults = await handlerInput.jrm.render(ri("REVIEW_NO_RESULTS"));
+      let reviewResults = await handlerInput.jrm.render(ri("REVIEW_RESULTS", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "number": constants.RECORD_LIMIT}));
+      let reviewResultsOne = await handlerInput.jrm.render(ri("REVIEW_RESULTS_ONE"));
 
       return new Promise(resolve => {
-        helpers.getSchools(url, (error, res) => {
+        helpers.getSchools(url, async (error, res) => {
           console.info('Search results: ', res);
 
           if (error) {
-            let reviewErrorMsg = handlerInput.jrm.render(ri("REVIEW_ERROR"))
+
             let message = helpers.getPromptMessage(
               attributes,
               reviewErrorMsg
@@ -492,7 +496,6 @@ module.exports = {
           }
 
           if (!res || !res.results || res.results.length < 1) {
-            let reviewNoResults = handlerInput.jrm.render(ri("REVIEW_NO_RESULTS", {"score": currentSlot.value}))
             resolve(
               helpers.simpleDisplayResponse(
                 handlerInput,
@@ -515,8 +518,6 @@ module.exports = {
             attributes[constants.SEARCH_RESULTS] = list;
             attributes[constants.INTRO_MESSAGE] = null;
 
-            let reviewResults = handlerInput.jrm.render(ri("REVIEW_RESULTS", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "number": constants.RECORD_LIMIT}))
-            let reviewResultsOne = handlerInput.jrm.render(ri("REVIEW_RESULTS_ONE", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "number": constants.RECORD_LIMIT}))
             let message =
               schools.length > 1
                 ? reviewResults
