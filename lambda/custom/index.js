@@ -41,7 +41,11 @@ const search = require('./fullSearchHandlers');
  */
 const GetUserDataInterceptor = {
   process (handlerInput) {
+<<<<<<< HEAD
     console.log('Request: ', JSON.stringify(handlerInput));
+=======
+    //console.log('Request: ', util.inspect(handlerInput));
+>>>>>>> 088f48e09317f4da2b96ef729b7b73ceb81a31d5
     let attributes = handlerInput.attributesManager.getSessionAttributes();
     if (
       handlerInput.requestEnvelope.request.type === 'LaunchRequest' ||

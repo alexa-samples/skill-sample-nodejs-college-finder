@@ -7,7 +7,14 @@
   "trace": false,
   "virtualDeviceToken": "<See test/README.MD for setup>",
   "jest": {
+<<<<<<< HEAD:testing.json
     "collectCoverageFrom": ["lambda/custom/*.js"],
     "silent": false
+=======
+    "collectCoverageFrom": ["*.js"],
+    "silent": false,
+    "collectCoverage": false,
+    "testPathIgnorePatterns": []
+>>>>>>> 088f48e09317f4da2b96ef729b7b73ceb81a31d5:lambda/custom/testing.json
   }
 }

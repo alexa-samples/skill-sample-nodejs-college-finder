@@ -215,7 +215,7 @@ module.exports = {
             constants.SEARCHPAGING;
 
           return new Promise(resolve => {
-            helpers.getSchools(url, (error, res) => {
+            helpers.getSchools(url, async (error, res) => {
               if (error || res.results === undefined) {
                 let message =
                   helpers.getPromptMessage(
@@ -513,10 +513,16 @@ module.exports = {
               attributes[constants.SEARCH_RESULTS] = list;
               attributes[constants.SEARCH] = constants.STATES.SEARCH_BY_MAJOR;
               attributes[constants.STATE] = constants.STATES.LIST_SCHOOLS;
+<<<<<<< HEAD
               const message = helpers
                 .getMessage(handlerInput, 'SEARCH_BY_MAJOR_REFINE')
                 .replace('%%COUNT%%', attributes[constants.SEARCH_RESULTS_TOTAL])
                 .replace('%%MAJOR%%', major);
+=======
+
+              const message = await handlerInput.jrm.render(ri("SEARCH_BY_MAJOR_REFINE", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "major": major}));
+              let searchFewResults = await handlerInput.jrm.render(ri("SEARCH_FEW_RESULTS"));
+>>>>>>> 088f48e09317f4da2b96ef729b7b73ceb81a31d5
 
               if (schools.length < 2) {
                 attributes[constants.INTRO_MESSAGE] =

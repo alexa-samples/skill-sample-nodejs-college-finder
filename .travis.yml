@@ -7,7 +7,11 @@ cache:
 install:
   - npm install -g bespoken-tools
   - npm install codecov -g
+<<<<<<< HEAD
   - cd lambda/custom && npm install && cd ../..
+=======
+  - cd lambda/custom && npm install
+>>>>>>> 088f48e09317f4da2b96ef729b7b73ceb81a31d5
 script:
   - bst test test/unit
   - codecov

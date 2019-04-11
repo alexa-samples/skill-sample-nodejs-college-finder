@@ -476,12 +476,20 @@ module.exports = {
 
       const url = getSearchData(attributes);
       console.info('URL for full query: ', url);
+      let reviewErrorMsg = await handlerInput.jrm.render(ri("REVIEW_ERROR"));
+      let reviewNoResults = await handlerInput.jrm.render(ri("REVIEW_NO_RESULTS"));
+      let reviewResults = await handlerInput.jrm.render(ri("REVIEW_RESULTS", {"count": attributes[constants.SEARCH_RESULTS_TOTAL], "number": constants.RECORD_LIMIT}));
+      let reviewResultsOne = await handlerInput.jrm.render(ri("REVIEW_RESULTS_ONE"));
 
       return new Promise(resolve => {
-        helpers.getSchools(url, (error, res) => {
+        helpers.getSchools(url, async (error, res) => {
           console.info('Search results: ', res);
 
           if (error) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 088f48e09317f4da2b96ef729b7b73ceb81a31d5
             let message = helpers.getPromptMessage(
               attributes,
               helpers.getMessage(handlerInput, 'REVIEW_ERROR')

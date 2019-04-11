@@ -565,11 +565,19 @@ module.exports = {
         handlerInput,
         constants.MAJOR
       );
+<<<<<<< HEAD
 
       attributes[constants.INTRO_MESSAGE] = helpers
         .getMessage(handlerInput, 'MAJOR_CONFIRM')
         .replace('%%MAJOR%%', userInput)
         .replace('%%FIELD%%', attributes[constants.MAJOR_CATEGORY]);
+=======
+      
+      let majorConfirmMsg = await handlerInput.jrm.render(ri("MAJOR_CONFIRM", {"major": userInput, "field": attributes[constants.MAJOR_CATEGORY]})); 
+
+      attributes[constants.INTRO_MESSAGE] = 
+        majorConfirmMsg
+>>>>>>> 088f48e09317f4da2b96ef729b7b73ceb81a31d5
 
       return moveOn(handlerInput, attributes);
     }
