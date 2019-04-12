@@ -9,15 +9,6 @@ This is a complex and useful Node.js sample skill with examples of DynamoDB inte
 ### Data Source
 This skill queries the College Scorecard API public dataset. For more information view the documentation on the College Scorecard [site](https://collegescorecard.ed.gov/data/documentation/). 
 
-### Jargon.
-
-This skill has a Jargon library dependency. https://www.npmjs.com/package/@jargon/alexa-skill-sdk
-
-To add the Jargon SDK as a dependency of your lambda code go to skill_root/lambda/custom and run:
-
-`npm i --save @jargon/alexa-skill-sdk`
-`yarn add @jargon/alexa-skill-sdk`
-
 ### Environment Variables
 
 The skill references environment variables in the config.js file for instance specific data. In order to successfully deploy and launch the skill you need to add the following environment variables to your deployment:
@@ -36,9 +27,9 @@ This will create a lambda function called ask-custom-University-Finder-default w
 
 Add the Environment variables to your Lambda function manually or run the below AWS command (Info on how to set up AWS CLI here: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 
-`aws lambda update-function-configuration --function-name ask-custom-University-Finder-default --environment Variables={SKILL_ID=amzn1.ask.skill.86ef723e-4d6c-45cb-bde2-ac4b43df4225,LIST_IMAGE=https://s3.amazonaws.com/college-finder-display/list.jpg,API_KEY=kE8zKQcd5Hajuv15LBuE044KcBqWCbZcvJTJV0U4,GRAD_IMAGE=https://s3.amazonaws.com/college-finder-display/charles-deloye-660433-unsplash.jpg,MAIN_IMAGE=https://s3.amazonaws.com/college-finder-display/main.jpg}`
+`aws lambda update-function-configuration --function-name ask-custom-University-Finder-default --environment Variables={SKILL_ID=YOURSKILLID,LIST_IMAGE=https://s3.amazonaws.com/YOURS3BUCKET/image.jpg,API_KEY=YOURAPIKEY,GRAD_IMAGE=https://s3.amazonaws.com/YOURS3BUCKET/image-2.jpg,MAIN_IMAGE=https://s3.amazonaws.com/YOURS3BUCKET/image-3.jpg}`
 
-Make sure to change the SKILL_ID to your skill ID
+Make sure to change the variables to match your environment
 
 Then run this command:
 
