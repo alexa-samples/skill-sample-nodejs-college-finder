@@ -35,13 +35,18 @@ const searchBy = require('./basicSearchHandlers');
 const results = require('./resultsHandlers');
 const search = require('./fullSearchHandlers');
 
+//Files for Jargon
+const Jargon = require('@jargon/alexa-skill-sdk');
+const util = require('util')
+
+
 /**
  * If this is the first start of the skill, grab the user's data from Dynamo and
  * set the session attributes to the persistent data.
  */
 const GetUserDataInterceptor = {
   process (handlerInput) {
-    console.log('Request: ', JSON.stringify(handlerInput));
+    //console.log('Request: ', util.inspect(handlerInput));
     let attributes = handlerInput.attributesManager.getSessionAttributes();
     if (
       handlerInput.requestEnvelope.request.type === 'LaunchRequest' ||
@@ -83,7 +88,12 @@ const GetUserDataInterceptor = {
  * Search - FillSearchHandler, CompleteSearchHandler
  */
 
-exports.handler = Alexa.SkillBuilders.standard()
+
+// install Jargon skill builder.
+const skillBuilder = new Jargon.JargonSkillBuilder({ mergeSpeakAndReprompt: true }).wrap(Alexa.SkillBuilders.standard());
+
+//exports.handler = Alexa.SkillBuilders.standard()
+exports.handler = skillBuilder
   .withSkillId(config.APPID)
   .addRequestHandlers(
     common.CancelAndStopIntentHandler,

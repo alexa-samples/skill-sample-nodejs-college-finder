@@ -7,7 +7,7 @@
           "apis": {
             "custom": {
               "endpoint": {
-                "uri": "ask-custom-College-Finder-default"
+                "uri": "ask-custom-University-Finder-default"
               }
             }
           }

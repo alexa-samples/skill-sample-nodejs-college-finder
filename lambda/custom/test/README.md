@@ -15,14 +15,16 @@ There are four key aspects to the testing provided:
 
 ## Setup
 To get started with testing, install the Bespoken CLI:  
-`npm install bespoken-tools -g`
+```
+npm install bespoken-tools -g
+```
 
 ## Running Unit Tests
-Unit tests can be found under the `test/unit` folder.
+Unit tests can be found under the `/lambda/custom/test/unit` folder.
 
 Key configuration settings for the tests are found in the [testing.json](../testing.json). For full details on how the testing.json works, read [here](https://read.bespoken.io/end-to-end/guide/#configuration).
 
-To run the tests, simply open a command-line terminal, go to the project directory and type:  
+To run the tests, simply open a command-line terminal, go to the /lambda/custom directory  and type:  
 ```
 bst test test/unit
 ```

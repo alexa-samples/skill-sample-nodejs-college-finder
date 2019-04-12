@@ -9,3 +9,8 @@ coverage/
 lambda/custom/package-lock.json
 lambda/custom/.env
 test_output
+hooks/pre_deploy_hook.ps1
+lambda/custom/yarn.lock
+bst-debug.log
+lambda/custom/output.log
+output.log
