@@ -6,7 +6,7 @@
   "locale": "en-US",
   "interactionModel": "../../models/en-US.json",
   "trace": false,
-  "virtualDeviceToken": "<See test/README.MD for setup>",
+  "virtualDeviceToken": "<Get token at apps.bespoken.io>",
   "jest": {
     "collectCoverageFrom": ["*.js"],
     "silent": false,
