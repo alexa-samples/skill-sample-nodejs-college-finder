@@ -117,9 +117,6 @@
     },
     "apis": {
       "custom": {
-        "endpoint": {
-          "sourceDir": "lambda/custom"
-        },
         "interfaces": [
           {
             "type": "RENDER_TEMPLATE"
